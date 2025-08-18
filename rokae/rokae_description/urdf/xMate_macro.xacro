@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="rokae_robot"
+    params="
+    xMate_type
+    robot_ip
+    local_ip
+    use_fake_hardware:=false
+    ">
+
+    <!-- Rizon 4 or 4s-->
+    <xacro:include filename="$(find rokae_description)/urdf/xMateCR7.urdf.xacro" />
+    <xacro:include filename="$(find rokae_description)/urdf/cr7.ros2_controll.xacro" />
+    <xacro:cr7_ros2_controll 
+      use_fake_hardware="${use_fake_hardware}"
+      robot_ip="$(arg robot_ip)"
+      local_ip="$(arg local_ip)"
+    />
+
+  </xacro:macro>
+
+</robot>  
+  
+  
+  
+

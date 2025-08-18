@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_ip" doc="IP address of the robot server (remote)." default="10.0.80.45"/>
+    <arg name="local_ip" doc="IP address of the workstation PC (local)." default="10.0.80.30"/>
+    <arg name="controllers_file" default="$(find rokae_bringup)/config/xMateSR_controllers.yaml" doc="YAML file with the controllers configuration."/> 
+    <arg name="controllers" default="joint_state_controller position_joint_trajectory_controller" /> 
+
+    <!-- The name of the parameter under which the URDF is loaded -->
+    <arg name="robot_description" default="robot_description"/>
+
+    <!-- Load controller settings -->
+    <rosparam command="load" file="$(arg controllers_file)" subst_value="true" />     
+
+    <!-- Load universal robot description format (URDF) -->
+    <param name="$(arg robot_description)" command="$(find xacro)/xacro '$(find rokae_description)/urdf/xMateSR4.xacro'"/>    
+
+    <!-- Load hardware interface -->
+    <node name="rokae_hardware" pkg="rokae_hardware" type="rokae_hardware" output="screen" respawn="false">
+        <param name="robot_ip" type="str" value="$(arg robot_ip)"/>
+        <param name="local_ip" type="str" value="$(arg local_ip)"/>
+    </node>  
+    
+    <!-- Load controller settings -->
+    <rosparam command="load" file="$(arg controllers_file)" subst_value="true" />
+
+    <!-- Load & start joint_state_controller -->
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="$(arg controllers)" />
+     
+    <!-- Load robot_state_publisher node -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+
+    <!-- Load motion planning adapter from move group -->
+    <include file="$(find rokae_xMateSR4_moveit_config)/launch/move_group.launch">
+    </include>
+
+    <!-- Load rviz to control the robot-->
+    <include file="$(find rokae_xMateSR4_moveit_config)/launch/moveit_rviz.launch">
+    </include>    
+
+
+</launch>

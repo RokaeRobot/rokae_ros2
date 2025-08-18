@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMate">
+  <!-- 'xMate_type' values: xMate_CR7 -->
+  <xacro:arg name="xMate_type" default="xMate_CR7"/>
+
+  <!-- import main macro -->
+  <xacro:include filename="$(find rokae_description)/urdf/xMate_macro.xacro"/>
+
+  <!-- parameters -->
+  <xacro:arg name="use_fake_hardware" default="false" />
+  <xacro:arg name="robot_ip" default="192.168.21.10" />
+  <xacro:arg name="local_ip" default="192.168.21.131" />
+
+  <xacro:rokae_robot
+    xMate_type="$(arg xMate_type)"
+    robot_ip="$(arg robot_ip)"
+    local_ip="$(arg local_ip)"
+    use_fake_hardware="$(arg use_fake_hardware)">
+  </xacro:rokae_robot>
+
+</robot>

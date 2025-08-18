@@ -1,0 +1,90 @@
+# Settings for ros_control control loop
+hardware_control_loop:
+  loop_hz: &loop_hz 1000
+
+# Settings for ros_control hardware interface
+rokae_hardware_interface:
+  joints: &robot_joints
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
+    - joint7
+
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: *loop_hz
+
+position_joint_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints: *robot_joints
+  constraints:
+    goal_time: 0.5
+    stopped_velocity_tolerance: 0.05
+    joint1: {goal: 0.05}
+    joint2: {goal: 0.05}
+    joint3: {goal: 0.05}
+    joint4: {goal: 0.05}
+    joint5: {goal: 0.05}
+    joint6: {goal: 0.05}
+    joint7: {goal: 0.05}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: 100.0
+  action_monitor_rate: 20.0
+
+velocity_joint_trajectory_controller:
+  type: velocity_controllers/JointTrajectoryController
+  joints: *robot_joints
+  constraints:
+    goal_time: 0.5
+    stopped_velocity_tolerance: 0.05
+    joint1: { goal: 0.05}
+    joint2: { goal: 0.05}
+    joint3: { goal: 0.05}
+    joint4: { goal: 0.05}
+    joint5: { goal: 0.05}
+    joint6: { goal: 0.05}
+    joint7: { goal: 0.05}
+  gains:
+    joint1: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint2: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint3: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint4: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint5: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint6: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    joint7: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: 100.0
+  action_monitor_rate: 20.0
+
+torque_joint_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints: *robot_joints
+  constraints:
+    goal_time: 0.5
+    stopped_velocity_tolerance: 0.05
+    joint1: { goal: 0.05}
+    joint2: { goal: 0.05}
+    joint3: { goal: 0.05}
+    joint4: { goal: 0.05}
+    joint5: { goal: 0.05}
+    joint6: { goal: 0.05}
+    joint7: { goal: 0.05}
+  gains:
+    joint1: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint2: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint3: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint4: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint5: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint6: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    joint7: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: 100.0
+  action_monitor_rate: 20.0
+
+# Settings for joint group position controlller
+joint_group_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints: *robot_joints

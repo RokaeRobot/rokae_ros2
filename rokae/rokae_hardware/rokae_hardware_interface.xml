@@ -1,0 +1,7 @@
+<library path="rokae_hardware_interface">
+  <class name="rokae_hardware/RokaeHardwareInterface"
+         type="rokae_hardware::RokaeHardwareInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>Rokae hardware interface</description>
+  </class>
+</library>

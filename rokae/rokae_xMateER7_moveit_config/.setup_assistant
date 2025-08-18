@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: XME7
+    relative_path: urdf/XME7.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/XME7.srdf
+  CONFIG:
+    author_name: zhixiang wang
+    author_email: 197222566@qq.com
+    generated_timestamp: 1733743044

@@ -1,0 +1,262 @@
+---
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+      
+    position_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    velocity_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    torque_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_group_position_controller:
+      type: position_controllers/JointGroupPositionController   
+
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+position_joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.1
+      joint1: {goal: 0.1}
+      joint2: {goal: 0.1}
+      joint3: {goal: 0.1}
+      joint4: {goal: 0.1}
+      joint5: {goal: 0.1}
+      joint6: {goal: 0.1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+velocity_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.05
+      joint1: {goal: 0.05}
+      joint2: {goal: 0.05}
+      joint3: {goal: 0.05}
+      joint4: {goal: 0.05}
+      joint5: {goal: 0.05}
+      joint6: {goal: 0.05}
+    gains:
+      joint1: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint2: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint3: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint4: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint5: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint6: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+
+torque_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.05
+      joint1: {goal: 0.05}
+      joint2: {goal: 0.05}
+      joint3: {goal: 0.05}
+      joint4: {goal: 0.05}
+      joint5: {goal: 0.05}
+      joint6: {goal: 0.05}
+    gains:
+      joint1: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint2: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint3: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint4: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint5: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint6: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+
+joint_group_position_controller:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+
+
+
+# ---
+# controller_manager:
+#   ros__parameters:
+  
+#     joint_state_broadcaster:
+#       type: joint_state_broadcaster/JointStateBroadcaster
+#       publish_rate: 1000
+
+#     position_joint_trajectory_controller:
+#       type: joint_trajectory_controller/JointTrajectoryController
+#       joints:
+#         - joint1
+#         - joint2
+#         - joint3
+#         - joint4
+#         - joint5
+#         - joint6
+#       command_interfaces:
+#         - position
+#       state_interfaces:
+#         - position
+#         - velocity
+#       constraints:
+#         goal_time: 0.5
+#         stopped_velocity_tolerance: 0.05
+#         joint1: {goal: 0.05}
+#         joint2: {goal: 0.05}
+#         joint3: {goal: 0.05}
+#         joint4: {goal: 0.05}
+#         joint5: {goal: 0.05}
+#         joint6: {goal: 0.05}
+#       stop_trajectory_duration: 0.5
+#       state_publish_rate: 100.0
+#       action_monitor_rate: 20.0
+
+#     velocity_joint_trajectory_controller:
+#       type: joint_trajectory_controller/JointTrajectoryController
+#       joints:
+#         - joint1
+#         - joint2
+#         - joint3
+#         - joint4
+#         - joint5
+#         - joint6
+#       command_interfaces:
+#         - velocity
+#       state_interfaces:
+#         - position
+#         - velocity
+#       constraints:
+#         goal_time: 0.5
+#         stopped_velocity_tolerance: 0.05
+#         joint1: {goal: 0.05}
+#         joint2: {goal: 0.05}
+#         joint3: {goal: 0.05}
+#         joint4: {goal: 0.05}
+#         joint5: {goal: 0.05}
+#         joint6: {goal: 0.05}
+#       gains:
+#         joint1: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#         joint2: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#         joint3: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#         joint4: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#         joint5: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#         joint6: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+#       stop_trajectory_duration: 0.5
+#       state_publish_rate: 100.0
+#       action_monitor_rate: 20.0
+
+
+#     torque_joint_trajectory_controller:
+#       type: joint_trajectory_controller/JointTrajectoryController
+#       joints:
+#         - joint1
+#         - joint2
+#         - joint3
+#         - joint4
+#         - joint5
+#         - joint6
+#       command_interfaces:
+#         - effort
+#       state_interfaces:
+#         - position
+#         - velocity
+#       constraints:
+#         goal_time: 0.5
+#         stopped_velocity_tolerance: 0.05
+#         joint1: {goal: 0.05}
+#         joint2: {goal: 0.05}
+#         joint3: {goal: 0.05}
+#         joint4: {goal: 0.05}
+#         joint5: {goal: 0.05}
+#         joint6: {goal: 0.05}
+#       gains:
+#         joint1: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#         joint2: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#         joint3: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#         joint4: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#         joint5: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#         joint6: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+#       stop_trajectory_duration: 0.5
+#       state_publish_rate: 100.0
+#       action_monitor_rate: 20.0
+
+#     joint_group_position_controller:
+#       type: position_controllers/JointGroupPositionController
+#       joints:
+#         - joint1
+#         - joint2
+#         - joint3
+#         - joint4
+#         - joint5
+#         - joint6
+
+

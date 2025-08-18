@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: rokae_description
+    relative_path: urdf/xMatePro7.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/xMatePro7.srdf
+  CONFIG:
+    author_name: zengxu he
+    author_email: hezengxu@rokae.com
+    generated_timestamp: 1680161215

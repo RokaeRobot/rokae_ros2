@@ -1,0 +1,20 @@
+<package>
+  <name>XME7</name>
+  <version>1.0.0</version>
+  <description>
+    <p>URDF Description package for XME7</p>
+    <p>This package contains configuration data, 3D models and launch files
+for XME7 robot</p>
+  </description>
+  <author>me</author>
+  <maintainer email="1937222566@qq.com" />
+  <license>BSD</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>rviz</run_depend>
+  <run_depend>joint_state_publisher</run_depend>
+  <run_depend>gazebo</run_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
