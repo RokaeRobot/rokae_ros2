@@ -7,13 +7,13 @@ colcon build
 
 # 启动机器人命令    
 ## 使用封装的硬件接口（一般都用这条）
-ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=xMateCR7 use_fake_hardware:=false robot_ip:=192.168.21.10 local_ip:=192.168.21.131 
+ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardware:=false robot_ip:=192.168.21.10 local_ip:=192.168.21.131 
 ## 使用虚拟仿真硬件接口（测试move_group,rviz等应用配置用，并非连接实体机器人或HMI）
-ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=xMateCR7 use_fake_hardware:=true robot_ip:=192.168.21.10 local_ip:=192.168.21.131   
+ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardware:=true robot_ip:=192.168.21.10 local_ip:=192.168.21.131   
+注意：第二版robot_type可换成不同的机型名称启动相应的机型（CR7,ER7,Pro7等，不需要xMate前缀）；robot_ip与local_ip换成自己的地址即可。
 
 ##存在的问题：  
-1.只封装了CR7机型，还未添加其它机型  
-2.硬件接口运行时会出现崩溃,主要的两个崩溃如下：
+硬件接口运行时会出现崩溃,主要的两个崩溃如下：  
 [ERROR] [ros2_control_node-1]: process has died [pid 4417, exit code -11, cmd '/opt/ros/humble/lib/controller_manager/ros2_control_node --ros-args --params-file /tmp/launch_params_jbqbmz5t --params-file /tmp/launch_params_xjmitrq7'].
 
 [ros2_control_node-1] Stack trace (most recent call last) in thread 4529:  
