@@ -36,7 +36,7 @@
 
 namespace rokae_hardware    //用override虚函数对基类SystemInterface的成员函数进行复写，否则子类RokaeHardwareInterface中的方法可能无法被ROS2中接口SystemInterface调用（）
 {
-    //template <unsigned short DoF>
+    template <unsigned short DoF>
     class RokaeHardwareInterface : public hardware_interface::SystemInterface
     {
     public:
@@ -105,18 +105,18 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
             return jcmd;
         }
 
-    public:
-        std::unique_ptr<rokae::xMateRobot> rokae_;
-        std::shared_ptr<rokae::xMateRobot> robot_;
+    public: 
+        std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
+        //std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
         std::string robot_ip_;
         std::string local_ip_;
         std::error_code ec;
-        //static const size_t num_joints_ = DoF;
+        static const size_t num_joints_ = DoF;
         //size_t num_joints_ = DoF;
-        size_t num_joints_ = 6;
+        //size_t num_joints_ = 7;
         std::vector<std::string> joint_names_;
 
-        using RtType = rokae::RtMotionControl<rokae::WorkType::collaborative, 6>;
+        using RtType = rokae::RtMotionControl<rokae::WorkType::collaborative, DoF>;
         std::shared_ptr<RtType> rci_;
 
         std::vector<double> joint_position_state_;

@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile
 from launch_ros.substitutions import FindPackageShare
@@ -26,11 +26,17 @@ def load_yaml(package_name, file_path):
         return None
 
 def generate_launch_description():
+    robot_type = LaunchConfiguration("robot_type")
     # 获取路径
     description_pkg = FindPackageShare("rokae_description").find("rokae_description")
-    moveit_config_pkg = FindPackageShare('rokae_moveit_config').find('rokae_xMateCR7_moveit_config')
-    hardware_pkg = FindPackageShare("rokae_hardware").find("rokae_hardware")
-    controller_yaml = os.path.join(hardware_pkg, "config", "xMateCR_controllers.yaml")
+    # 拼出 rokae_xMateCR7_moveit_config 包名
+    moveit_config_pkg_name = PythonExpression([
+        "'rokae_xMate' + '", robot_type, "' + '_moveit_config'"
+    ])
+
+    # 得到 rokae_xMateCR7_moveit_config 的 share 路径
+    moveit_config_pkg_share = FindPackageShare(moveit_config_pkg_name)
+
     # 获取参数
     robot_ip = LaunchConfiguration('robot_ip')
     local_ip = LaunchConfiguration('local_ip')
@@ -38,12 +44,20 @@ def generate_launch_description():
 
     # URDF/xacro 路径
     urdf_file = os.path.join(description_pkg, "urdf", "xMate.urdf.xacro")
-    srdf_file = os.path.join(moveit_config_pkg, "config", "xMateCR7.srdf")
+    srdf_file = PathJoinSubstitution([
+        moveit_config_pkg_share,
+        "config",
+        PythonExpression([
+        "'xMate' + '", robot_type, "' + '.srdf'"
+        ])
+    ])
 
     # robot_description 参数（xacro 动态传参）
     robot_description = {
         "robot_description": Command([
             " xacro ", urdf_file,
+            #" xMate_type:=", PythonExpression(["'xMate_' + '", robot_type, "'"]),
+            " robot_type:=", robot_type,       # 这里很关键
             " robot_ip:=", robot_ip,
             " local_ip:=", local_ip,
             " use_fake_hardware:=true"
@@ -143,7 +157,14 @@ def generate_launch_description():
     
 
     # RViz可选节点（带 moveit config）
-    rviz_config_file = os.path.join(moveit_config_pkg, "rviz", "moveit.rviz")
+
+
+    rviz_config_file = PathJoinSubstitution([
+        moveit_config_pkg_share,
+        "rviz",
+        "moveit.rviz"
+    ])
+    
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",

@@ -1,7 +1,13 @@
 <library path="rokae_hardware_interface">
-  <class name="rokae_hardware/RokaeHardwareInterface"
-         type="rokae_hardware::RokaeHardwareInterface"
+  <class name="rokae_hardware/RokaeHardwareInterface6"
+         type="rokae_hardware::RokaeHardwareInterface6"
          base_class_type="hardware_interface::SystemInterface">
-    <description>Rokae hardware interface</description>
+    <description>Rokae hardware interface 6-DoF</description>
+  </class>
+
+  <class name="rokae_hardware/RokaeHardwareInterface7"
+         type="rokae_hardware::RokaeHardwareInterface7"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>Rokae hardware interface 7-DoF</description>
   </class>
 </library>

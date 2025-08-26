@@ -26,14 +26,15 @@ public:
         auto& arm = *move_group_;
 
         arm.setPlanningTime(45.0);
-        arm.setPoseReferenceFrame("xMateCR7_base");
+        arm.setPoseReferenceFrame("xMatePro7_base");
         arm.allowReplanning(true);
         arm.setGoalPositionTolerance(0.05);
         arm.setGoalOrientationTolerance(0.2);
         arm.setMaxAccelerationScalingFactor(0.5);
         arm.setMaxVelocityScalingFactor(0.1);
 
-        std::vector<double> joint_target = {0.0, -M_PI/2, 0.0, -M_PI/2, 0.0, 0.0};
+        //std::vector<double> joint_target = {0.0, -M_PI/2, 0.0, -M_PI/2, 0.0, 0.0, 0.0};
+        std::vector<double> joint_target = {1, 1, 1, 1, 1, 1, 1};
         arm.setJointValueTarget(joint_target);
 
         moveit::planning_interface::MoveGroupInterface::Plan plan;

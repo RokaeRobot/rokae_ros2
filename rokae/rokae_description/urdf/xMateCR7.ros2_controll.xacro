@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- 控制接口定义宏 -->
+  <xacro:macro name="cr7_ros2_controll" params="
+    xMate_type:=CR7
+    robot_ip
+    local_ip
+    use_fake_hardware:=false
+    ">
+
+    <ros2_control name="rokae_hardware_interface" type="system">
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="state_following_offset">0.0</param>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+          <param name="xMate_type">${xMate_type}</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>rokae_hardware/RokaeHardwareInterface6</plugin>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+          <param name="xMate_type">${xMate_type}</param>
+        </xacro:unless>
+      </hardware>
+
+      <joint name="joint1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="joint2">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="joint3">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="joint4">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="joint5">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="joint6">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
+
+
+  <!--
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+ 控制接口定义宏 
+  <xacro:macro name="cr7_ros2_controll" params="
+    prefix
+    robot_sn
+    robot_ip
+    local_ip
+    use_fake_hardware:=true
+    fake_sensor_commands:=true
+    ">
+
+    <ros2_control name="rokae_hardware_interface" type="system">
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="mock_sensor_commands">${fake_sensor_commands}</param>
+          <param name="state_following_offset">0.0</param>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>rokae_hardware/RokaeHardwareInterface</plugin>
+          <param name="robot_sn">${robot_sn}</param>
+          <param name="prefix">${prefix}</param>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+        </xacro:unless>
+
+      </hardware>
+
+      <joint name="joint1">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="joint2">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="joint3">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="joint4">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="joint5">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+      <joint name="joint6">
+        <command_interface name="position"/>
+        <command_interface name="velocity"/>
+        <command_interface name="effort"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
+
+-->

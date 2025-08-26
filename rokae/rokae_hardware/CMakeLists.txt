@@ -141,57 +141,57 @@ install(TARGETS connect
 )
 
 
-add_executable(thread_test src/thread_test.cpp src/rokae_hardware_interface.cpp)   #需要包含src/rokae_hardware_interface.cpp否则无法调用里面接口
+# add_executable(thread_test src/thread_test.cpp src/rokae_hardware_interface.cpp)   #需要包含src/rokae_hardware_interface.cpp否则无法调用里面接口
 
-ament_target_dependencies(thread_test 
-  rclcpp
-  rclcpp_lifecycle
-  sensor_msgs
-  std_msgs
-  rokae_msgs
-  controller_manager
-  hardware_interface
-  pluginlib
-  realtime_tools
-  Eigen3
-)
+# ament_target_dependencies(thread_test 
+#   rclcpp
+#   rclcpp_lifecycle
+#   sensor_msgs
+#   std_msgs
+#   rokae_msgs
+#   controller_manager
+#   hardware_interface
+#   pluginlib
+#   realtime_tools
+#   Eigen3
+# )
 
-#3.添加头文件路径
-target_include_directories(thread_test PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-  #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
-  ${EIGEN3_INCLUDE_DIR}
-)
+# #3.添加头文件路径
+# target_include_directories(thread_test PRIVATE
+#   ${CMAKE_CURRENT_SOURCE_DIR}/include
+#   ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
+#   #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
+#   ${EIGEN3_INCLUDE_DIR}
+# )
 
-target_link_libraries(thread_test 
-  xCoreSDK
-  xMateModel  # 如果需要
-  xMateSDK_so
-)
+# target_link_libraries(thread_test 
+#   xCoreSDK
+#   xMateModel  # 如果需要
+#   xMateSDK_so
+# )
 
-install(TARGETS thread_test 
-  DESTINATION lib/${PROJECT_NAME}
-  # ARCHIVE DESTINATION lib
-  # LIBRARY DESTINATION lib
-  # RUNTIME DESTINATION bin
-)
+# install(TARGETS thread_test 
+#   DESTINATION lib/${PROJECT_NAME}
+#   # ARCHIVE DESTINATION lib
+#   # LIBRARY DESTINATION lib
+#   # RUNTIME DESTINATION bin
+# )
 
 
 install(DIRECTORY include/
   DESTINATION include/
 )
 
-# add_executable(movej src/movej.cpp)
-# ament_target_dependencies(movej
-#   rclcpp
-#   moveit_ros_planning_interface
-#   controller_manager_msgs
-# )
+add_executable(movej src/movej.cpp)
+ament_target_dependencies(movej
+  rclcpp
+  moveit_ros_planning_interface
+  controller_manager_msgs
+)
 
-# install(TARGETS movej
-#   DESTINATION lib/${PROJECT_NAME}
-# )
+install(TARGETS movej
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 # 7.插件导出（用于 controller manager 动态加载）  
 # 将 hardware_interface 插件描述文件 xml 注册到插件系统供 controller manager 使用 pluginlib 动态加载实现的接口类
