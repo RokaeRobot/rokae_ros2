@@ -37,7 +37,7 @@ ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardw
 [ros2_control_node-1] #0    Source "../sysdeps/x86_64/multiarch/memmove-vec-unaligned-erms.S", line 317, in __memmove_avx512_unaligned_erms [0x7cc14ffa67cd]  
 [ros2_control_node-1] Segmentation fault (Address not mapped to object [0x10c])   
 
-如果不启动move_group和rviz，目前模版实例化后的硬件接口运行崩溃报错如下
+如果不启动move_group和rviz，目前模版实例化后的硬件接口运行崩溃报错如下   
 [ros2_control_node-1] terminate called after throwing an instance of 'std::logic_error'
 [ros2_control_node-1]   what():  basic_string::_M_construct null not valid
 [ros2_control_node-1] Stack trace (most recent call last) in thread 4554:
@@ -66,11 +66,14 @@ ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardw
 [ros2_control_node-1] #6    Object "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30", at 0x7c12e0cae4d7, in __cxa_throw
 [ros2_control_node-1] #5    Object "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30", at 0x7c12e0cae276, in std::terminate()
 [ros2_control_node-1] #4    Object "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30", at 0x7c12e0cae20b, in 
-[ros2_control_node-1] #3    Object "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30", at 0x7c12e0ca2b9d, in 
+[ros2_control_node-1] #3    Object "/usr/lib/x86_64-linux-gnu/libstdc+
+
++.so.6.0.30", at 0x7c12e0ca2b9d, in 
 [ros2_control_node-1] #2    Source "./stdlib/abort.c", line 79, in abort [0x7c12e08287f2]
 [ros2_control_node-1] #1    Source "../sysdeps/posix/raise.c", line 26, in raise [0x7c12e0842475]
 [ros2_control_node-1] #0  | Source "./nptl/pthread_kill.c", line 89, in __pthread_kill_internal
 [ros2_control_node-1]     | Source "./nptl/pthread_kill.c", line 78, in __pthread_kill_implementation
 [ros2_control_node-1]       Source "./nptl/pthread_kill.c", line 44, in __pthread_kill [0x7c12e08969fc]
 [ros2_control_node-1] Aborted (Signal sent by tkill() 4494 1000)
+
 
