@@ -1,7 +1,7 @@
 ---
 controller_manager:
   ros__parameters:
-    update_rate: 100
+    update_rate: 1000
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -48,7 +48,7 @@ position_joint_trajectory_controller:
       - position
       - velocity
     constraints:
-      goal_time: 0.5
+      goal_time: 7.5
       stopped_velocity_tolerance: 0.1
       joint1: {goal: 0.1}
       joint2: {goal: 0.1}

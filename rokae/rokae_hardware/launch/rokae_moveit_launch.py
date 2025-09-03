@@ -42,12 +42,17 @@ def generate_launch_description():
 
     # 拼接到 launch 文件
     moveit_config_launch_file = PathJoinSubstitution([
-        moveit_config_pkg_share,
+        hardware_pkg,   #只启动一个moveit.launch.py
         "launch",
-        # "xMateCR7_moveit_config.launch.py"
         PythonExpression([
-        "'xMate' + '", robot_type, "' + '_moveit_config.launch.py'"
+        "'xMate_moveit_config.launch.py'"
         ])
+        # moveit_config_pkg_share,    #根据不同机型启动不同launch.py
+        # "launch",
+        # # "xMateCR7_moveit_config.launch.py"
+        # PythonExpression([
+        # "'xMate' + '", robot_type, "' + '_moveit_config.launch.py'"
+        # ])
     ])
 
 
@@ -86,6 +91,7 @@ def generate_launch_description():
                         ParameterFile(controller_yaml, allow_substs=True),
                         #controller_yaml  #给节点ros2_control_node本身传递robot_description和controller_yaml文件中的参数
                         ],   
+            # prefix="gdb -ex run --args",   #gdb调试打印硬件接口运行情况，定位崩溃位置
             # remappings=[("joint_states", "rokae_arm/joint_states")],
             output="both",
         )

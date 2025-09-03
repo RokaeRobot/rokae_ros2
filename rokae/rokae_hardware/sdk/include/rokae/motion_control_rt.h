@@ -115,6 +115,21 @@ namespace rokae {
     */
    void stopMove();
 
+   /**
+    * @brief 发送JointPosition/CartesianPosition/Torque命令。适用于不使用调度周期，程序直接发送命令。
+    * @note 开始运动后，持续调用此函数发送运动命令。由于控制器执行命令的周期为1ms，发送命令的间隔也需要控制在1ms，
+    * 如果发送间隔过长会判断为通信丢包，间隔过短会造成伺服报错。
+    * 直接发送命令的话就不需要用调度周期了，setControlLoop(), startLoop(), stopLoop()等相关函数都不需要。
+    * 实时运动报错可通过BaseRobot::updateRobotState()获知，有报错会抛出异常；
+    * 需要调用Robot_T::startReceiveRobotState()接收数据，建议间隔为1ms，避免报错信息被覆盖
+    * @param[in] cmd 根据控制模式(RtControllerMode)不同，有3种运动命令: 关节角度/笛卡尔位姿/力矩
+    * @throw ArgumentException 指令数值存在非法值
+    * @throw RealtimeStateException 未开始运动
+    * @throw RealtimeControlException 命令发送网络异常; 或命令类型与控制模式不匹配; 或控制器执行已发送命令时发生错误
+    */
+   template<class Command>
+   void sendCommand(const Command &cmd);
+
    // *********************************************************************
    // *****************        获取机器人实时状态数据        ******************
 
@@ -245,6 +260,7 @@ namespace rokae {
 
    /**
     * @brief MoveJ指令，上位机规划路径，在到达target之前处于处于阻塞状态。如果运动中发生错误将停止阻塞状态并返回。
+    * @note 已不建议使用，请使用非实时模式指令MoveAbsJCommand。
     * @param[in] speed 速度比例系数
     * @param[in] start 起始关节角度，需要是机器人当前关节角度，否则可能造成下电。
     * @param[in] target 机器人目标关节角度
@@ -254,6 +270,7 @@ namespace rokae {
 
    /**
     * @brief MoveL指令，上位机规划路径，在到达target之前处于处于阻塞状态。如果运动中发生错误将停止阻塞状态并返回。
+    * @note 已不建议使用，请使用非实时模式指令MoveLCommand。
     * @param[in] speed 速度比例系数, 范围 0 - 1
     * @param[in] start 起始位姿, 需要是机器人当前位姿，否则可能造成下电。如果设置了TCP，那么应该是工具相对于基坐标系的位姿。
     * @param[in] target 机器人目标位姿。同理如果设置了TCP，应是TCP相对于基坐标系的位姿
@@ -264,6 +281,7 @@ namespace rokae {
 
    /**
     * @brief MoveC指令，在到达target之前处于阻塞状态。如果运动中发生错误将停止阻塞状态并返回。
+    * @note 已不建议使用，请使用非实时模式指令MoveCCommand。
     * @param[in] speed 速度比例系数
     * @param[in] start 机器人起始位姿, 需要是机器人当前位姿。如果设置了TCP，那么应该是工具相对于基坐标系的位姿。
     * @param[in] aux 机器人辅助点位姿。同理如果设置了TCP，应是TCP相对于基坐标系的位姿

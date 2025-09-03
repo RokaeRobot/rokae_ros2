@@ -86,32 +86,33 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
             const std::vector<std::string>& start_interfaces,
             const std::vector<std::string>& stop_interfaces) override;
 
-        rokae::JointPosition callback()
-        {
-            // RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start() called");
-            rci_->updateRobotState();
-            //robot_->updateRobotState(std::chrono::milliseconds(1));
-            //robot_->startReceiveRobotState(std::chrono::milliseconds(1), {rokae::RtSupportedFields::jointPos_m, rokae::RtSupportedFields::jointVel_m,
-                                    //   rokae::RtSupportedFields::tau_m, rokae::RtSupportedFields::tauExt_inBase,
-                                    //   rokae::RtSupportedFields::tauExt_inStiff});
-            rokae::JointPosition jcmd(num_joints_);
-            for (size_t i = 0; i < num_joints_; i++)
-            {
-                jcmd.joints[i] = joint_position_command_[i];
-            }
-            this->time_us2 = time_us1;
-            this->time_us1 = getLocalTimeUs();
-            std::this_thread::sleep_for(std::chrono::microseconds(50));
-            return jcmd;
-        }
+        // rokae::JointPosition callback()
+        // {
+        //     //RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "开始回调start() called");
+        //     //rci_->updateRobotState();
+        //     //robot_->updateRobotState(std::chrono::milliseconds(1));
+        //     //robot_->startReceiveRobotState(std::chrono::milliseconds(1), {rokae::RtSupportedFields::jointPos_m, rokae::RtSupportedFields::jointVel_m,
+        //                             //   rokae::RtSupportedFields::tau_m, rokae::RtSupportedFields::tauExt_inBase,
+        //                             //   rokae::RtSupportedFields::tauExt_inStiff});
+        //     rokae::JointPosition jcmd(num_joints_);
+        //     for (size_t i = 0; i < num_joints_; i++)
+        //     {
+        //         jcmd.joints[i] = joint_position_command_[i];
+        //     }
+        //     this->time_us2 = time_us1;
+        //     this->time_us1 = getLocalTimeUs();
+        //     //std::this_thread::sleep_for(std::chrono::microseconds(50));
+        //     return jcmd;
+        // }
 
     public: 
-        std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
-        //std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
+        //std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
+        std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
         std::string robot_ip_;
         std::string local_ip_;
         std::error_code ec;
-        static const size_t num_joints_ = DoF;
+        //const → 值不可变 ；static → 所有对象共享一份
+        static const size_t num_joints_ = DoF;   //const 表示这个变量是常量，初始化之后不能再修改，且只能初始化一次；static 表示这是一个 类变量，而不是某个对象独有的。没有 static 的话，就是 实例成员变量，每个对象都会单独保存一份 num_joints_。但轴数其实是由模板参数 DoF 决定的，不需要重复存储，所以用 static
         //size_t num_joints_ = DoF;
         //size_t num_joints_ = 7;
         std::vector<std::string> joint_names_;

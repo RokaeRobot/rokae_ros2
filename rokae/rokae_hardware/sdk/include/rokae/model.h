@@ -113,7 +113,8 @@ namespace rokae {
 
  /**
   * @class xMateModel
-  * @brief xMate模型库。支持的机型: xMateER系列, XMC7/12, XMS3/4/5
+  * @brief xMate模型库。支持的机型: xMateER系列, XMC7/12, XMS3/4/5。
+  * 注意：对于XMS5机型，需要升级特殊版本的机型文件后方可使用模型库，否则计算结果是错误的，请联系珞石技术支持人员进行机型文件升级。
   * @tparam DoF 轴数
   */
  template <unsigned short DoF>

@@ -42,13 +42,13 @@ position_joint_trajectory_controller:
       - joint6
     constraints:
       goal_time: 20
-      stopped_velocity_tolerance: 2.175
+      stopped_velocity_tolerance: 0.5
       joint1: {goal: 2.175}
       joint2: {goal: 2.175}
       joint3: {goal: 2.175}
       joint4: {goal: 2.175}
       joint5: {goal: 2.175}
       joint6: {goal: 2.175}
-    stop_trajectory_duration: 0.01
+    stop_trajectory_duration: 0.5
     state_publish_rate: 100.0
     action_monitor_rate: 20.0

@@ -578,6 +578,7 @@ namespace rokae {
     * @param[in] timeout 超时时间
     * @return 接收到的数据长度。如果超时前没有收到数据，那么返回0。
     * @throw RealtimeControlException 无法收到数据；或收到的数据有错误导致无法解析
+    * @throw RealtimeMotionException 实时模式运动报错
     */
    unsigned updateRobotState(std::chrono::steady_clock::duration timeout);
 
@@ -1121,7 +1122,7 @@ namespace rokae {
    /**
     * @brief 设置发送实时运动指令网络延迟阈值，即RobotAssist - RCI设置界面中的”包丢失阈值“。
     * 请在切换到RtCommand模式前进行设置，否则不生效。
-    * @param[in] percent 允许的范围0 - 100
+    * @param[in] percent 允许的范围0 - 100。Linux下运行建议20%以上; Windows下运行建议60%以上
     * @param[out] ec 错误码
     */
    void setRtNetworkTolerance(unsigned percent, error_code& ec) noexcept;
