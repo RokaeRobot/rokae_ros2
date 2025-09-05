@@ -12,7 +12,7 @@ ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardw
 ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardware:=true robot_ip:=192.168.21.10 local_ip:=192.168.21.131  
 现有机型启动，只需将robot_type换成相应的机型（SR4,ER7,Pro3,Pro7）  
 rokae_hardware_interface.cpp中：  
-robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_); 对应启动六轴机型
+robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_); 对应启动六轴机型  
 robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);  对应启动七轴机型  
 根据机型轴数不同需要对共享指针robot_的定义和初始化进行修改。
 # 添加新机型步骤：  
