@@ -14,7 +14,12 @@ ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardw
 rokae_hardware_interface.cpp中：  
 robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_); 对应启动六轴机型  
 robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);  对应启动七轴机型  
-根据机型轴数不同需要对共享指针robot_的定义和初始化进行修改。
+根据机型轴数不同需要对共享指针robot_的定义和初始化进行修改。  
+## 启动机器人测试脚本命令  
+ros2 launch rokae_hardware controll_movej.launch.py robot_type:=CR7（机型包括CR7,SR4,ER7,Pro3,Pro7）  
+movej.cpp测试脚本中：   
+arm.setPoseReferenceFrame("xMateCR7_base");    //换成相应的基座(在相应机型srdf下)  
+auto move_group = std::make_shared<moveit::planning_interface::MoveGroupInterface>(node, "rokae_arm");   //换成相应的group(在相应机型srdf下)  
 # 添加新机型步骤：  
 ## 1.robot_description中导入相应rviz,mesh,xacro文件，文件格式可模仿现有机型  
 ## 2.robot_description urdf文件中xMate.urdf.xacro,xMate_macro.xacro添加相应机型配置，并编写新机型ros2_controll.xacro文件，具体格式可参照现有文件机型  
