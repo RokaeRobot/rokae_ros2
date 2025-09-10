@@ -144,6 +144,22 @@ def launch_setup(context, *args, **kwargs):
             ompl_pipeline_config,
             ],
     )
+    
+    movej_node = Node(
+        package="rokae_hardware",
+        executable="movej",
+        name="movej",
+        parameters=[
+            robot_description, 
+            robot_description_semantic,
+            robot_description_kinematics,
+            joint_limits_yaml,
+            ompl_pipeline_config,
+            moveit_controllers,
+            trajectory_execution,
+            planning_scene_monitor_parameters,
+            ]
+    )
 
     return [move_group_node, rviz_node]
 

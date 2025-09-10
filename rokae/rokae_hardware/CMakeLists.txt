@@ -64,21 +64,6 @@ target_link_libraries(rokae_hardware_interface
   xMateSDK_so
 )
 
-
-# #添加头文件路径
-# target_include_directories(rokae_hardware PRIVATE
-#   ${CMAKE_CURRENT_SOURCE_DIR}/include
-#   ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-#   #${EIGEN3_INCLUDE_DIR}
-# )
-
-# # 5. 链接依赖库
-# target_link_libraries(rokae_hardware
-#   rokae_hardware_interface
-#   xCoreSDK
-#   xMateModel
-# )
-
 #5.对rokae_hardware_interface工程声明依赖
 ament_target_dependencies(rokae_hardware_interface
   rclcpp
@@ -141,43 +126,6 @@ install(TARGETS connect
 )
 
 
-# add_executable(thread_test src/thread_test.cpp src/rokae_hardware_interface.cpp)   #需要包含src/rokae_hardware_interface.cpp否则无法调用里面接口
-
-# ament_target_dependencies(thread_test 
-#   rclcpp
-#   rclcpp_lifecycle
-#   sensor_msgs
-#   std_msgs
-#   rokae_msgs
-#   controller_manager
-#   hardware_interface
-#   pluginlib
-#   realtime_tools
-#   Eigen3
-# )
-
-# #3.添加头文件路径
-# target_include_directories(thread_test PRIVATE
-#   ${CMAKE_CURRENT_SOURCE_DIR}/include
-#   ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-#   #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
-#   ${EIGEN3_INCLUDE_DIR}
-# )
-
-# target_link_libraries(thread_test 
-#   xCoreSDK
-#   xMateModel  # 如果需要
-#   xMateSDK_so
-# )
-
-# install(TARGETS thread_test 
-#   DESTINATION lib/${PROJECT_NAME}
-#   # ARCHIVE DESTINATION lib
-#   # LIBRARY DESTINATION lib
-#   # RUNTIME DESTINATION bin
-# )
-
-
 install(DIRECTORY include/
   DESTINATION include/
 )
@@ -187,6 +135,21 @@ ament_target_dependencies(movej
   rclcpp
   moveit_ros_planning_interface
   controller_manager_msgs
+  realtime_tools
+)
+
+#3.添加头文件路径
+target_include_directories(movej PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
+  #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
+  ${EIGEN3_INCLUDE_DIR}
+)
+
+target_link_libraries(movej 
+  xCoreSDK
+  xMateModel  # 如果需要
+  xMateSDK_so
 )
 
 install(TARGETS movej

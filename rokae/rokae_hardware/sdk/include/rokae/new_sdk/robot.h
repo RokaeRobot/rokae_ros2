@@ -1100,7 +1100,7 @@ namespace rokae {
 
    /**
     * @brief 通过xPanel末端直接传输RTU协议裸数据
-    * @param[in] send_byte 发送字节长度  0-16
+    * @param[in] xMatePro3_byte 发送字节长度  0-16
     * @param[in] rev_byte 接收字节长度 0-16
     * @param[in] send_data 发送字节数据 数组长度需要和send_byte 参数一致
     * @param[out] rev_data 接收字节数据 数组长度需要和rev_byte 参数一致

@@ -7,6 +7,8 @@
 #include "rclcpp/macros.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
+#include "sensor_msgs/msg/joint_state.hpp"
+
 //#include <urdf/model.h>
 
 #include <realtime_tools/realtime_publisher.h>
@@ -86,24 +88,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
             const std::vector<std::string>& start_interfaces,
             const std::vector<std::string>& stop_interfaces) override;
 
-        // rokae::JointPosition callback()
-        // {
-        //     //RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "开始回调start() called");
-        //     //rci_->updateRobotState();
-        //     //robot_->updateRobotState(std::chrono::milliseconds(1));
-        //     //robot_->startReceiveRobotState(std::chrono::milliseconds(1), {rokae::RtSupportedFields::jointPos_m, rokae::RtSupportedFields::jointVel_m,
-        //                             //   rokae::RtSupportedFields::tau_m, rokae::RtSupportedFields::tauExt_inBase,
-        //                             //   rokae::RtSupportedFields::tauExt_inStiff});
-        //     rokae::JointPosition jcmd(num_joints_);
-        //     for (size_t i = 0; i < num_joints_; i++)
-        //     {
-        //         jcmd.joints[i] = joint_position_command_[i];
-        //     }
-        //     this->time_us2 = time_us1;
-        //     this->time_us1 = getLocalTimeUs();
-        //     //std::this_thread::sleep_for(std::chrono::microseconds(50));
-        //     return jcmd;
-        // }
+        
 
     public: 
         //std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
@@ -144,6 +129,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         bool joint_velocity_controller_running_ = false;
         bool joint_torque_controller_running_ = false;
         bool controllers_initialized_ = false;
+
         long times_loop_ = 0;
 
         // ROS 2 Publisher示例

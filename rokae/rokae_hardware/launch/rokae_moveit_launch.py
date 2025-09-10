@@ -59,8 +59,6 @@ def generate_launch_description():
     urdf_file = os.path.join(description_pkg, "urdf", "xMate.urdf.xacro")
     # controller_yaml = os.path.join(hardware_pkg, "config", "xMateCR_controllers.yaml")
     # -------- 根据机型选择控制器配置 --------
-    # -------- 根据机型选择控制器配置 --------
-    # 控制器配置
     # 控制器配置
     controller_yaml = PathJoinSubstitution([
         hardware_pkg,
