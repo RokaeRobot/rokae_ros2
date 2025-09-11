@@ -1,8 +1,10 @@
+# 运行环境：ubuntu22.04 ROS2 humble  
+鱼香ROS2一键安装：<https://blog.csdn.net/pixelprodigy/article/details/147933853>
 # 使用步骤：
 mkdir -p ~/ros2_ws/src  
 cd ~/ros2_ws/src
 git clone https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2.git  
-cd ..
+cd ..  
 colcon build  
 
 # 启动机器人命令    
