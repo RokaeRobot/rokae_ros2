@@ -59,5 +59,5 @@ auto move_group = std::make_shared<moveit::planning_interface::MoveGroupInterfac
 
 # 需要优化的地方  
 ## 1.rviz端plan时候可视化界面仿真机器人未随着HMI中机器人移动，可优化  
-## 2.机器人位置指令下发频率需要和机器人控制周期以及ROS2生命周期匹配，否则会出现：[ros2_control_node-1]   what():  实时模式异常: 运动错误: 指令轴速度超限 (10-kCommandJointVelocityLimitsViolation)报错  
-## 3.机器人运动碰到奇异点导致控制器aborted后，无法再进行下一段轨迹规划，需要重新用命令行启动。可以优化使控制器aborted后重新启动，让机器人再继续进行下一段轨迹规划
+## 2.运行movej.cpp脚本可能遇到的问题：机器人位置指令下发频率需要和机器人控制周期以及ROS2生命周期匹配，否则会出现：[ros2_control_node-1]   what():  实时模式异常: 运动错误: 指令轴速度超限 (10-kCommandJointVelocityLimitsViolation)报错  
+## 3.在rviz下进行plan&excute可能遇到的问题：机器人运动碰到奇异点导致控制器aborted后，无法再进行下一段轨迹规划，需要重新用命令行启动。可以优化使控制器aborted后重新启动，让机器人再继续进行下一段轨迹规划
