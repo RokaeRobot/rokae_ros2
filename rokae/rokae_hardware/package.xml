@@ -19,6 +19,8 @@
   <depend>eigen3_cmake_module</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>controller_manager_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>liborocos-kdl-dev</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

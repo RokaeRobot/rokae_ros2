@@ -22,7 +22,7 @@ find_package(Eigen3 REQUIRED)
 find_package(orocos_kdl REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(controller_manager_msgs REQUIRED)
-
+find_package(PkgConfig REQUIRED)
 
 
 set(SDK_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib")
@@ -43,8 +43,8 @@ target_include_directories(rokae_hardware_interface PRIVATE
 # 4. 添加静态库（ROKAE SDK）：将SDK 路径导入静态库
 add_library(xCoreSDK STATIC IMPORTED)
 set_target_properties(xCoreSDK PROPERTIES
-    #IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.a"
-    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK_static.a"
+    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.a"
+    # IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK_static.a"
 )
 
 add_library(xMateModel STATIC IMPORTED)
@@ -60,8 +60,9 @@ set_target_properties(xMateSDK_so PROPERTIES
 
 target_link_libraries(rokae_hardware_interface
   xCoreSDK
-  #xMateModel  # 如果需要
+  xMateModel  # 如果需要
   xMateSDK_so
+  orocos-kdl
 )
 
 #5.对rokae_hardware_interface工程声明依赖
@@ -116,6 +117,7 @@ target_link_libraries(connect
   xCoreSDK
   xMateModel  # 如果需要
   xMateSDK_so
+  orocos-kdl
 )
 
 install(TARGETS connect 
@@ -150,6 +152,7 @@ target_link_libraries(movej
   xCoreSDK
   xMateModel  # 如果需要
   xMateSDK_so
+  orocos-kdl
 )
 
 install(TARGETS movej
@@ -182,3 +185,23 @@ install(DIRECTORY config launch
 
 # 9.生成 ament package
 ament_package()
+
+# 添加 moveit_msgs 依赖
+find_package(moveit_msgs REQUIRED)
+
+# 轨迹监控节点
+add_executable(trajectory_monitor_node
+  src/trajectory_monitor.cpp
+)
+
+ament_target_dependencies(trajectory_monitor_node
+  rclcpp
+  moveit_msgs        # 新增
+  std_msgs
+  rosidl_typesupport_c
+)
+
+install(TARGETS
+  trajectory_monitor_node
+  DESTINATION lib/${PROJECT_NAME}
+)

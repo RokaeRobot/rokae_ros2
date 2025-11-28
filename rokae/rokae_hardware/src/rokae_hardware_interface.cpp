@@ -7,6 +7,7 @@
 // Rokae sdk
 #include <rokae/robot.h>
 #include <rokae/data_types.h>
+// #include <rokae/motion_control_rt.h>
 //#include "rokae_msgs/include/rokae_msgs/rokae_msgs/msg/external_force.h"
 #include "rokae_hardware/rokae_hardware_interface.h"
 #include "pluginlib/class_list_macros.hpp"
@@ -75,6 +76,7 @@ hardware_interface::CallbackReturn RokaeHardwareInterface<DoF>::on_init(const ha
 
 
 // ROS2接口注册
+//注册状态接口 - 告诉 ROS2 Control 框架硬件能够提供哪些状态数据（从硬件读取的数据）
 template <unsigned short DoF>
 std::vector<hardware_interface::StateInterface> RokaeHardwareInterface<DoF>::export_state_interfaces()
 //std::vector<hardware_interface::StateInterface> RokaeHardwareInterface::export_state_interfaces()
@@ -114,6 +116,7 @@ std::vector<hardware_interface::StateInterface> RokaeHardwareInterface<DoF>::exp
     return state_interfaces;
 }
 
+//注册命令接口 - 告诉 ROS2 Control 框架硬件能够接收哪些命令数据（发送给硬件的控制命令）
 template <unsigned short DoF>
 std::vector<hardware_interface::CommandInterface> RokaeHardwareInterface<DoF>::export_command_interfaces()
 //std::vector<hardware_interface::CommandInterface> RokaeHardwareInterface::export_command_interfaces()
@@ -221,8 +224,8 @@ bool RokaeHardwareInterface<DoF>::initRobot()
 {
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start connect rokae");
     try {
-        //robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
-        robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
+        robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
+        // robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
     } catch (const rokae::NetworkException &e) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot instantiation failed: %s", e.what());
         return false;
@@ -275,47 +278,138 @@ void RokaeHardwareInterface<DoF>::setInitPosition()
 }
 
 
+// template <unsigned short DoF>
+// hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::Time&, const rclcpp::Duration&)
+// //hardware_interface::return_type RokaeHardwareInterface::read(const rclcpp::Time&, const rclcpp::Duration&)
+// {
+//     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始从机器人读取数据read() called");
+   
+//     int update_success = robot_->updateRobotState(std::chrono::milliseconds(1));  ///返回0或268
+
+//     // 读取状态数据，getStateData 返回0通常表示成功
+
+//     int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
+//     int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
+//     int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
+
+//     if (ret_pos != 0) {
+//         RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint position");
+//         return hardware_interface::return_type::ERROR;
+//     }
+//     if (ret_vel != 0) {
+//         RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint velocity");
+//     }
+//     if (ret_torque != 0) {
+//         RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint torque");
+//     }
+
+//     internal_joint_position_command_ = joint_position_state_;
+//     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始从机器人读取数据read() called");
+//     return hardware_interface::return_type::OK;
 template <unsigned short DoF>
-hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::Time&, const rclcpp::Duration&)
-//hardware_interface::return_type RokaeHardwareInterface::read(const rclcpp::Time&, const rclcpp::Duration&)
+hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::Time&, const rclcpp::Duration &period)
 {
     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始从机器人读取数据read() called");
+    // 检查周期时间
+    double period_ms = period.seconds() * 1000.0;
+    if (period_ms>10) {
+        RCLCPP_INFO(
+            rclcpp::get_logger("RokaeHardwareInterface"),
+            "read周期: %.3fms", period_ms);
+    }
    
-    robot_->updateRobotState(std::chrono::milliseconds(1));
+    try {
+        int update_success = robot_->updateRobotState(std::chrono::milliseconds(1));
 
-    // 读取状态数据，getStateData 返回0通常表示成功
+        int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
+        int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
+        int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
+        
+        if (ret_pos != 0) {
+            RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint position");
+            return hardware_interface::return_type::ERROR;
+        }
+        if (ret_vel != 0) {
+            RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint velocity");
+        }
+        if (ret_torque != 0) {
+            RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint torque");
+        }
 
-    int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
-    int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
-    int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
+        internal_joint_position_command_ = joint_position_state_;
+        RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "成功从机器人读取数据");
 
-    if (ret_pos != 0) {
-        RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint position");
-        return hardware_interface::return_type::ERROR;
-    }
-    if (ret_vel != 0) {
-        RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint velocity");
-    }
-    if (ret_torque != 0) {
-        RCLCPP_WARN(rclcpp::get_logger("RokaeHardwareInterface"), "Failed to get joint torque");
-    }
+        return hardware_interface::return_type::OK;
 
-    internal_joint_position_command_ = joint_position_state_;
-    RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始从机器人读取数据read() called");
-    return hardware_interface::return_type::OK;
+    } catch (const rokae::RealtimeMotionException& e) {
+        RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), 
+                     "实时运动异常:---wyf %s", e.what());  
+        ///添加实现 rci_, robot_正常
+        // if (!initRobot()) {
+        // RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot initialization failed.");
+        //写入命令失败: 实时模式异常: 状态错误: 指令和控制模式不一致
+        // return hardware_interface::CallbackReturn::ERROR;
+        // }
+
+
+        return hardware_interface::return_type::ERROR;   //返回error导致接口unavailable
+
+    } 
 }
 
 
+// template <unsigned short DoF>
+// hardware_interface::return_type RokaeHardwareInterface<DoF>::write(const rclcpp::Time&, const rclcpp::Duration &period)
+// //hardware_interface::return_type RokaeHardwareInterface::write(const rclcpp::Time&, const rclcpp::Duration &period)
+// {
+//     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
+//     // enforceLimits(period); // 需要自己实现限幅逻辑
+//     //robot_->updateRobotState(std::chrono::milliseconds(1));
+    
+//     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
+//     return hardware_interface::return_type::OK;
+// }
 
 template <unsigned short DoF>
 hardware_interface::return_type RokaeHardwareInterface<DoF>::write(const rclcpp::Time&, const rclcpp::Duration &period)
-//hardware_interface::return_type RokaeHardwareInterface::write(const rclcpp::Time&, const rclcpp::Duration &period)
 {
     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
-    // enforceLimits(period); // 需要自己实现限幅逻辑
-    //robot_->updateRobotState(std::chrono::milliseconds(1));
+    // 检查周期时间
+    double period_ms = period.seconds() * 1000.0;
+    if (period_ms>10) {
+        RCLCPP_INFO(
+            rclcpp::get_logger("RokaeHardwareInterface"),
+            "write周期: %.3fms", period_ms);
+    }
     
-    RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
+    // 只有位置控制器运行时才发送命令
+    if (joint_position_controller_running_ ) {
+        try {
+            // 正常发送位置命令
+            rokae::JointPosition jcmd(DoF);
+            for (size_t i = 0; i < DoF; i++) {
+                jcmd.joints[i] = joint_position_command_[i];
+            }
+            
+            if (rci_) {
+                rci_->sendCommand(jcmd);
+                // busy_wait(planPeriod*1000);
+            }
+            
+            RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), 
+                        "发送位置命令: [%f, %f, %f, %f, %f, %f]", 
+                        joint_position_command_[0], joint_position_command_[1],
+                        joint_position_command_[2], joint_position_command_[3],
+                        joint_position_command_[4], joint_position_command_[5]);
+                        
+        } 
+        catch (const std::exception& e) {
+            RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), 
+                        "写入命令失败: %s", e.what());
+            return hardware_interface::return_type::ERROR;
+        }
+    }
+    
     return hardware_interface::return_type::OK;
 }
 
@@ -420,7 +514,12 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::perform_command_mod
             joint_position_controller_running_ = true;
             joint_velocity_controller_running_ = false;
             joint_torque_controller_running_ = false;
-            if (rci_) rci_->startMove(rokae::RtControllerMode::jointPosition);
+            if (rci_){
+                //启用servoj接口
+                // rci_->setServoJoint(planPeriod,planPeriod*3,1,ec);
+                rci_->startMove(rokae::RtControllerMode::jointPosition);
+                
+            }
         } else if (first.find(hardware_interface::HW_IF_VELOCITY) != std::string::npos) {
             joint_velocity_controller_running_ = true;
             joint_position_controller_running_ = false;
@@ -442,24 +541,28 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::perform_command_mod
                 joint_position_controller_running_, joint_velocity_controller_running_,
                 joint_torque_controller_running_);
 
+    //启动时被激活[RokaeHardwareInterface]: perform_command_mode_switch done. pos=1 vel=0 eff=0
+
     if (joint_position_controller_running_) {
         //RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
         //std::function<rokae::JointPosition()> callback2 = std::bind(&RokaeHardwareInterface::callback, this);
         //rokae::JointPosition joints_value=callback2();
-        std::function<rokae::JointPosition()> callback = [this]()
-        {
-            rokae::JointPosition jcmd(num_joints_);
-            for (size_t i = 0; i < num_joints_; i++)
-            {
-                jcmd.joints[i] = joint_position_command_[i];
-            }
-            this->time_us2 = time_us1;
-            this->time_us1 = getLocalTimeUs();
-            //std::this_thread::sleep_for(std::chrono::microseconds(50));
-            return jcmd;
-        };
-        this->rci_->setControlLoop(callback, 0, true);
-        this->rci_->startLoop(false);
+        // std::function<rokae::JointPosition()> callback = [this]()
+        // {
+        //     // joint_position_command_ 是由ROS2的控制器通过命令接口设置的，所以理论上，只要控制器更新了 joint_position_command_，回调函数中就会使用最新的值
+        //     // RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"),"使用回调函数");
+        //     rokae::JointPosition jcmd(num_joints_);
+        //     for (size_t i = 0; i < num_joints_; i++)
+        //     {
+        //         jcmd.joints[i] = joint_position_command_[i];
+        //     }
+        //     this->time_us2 = time_us1;
+        //     this->time_us1 = getLocalTimeUs();
+        //     //std::this_thread::sleep_for(std::chrono::microseconds(50));
+        //     return jcmd;
+        // };
+        // this->rci_->setControlLoop(callback, 0, true);
+        // this->rci_->startLoop(false);
     }
     else if (joint_velocity_controller_running_) {
         //for (std::size_t i = 0; i < num_joints_; i++)
@@ -489,6 +592,16 @@ void RokaeHardwareInterface<DoF>::publishExternalForce()
 {
     // TODO: rclcpp::Publisher<rokae_msgs::msg::ExternalForce>::SharedPtr
 }
+
+//servoj 接口
+template<unsigned short DoF>
+void RokaeHardwareInterface<DoF>::busy_wait(int milliseconds) {
+    auto start = std::chrono::steady_clock::now();
+    while (std::chrono::duration_cast<std::chrono::milliseconds>(
+           std::chrono::steady_clock::now() - start).count() < milliseconds) {
+    }
+}
+
 
 
 template class RokaeHardwareInterface<5>;

@@ -37,11 +37,15 @@ namespace rokae {
  class XCORE_API CartMotionGenerator {
   public:
    /**
-    * @brief 根据关节目标位置和速度系数生成一条轴空间轨迹，可用来回零或到达指定位置。
+    * @brief 根据路径总长度和速度系数生成一条笛卡尔空间平滑的轨迹
     * @param[in] speed_factor 速度系数，范围[0, 1]。最终的速度/加速度 = 最大速度/加速度 * 速度系数
-    * @param[in] s_goal 目标关节角度
+    * @param[in] s_goal 路径总长度 [m]
     */
    CartMotionGenerator(double speed_factor, double s_goal);
+
+   /**
+    * @brief 析构函数
+    */
    ~CartMotionGenerator();
 
    /**
@@ -128,7 +132,7 @@ namespace rokae {
 
 #if defined(XMATEMODEL_LIB_SUPPORTED)
  /**
-  * @brief 点位跟随, 点位可以是笛卡尔位姿或轴角度
+  * @brief 点位跟随, 点位可以是笛卡尔位姿或轴角度，适用于视觉伺服跟随的使用场景
   * @tparam DoF 轴数
   */
  template <unsigned short DoF>
@@ -176,13 +180,15 @@ namespace rokae {
    void stop();
 
    /**
-    * @brief 更新期望的位姿
+    * @brief 更新期望的位姿。
+    * @note 跟随带有加减速过程，在接近目标点时减速，故更新的目标点不宜密集，更新频率不宜过快。更新间隔建议至少几十毫秒的量级
     * @param[in] bMe_desire 末端相对于基坐标系，即TCP位姿
     */
    void update(const Eigen::Transform<double, 3, Eigen::Isometry>& bMe_desire);
 
    /**
     * @brief 更新期望的目标轴角度
+    * @note 跟随带有加减速过程，在接近目标点时减速，故更新的目标点不宜密集，更新频率不宜过快。更新间隔建议至少几十毫秒的量级
     * @param[in] jnt_desired 轴角度, 单位: 弧度
     */
    void update(const std::array<double, DoF>& jnt_desired);

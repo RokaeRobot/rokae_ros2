@@ -347,9 +347,10 @@ namespace rokae {
     * @param[in] count 查询个数，上限是10条
     * @param[in] level 指定日志等级，空集合代表不指定
     * @param[out] ec 错误码
+    * @param[in] offset 偏移数, 比如0代表从最新的日志开始查询, 10代表从第11条开始查询
     * @return 日志信息
     */
-   std::vector<LogInfo> queryControllerLog(unsigned count, const std::set<LogInfo::Level>& level, error_code &ec) noexcept;
+   std::vector<LogInfo> queryControllerLog(unsigned count, const std::set<LogInfo::Level>& level, error_code &ec, unsigned offset = 0) noexcept;
 
    // **********************************************************************
    // ******************      Motion Controller        *********************
@@ -1072,7 +1073,6 @@ namespace rokae {
     * @param[out] ec 错误码
     */
    void setxPanelRS485(xPanelOpt::Vout opt, bool if_rs485, error_code& ec) noexcept;
-
 
    /**
     * @brief 通过xPanel末端读写modbus寄存器

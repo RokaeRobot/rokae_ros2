@@ -40,7 +40,7 @@ def generate_launch_description():
     # 得到 rokae_xMateCR7_moveit_config 的 share 路径
     moveit_config_pkg_share = FindPackageShare(moveit_config_pkg_name)
 
-    # 拼接到 launch 文件
+    # 拼接到 launch 文件   /path/to/rokae_hardware/launch/xMate_moveit_config.launch.py
     moveit_config_launch_file = PathJoinSubstitution([
         hardware_pkg,   #只启动一个moveit.launch.py
         "launch",
@@ -77,7 +77,7 @@ def generate_launch_description():
             " robot_type:=", robot_type,    #这里把机型传入 xacro
             " robot_ip:=", robot_ip,
             " local_ip:=", local_ip,
-            " use_fake_hardware:=",use_fake_hardware
+            " use_fake_hardware:=",use_fake_hardware,
         ])
     }
     
@@ -90,6 +90,7 @@ def generate_launch_description():
                         #controller_yaml  #给节点ros2_control_node本身传递robot_description和controller_yaml文件中的参数
                         ],   
             # prefix="gdb -ex run --args",   #gdb调试打印硬件接口运行情况，定位崩溃位置
+            # prefix="xterm -e gdb -ex run --args",
             # remappings=[("joint_states", "rokae_arm/joint_states")],
             output="both",
         )
@@ -159,7 +160,7 @@ def generate_launch_description():
             parameters=[
                 {
                     "source_list": [
-                        "rokae_arm/joint_states",
+                        "joint_states",
                     ],
                     "rate": 30,
                 }

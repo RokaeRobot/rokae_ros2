@@ -190,6 +190,22 @@ namespace rokae {
     */
    void setCartesianMaxVel(const std::array<double, 6> &velocity, error_code &ec) noexcept;
 
+   /**
+    * @brief 阻抗力限幅指令 - 笛卡尔。fcStart()开始生效, fcStop后失效。
+    * 说明: 在部分力控装配场景，采用阻抗下运动，同时想限制末端出力，也起到一个末端力监控的作用。
+    * @param[out] max_wrench 依次为：XYZ [N], ABC [Nm], 范围 [0, 1000], 默认设置最大值
+    * @param[out] ec 错误码
+    */
+   void setCartesianControlMaxWrench(const std::array<double, 6> &max_wrench, error_code &ec) noexcept;
+
+   /**
+    * @brief  阻抗速度限幅 - 笛卡尔。fcStart()开始生效, fcStop后失效。
+    * 说明: 以加期望力下压直到接触这个场景为例，一般是设置期望力的方式来实现。此接口可对该接触过程做限速处理。
+    * @param[out] max_cart_vel 范围 XYZ - [0, 3.0], 单位m/s, ABC - [0, 10.0], 单位rad/s, 默认设置最大值
+    * @param[out] ec 错误码
+    */
+   void setCartesianControlMaxVel(const std::array<double, 6> &max_cart_vel, error_code &ec) noexcept;
+
    /// @cond DO_NOT_DOCUMENT
    explicit BaseForceControl(std::shared_ptr<XService> rpc);
    virtual ~BaseForceControl();
@@ -260,6 +276,36 @@ namespace rokae {
     * @param[out] ec 错误码
     */
    void setJointMaxEnergy(const std::array<double, DoF> &energy, error_code &ec) noexcept;
+
+   /**
+    * @brief 阻抗力限幅指令 - 关节。fcStart()开始生效, fcStop后失效。
+    * 说明: 在部分力控装配场景，采用阻抗下运动，同时想限制末端出力，也起到一个末端力监控的作用。
+    * @param[in] max_torque 力限幅, 单位：Nm, 范围 [0, 1000], 默认设置最大值
+    * @param[out] ec 错误码
+    */
+   void setJointControlMaxTorque(const std::array<double, DoF> &max_torque, error_code &ec) noexcept;
+
+   /**
+    * @brief 阻抗速度限幅 - 关节。fcStart()开始生效, fcStop后失效。
+    * 说明: 以加期望力下压直到接触这个场景为例，一般是设置期望力的方式来实现。此接口可对该接触过程做限速处理。
+    * @param[in] max_joint_vel 关节速度最大值, 单位: rad/s, 范围 [0, 10.0], 默认设置最大值
+    * @param[out] ec 错误码
+    */
+   void setJointControlMaxVel(const std::array<double, DoF> &max_joint_vel, error_code &ec) noexcept;
+
+   /**
+    * @brief 设置各轴力控带宽。fcStart()开始生效, fcStop后失效。
+    * @param[in] gain 各轴带宽, 范围 [0, 60], 各轴默认值20, 无单位
+    * @param[out] ec 错误码
+    */
+   void setFcGain(const std::array<double, DoF> &gain, error_code &ec) noexcept;
+
+   /**
+    * @brief 设置各轴摩擦力补偿系数。fcStart()开始生效, fcStop后失效。
+    * @param[in] fric 补偿系数, 范围 [0, 1], 各轴默认值0.9, 无单位
+    * @param[out] ec 错误码
+    */
+   void setFriction(const std::array<double, DoF> &fric, error_code &ec) noexcept;
 
  };
 

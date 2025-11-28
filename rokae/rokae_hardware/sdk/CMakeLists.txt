@@ -7,7 +7,11 @@ set(SHARED_HEADERS
     exception.h
     model.h
 	robot.h
-	)
+    motion_control_rt.h
+    force_control.h
+    planner.h
+	utility.h
+    )
 
 
 add_compile_options(-std=c++17)

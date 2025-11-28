@@ -172,6 +172,22 @@ namespace rokae {
    [[deprecated("Use BaseRobot::getStateData(fieldName, data) instead")]]
    int getStateData(const std::string &fieldName, R &data);
 
+   // *******************          ServoJ相关          *********************
+
+   /**
+    * @brief 通过实时模式sendCommand下发关节位置，开放调用周期、增益和前瞻时间的设置，且开启servoJ功能
+    * @param[in] ServoJ_T 下发关节位置时调用servoJ的周期, 单位s
+    * @param[in] ServoJ_Lookahead 前瞻时间，对下发关节位置后运动速度的限制, 单位s
+    * @param[in] ServoJ_Kp 控制增益
+    * @param[out] ec 错误码
+    */
+   void setServoJoint(double ServoJ_T, double ServoJ_Lookahead, double ServoJ_Kp, error_code &ec) noexcept;
+
+   /**
+    * @brief 关闭servoJ功能，停止使用setServoJoint需要进行关闭
+    */
+   void stopServoJoint() noexcept;
+
    // *********************************************************************
    // ********************          其他操作            *********************
 
