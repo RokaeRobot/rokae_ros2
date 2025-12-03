@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- 控制接口定义宏 -->
+  <xacro:macro name="AR5R_ros2_control" params="
+    xMate_type:=AR5R
+    robot_ip
+    local_ip
+    use_fake_hardware:=false
+    ">
+
+    <ros2_control name="rokae_hardware_interface" type="system">
+      <hardware>
+        <xacro:if value="${use_fake_hardware}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="state_following_offset">0.0</param>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+          <param name="xMate_type">${xMate_type}</param>
+        </xacro:if>
+        <xacro:unless value="${use_fake_hardware}">
+          <plugin>rokae_hardware/RokaeHardwareInterface7</plugin>
+          <param name="robot_ip">${robot_ip}</param>
+          <param name="local_ip">${local_ip}</param>
+          <param name="xMate_type">${xMate_type}</param>
+        </xacro:unless>
+      </hardware>
+
+      <joint name="AR5-5_07R-W4C4A2_joint_1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_2">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_3">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_4">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_5">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_6">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="AR5-5_07R-W4C4A2_joint_7">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

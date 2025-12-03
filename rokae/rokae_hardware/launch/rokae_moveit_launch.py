@@ -41,6 +41,10 @@ def generate_launch_description():
     moveit_config_pkg_share = FindPackageShare(moveit_config_pkg_name)
 
     # 拼接到 launch 文件   /path/to/rokae_hardware/launch/xMate_moveit_config.launch.py
+<<<<<<< Updated upstream
+=======
+    #hardware文件夹下
+>>>>>>> Stashed changes
     moveit_config_launch_file = PathJoinSubstitution([
         hardware_pkg,   #只启动一个moveit.launch.py
         "launch",
@@ -59,7 +63,7 @@ def generate_launch_description():
     urdf_file = os.path.join(description_pkg, "urdf", "xMate.urdf.xacro")
     # controller_yaml = os.path.join(hardware_pkg, "config", "xMateCR_controllers.yaml")
     # -------- 根据机型选择控制器配置 --------
-    # 控制器配置
+    # 控制器配置    hardware  文件夹下
     controller_yaml = PathJoinSubstitution([
         hardware_pkg,
         "config",

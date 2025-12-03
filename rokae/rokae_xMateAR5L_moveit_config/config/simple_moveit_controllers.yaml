@@ -1,0 +1,47 @@
+# # MoveIt uses this configuration for controller management
+
+# moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+# moveit_simple_controller_manager:
+#   controller_names:
+#     - AR5L_arm_controller
+
+#   AR5L_arm_controller:
+#     type: FollowJointTrajectory
+#     joints:
+#       - AR5-5_07L-W4C4A2_joint_1
+#       - AR5-5_07L-W4C4A2_joint_2
+#       - AR5-5_07L-W4C4A2_joint_3
+#       - AR5-5_07L-W4C4A2_joint_4
+#       - AR5-5_07L-W4C4A2_joint_5
+#       - AR5-5_07L-W4C4A2_joint_6
+#       - AR5-5_07L-W4C4A2_joint_7
+
+controller_names:
+  - position_joint_trajectory_controller
+
+position_joint_trajectory_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - AR5-5_07L-W4C4A2_joint_1
+      - AR5-5_07L-W4C4A2_joint_2
+      - AR5-5_07L-W4C4A2_joint_3
+      - AR5-5_07L-W4C4A2_joint_4
+      - AR5-5_07L-W4C4A2_joint_5
+      - AR5-5_07L-W4C4A2_joint_6
+      - AR5-5_07L-W4C4A2_joint_7
+    constraints:
+      goal_time: 20
+      stopped_velocity_tolerance: 0.5
+      joint1: {goal: 2.175}
+      joint2: {goal: 2.175}
+      joint3: {goal: 2.175}
+      joint4: {goal: 2.175}
+      joint5: {goal: 2.175}
+      joint6: {goal: 2.175}
+      joint7: {goal: 2.175}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
