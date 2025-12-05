@@ -26,6 +26,7 @@ def launch_setup(context, *args, **kwargs):
     robot_ip = LaunchConfiguration("robot_ip").perform(context)
     local_ip = LaunchConfiguration("local_ip").perform(context)
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path").perform(context)
+    use_fake_hardware = LaunchConfiguration("use_fake_hardware").perform(context)
 
     # description 包
     description_pkg = get_package_share_directory("rokae_description")
@@ -48,7 +49,8 @@ def launch_setup(context, *args, **kwargs):
                 " robot_type:=", robot_type,
                 " robot_ip:=", robot_ip,
                 " local_ip:=", local_ip,
-                " use_fake_hardware:=true"
+                # " use_fake_hardware:=true"
+                " use_fake_hardware:=",use_fake_hardware,
             ]),
             value_type=str
         )
@@ -94,9 +96,14 @@ def launch_setup(context, *args, **kwargs):
     joint_limits_yaml = os.path.join(moveit_config_pkg_share, "config", "joint_limits.yaml")
     
     trajectory_execution = {
-        "moveit_manage_controllers": False,
-        # "execution_duration_monitoring": False,
-        # "manage_controllers": True,
+        "moveit_manage_controllers": True,
+        "execution_duration_monitoring": True,
+        "trajectory_execution.wait_for_trajectory_completion": True,
+        # 添加状态更新配置
+        "trajectory_execution.update_state_after_execution": True,
+        "trajectory_execution.update_state_before_execution": True,
+        "execution_duration_monitoring": False,
+        "manage_controllers": True,
         "trajectory_execution.allowed_execution_duration_scaling": 5.0,
         "trajectory_execution.allowed_goal_duration_margin": 2.0,
         "trajectory_execution.allowed_start_tolerance": 0.01,
@@ -142,7 +149,10 @@ def launch_setup(context, *args, **kwargs):
             robot_description_semantic,
             robot_description_kinematics,
             ompl_pipeline_config,
+            trajectory_execution,
+            planning_scene_monitor_parameters,
             ],
+        # prefix="gdb -ex run --args",
     )
     
     movej_node = Node(

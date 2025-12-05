@@ -73,6 +73,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         void publishExternalForce();
 
         void enforceLimits(const rclcpp::Duration & period);
+        void busy_wait(int milliseconds);
 
         std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
         std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
@@ -91,7 +92,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         
 
     public: 
-        //std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
+        // std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
         std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
         std::string robot_ip_;
         std::string local_ip_;
@@ -103,7 +104,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         std::vector<std::string> joint_names_;
 
         using RtType = rokae::RtMotionControl<rokae::WorkType::collaborative, DoF>;
-        std::shared_ptr<RtType> rci_;
+        std::shared_ptr<RtType> rci_; //
 
         std::vector<double> joint_position_state_;
         std::vector<double> joint_velocity_state_;
@@ -131,6 +132,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         bool controllers_initialized_ = false;
 
         long times_loop_ = 0;
+        double planPeriod = 0.001;  ///servoj 1ms
 
         // ROS 2 Publisher示例
         // rclcpp::Publisher<rokae_msgs::msg::ExternalForce>::SharedPtr ext_force_in_stiff_pub_;

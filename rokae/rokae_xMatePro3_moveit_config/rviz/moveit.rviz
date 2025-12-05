@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
+        - /RobotModel1
       Splitter Ratio: 0.5
     Tree Height: 226
   - Class: rviz_common/Help
@@ -35,6 +36,22 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
+    - Class: rviz_default_plugins/RobotModel
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: true
+      Name: RobotModel
+      TF Prefix: ""
+      Value: true
+      Visual Enabled: true
+      Collision Enabled: false
+      Robot State Topic: /joint_states  # 关键：订阅真实机械臂的关节状态
+      # 原有的 MotionPlanning 显示
     - Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Name: MotionPlanning

@@ -27,6 +27,12 @@
   <xacro:if value="${robot_type_prop == 'ER7'}">
     <xacro:property name="xMate_type" value="xMateER7"/>
   </xacro:if>
+  <xacro:if value="${robot_type_prop == 'AR5L'}">
+    <xacro:property name="xMate_type" value="AR5L"/>
+  </xacro:if>
+  <xacro:if value="${robot_type_prop == 'AR5R'}">
+    <xacro:property name="xMate_type" value="AR5R"/>
+  </xacro:if>
 
   <!-- 调用总宏（只传 xMate_type，内部再按机型 include/调用具体实现） -->
   <xacro:rokae_robot

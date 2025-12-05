@@ -59,9 +59,9 @@ def launch_setup(context, *args, **kwargs):
     }
 
     # kinematics
-    # robot_description_kinematics = os.path.join(
-    #     moveit_config_pkg_share, "config", "kinematics.yaml"
-    # )
+    robot_description_kinematics = os.path.join(
+        moveit_config_pkg_share, "config", "kinematics.yaml"
+    )
 
     movej_node = Node(
         package="rokae_hardware",
@@ -70,8 +70,10 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             robot_description, 
             robot_description_semantic,
-            # robot_description_kinematics
-            ]
+            robot_description_kinematics,
+            ],
+        # prefix="xterm -e gdb -ex run --args",
+        # prefix = "valgrind --leak-check=full --show-leak-kinds=all"
     )
 
     return [movej_node]
