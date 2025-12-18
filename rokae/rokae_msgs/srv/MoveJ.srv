@@ -1,0 +1,6 @@
+# MoveJ.srv
+float64[] joint_positions  # 6个关节角度
+float64 velocity          # 运动速度
+---
+bool success              # 是否成功
+string message            # 返回消息

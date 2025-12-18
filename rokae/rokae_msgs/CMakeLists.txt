@@ -16,9 +16,27 @@ set(msg_files
   msg/RobotState.msg
 )
 
+set(srv_files
+  srv/MoveJ.srv
+  srv/MoveC.srv
+  srv/MoveL.srv
+  srv/GetRobotInfo.srv
+  srv/CalculateFK.srv
+  srv/CalculateIK.srv
+  srv/DragCon.srv
+  srv/JogCon.srv
+  srv/GetDO.srv
+  srv/SetDO.srv
+  srv/GetDI.srv
+  srv/SetDI.srv
+  srv/ReadRegister.srv
+  srv/WriteRegister.srv
+)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
+rosidl_generate_interfaces(
+  ${PROJECT_NAME}
   ${msg_files}
+  ${srv_files}
   DEPENDENCIES
     std_msgs
     geometry_msgs

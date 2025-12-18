@@ -1,0 +1,45 @@
+# JogControl.srv
+string space       # 参考坐标系: "world", "joint", "tool", "flange", "singularityAvoidMode", "baseParallelMode"
+float64 rate       # 速率: 0.01 - 1
+float64 step       # 步长: 笛卡尔空间(毫米)或关节空间(度)
+uint8 index        # 索引: 根据space不同含义不同
+bool direction     # 方向: true-正向, false-负向
+---
+bool success
+string message
+
+#  /**
+#     * @brief 开始jog机器人，需要切换到手动操作模式。
+#     * @note 调用此接口并且机器人开始运动后，无论机器人是否已经自行停止，都必须调用stop()来结束jog操作，否则机器人会一直处于jog的运行状态。
+#     * @param[in] space jog参考坐标系。
+#     *     1) 工具/工件坐标系使用原则同setToolset();
+#     *     2) 工业六轴机型和xMateCR/SR六轴机型支持两种奇异规避方式: JogOpt::singularityAvoidMode JogOpt::baseParallelMode
+#     *     3) CR5轴机型支持平行基座模式Jog: JogOpt::baseParallelMode
+#     * @param[in] rate 速率, 范围 0.01 - 1
+#     * @param[in] step 步长。单位: 笛卡尔空间-毫米 | 轴空间-度。步长大于0即可，不设置上限，
+#     *             如果机器人无法继续jog会自行停止运动。
+#     * @param[in] index 根据不同的space，该参数含义如下：
+#     *     1) 世界坐标系,基坐标系,法兰坐标系,工具工件坐标系:
+#     *       a) 6轴机型: 0~5分别对应X, Y, Z, Rx, Ry, Rz。>5代表外部轴(若有)
+#     *       b) 7轴机型6代表肘关节, >6代表外部轴(若有)
+#     *     2) 轴空间: 关节序号，从0开始计数
+#     *     3) 奇异规避模式,平行基座模式:
+#     *       a) 6轴机型：0~5分别对应X, Y, Z, J4(4轴), Ry, J6(6轴);
+#     *       b) 5轴机型：0~4分别对应X, Y, Z, Ry, J5(5轴)
+#     * @param[in] direction 根据不同的space和index，该参数含义如下：
+#     *     1) 奇异规避模式 J4: true - ±180° | false - 0°;
+#     *     2) 平行基座模式 J4 & Ry: true - ±180° | false - 0°
+#     *     3) 其它，true - 正向 | false - 负向
+#     * @param[out] ec 错误码
+#     */
+
+    #  world = 0, ///< 世界坐标系
+    #  flange, ///< 法兰坐标系
+    #  baseFrame, ///< 基坐标系
+    #  toolFrame, ///< 工具坐标系
+    #  wobjFrame, ///< 工件坐标系
+    #  jointSpace, ///< 轴空间
+    #  singularityAvoidMode, ///< 奇异规避模式，适用于工业六轴, xMateCR和xMateSR机型，规避方法是锁定4轴
+    #  baseParallelMode ///< 平行基座模式，仅适用于xMateCR和xMateSR机型
+    
+#e.g.世界坐标系下, 沿Z+方向运动50mm, 速率50%，startJog(JogOpt::world, 0.5, 50, 2, true, ec)

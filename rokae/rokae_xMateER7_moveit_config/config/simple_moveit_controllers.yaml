@@ -7,15 +7,15 @@ position_joint_trajectory_controller:
     type: FollowJointTrajectory
     default: True
     joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
-      - joint6
+      - xMate7_joint_1
+      - xMate7_joint_2
+      - xMate7_joint_3
+      - xMate7_joint_4
+      - xMate7_joint_5
+      - xMate7_joint_6
     constraints:
       goal_time: 20
-      stopped_velocity_tolerance: 2.175
+      stopped_velocity_tolerance: 0.5
       joint1: {goal: 2.175}
       joint2: {goal: 2.175}
       joint3: {goal: 2.175}

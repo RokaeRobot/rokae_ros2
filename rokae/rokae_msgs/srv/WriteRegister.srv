@@ -1,0 +1,19 @@
+# 写入寄存器服务
+string register_name    # 寄存器名称
+string data_type       # "float", "int16", "bool" 或 "bit"
+uint8 index            # 索引（单值写入时使用，批量写入时忽略）
+bool write_all         # true: 批量写入整个数组，false: 写入单个值
+
+# 单值写入字段（当 write_all=false 时使用）
+float32 float_value
+int16 int16_value
+bool bool_value
+
+# 批量写入字段（当 write_all=true 时使用）
+float32[] float_values
+int16[] int16_values
+bool[] bool_values
+
+---
+bool success
+string message

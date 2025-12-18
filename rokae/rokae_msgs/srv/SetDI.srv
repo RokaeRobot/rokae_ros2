@@ -1,0 +1,7 @@
+# SetDI.srv
+uint32 board
+uint32 port
+bool state
+---
+bool success
+string message

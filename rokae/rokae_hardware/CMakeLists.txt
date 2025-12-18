@@ -1,102 +1,100 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 project(rokae_hardware)
+
+# 设置构建类型（可选）
+set(CMAKE_BUILD_TYPE Debug)
+
+# 设置编译器警告
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
 # 使用 C++17
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # -----------------------------------------------------------------------------
-# 1. 查找依赖项（用ROS 2方式）
+# 1. 查找依赖项（ROS 2 包）
 # -----------------------------------------------------------------------------
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(rokae_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
 find_package(controller_manager REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(realtime_tools REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(orocos_kdl REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
+# 可选：ROKAE 自定义消息包（如果存在）
+find_package(rokae_msgs REQUIRED)
+
+# 可选：MoveIt 相关包
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(controller_manager_msgs REQUIRED)
-find_package(PkgConfig REQUIRED)
+find_package(moveit_msgs REQUIRED)
 
+add_definitions(-DXMATEMODEL_LIB_SUPPORTED)
+# -----------------------------------------------------------------------------
+# 2. 设置 SDK 路径
+# -----------------------------------------------------------------------------
+# ROKAE SDK 目录（假设 SDK 在当前项目的 sdk 目录下）
+set(SDK_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include)
+set(SDK_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib)
 
-set(SDK_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib")
+# -----------------------------------------------------------------------------
+# 3. 声明可执行文件
+# -----------------------------------------------------------------------------
 
-# 2.添加硬件接口库
+# (3.1) 硬件接口库（如果需要，否则可以注释掉）
 add_library(rokae_hardware_interface SHARED
   src/rokae_hardware_interface.cpp
 )
 
-#3.添加头文件路径
-target_include_directories(rokae_hardware_interface PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-  #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
-  ${EIGEN3_INCLUDE_DIR}
-)
+# (3.2) 连接测试节点
+add_executable(connect src/connect.cpp)
 
-# 4. 添加静态库（ROKAE SDK）：将SDK 路径导入静态库
-add_library(xCoreSDK STATIC IMPORTED)
-set_target_properties(xCoreSDK PROPERTIES
-    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.a"
-    # IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK_static.a"
-)
+# (3.3) MoveJ 测试节点
+add_executable(movej src/movej.cpp)
 
-add_library(xMateModel STATIC IMPORTED)
-set_target_properties(xMateModel PROPERTIES
-    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxMateModel.a"  POSITION_INDEPENDENT_CODE ON
-)
+# (3.4) 轨迹监控节点
+add_executable(trajectory_monitor_node src/trajectory_monitor.cpp)
 
-add_library(xMateSDK_so STATIC IMPORTED)
-set_target_properties(xMateSDK_so PROPERTIES
-    # IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.so.0.3.3"  POSITION_INDEPENDENT_CODE ON
-    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.so.0.6.0"  POSITION_INDEPENDENT_CODE ON
-)
+# (3.5) 新增：rokae_driver 节点（这是你要添加的）
+add_executable(rokae_driver src/rokae_driver.cpp)
 
-target_link_libraries(rokae_hardware_interface
-  xCoreSDK
-  xMateModel  # 如果需要
-  xMateSDK_so
-  orocos-kdl
-)
+# -----------------------------------------------------------------------------
+# 4. 为每个节点链接依赖
+# -----------------------------------------------------------------------------
 
-#5.对rokae_hardware_interface工程声明依赖
+# (4.1) 硬件接口库的依赖
 ament_target_dependencies(rokae_hardware_interface
   rclcpp
   rclcpp_lifecycle
-  sensor_msgs
   std_msgs
+  geometry_msgs
+  sensor_msgs
   rokae_msgs
   controller_manager
   hardware_interface
   pluginlib
-  orocos_kdl
   realtime_tools
   Eigen3
+  orocos_kdl
 )
 
-# 6. 安装节点与头文件
-install(TARGETS
-  rokae_hardware_interface
-  DESTINATION lib/${PROJECT_NAME}
-  # rokae_hardware
-  # ARCHIVE DESTINATION lib
-  # LIBRARY DESTINATION lib
-  # RUNTIME DESTINATION bin
-)
-
-add_executable(connect src/connect.cpp)
-
-ament_target_dependencies(connect 
+# (4.2) connect 节点的依赖
+ament_target_dependencies(connect
   rclcpp
   rclcpp_lifecycle
-  sensor_msgs
   std_msgs
+  geometry_msgs
+  sensor_msgs
   rokae_msgs
   controller_manager
   hardware_interface
@@ -105,103 +103,153 @@ ament_target_dependencies(connect
   Eigen3
 )
 
-#3.添加头文件路径
-target_include_directories(connect PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-  #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
-  ${EIGEN3_INCLUDE_DIR}
-)
-
-target_link_libraries(connect 
-  xCoreSDK
-  xMateModel  # 如果需要
-  xMateSDK_so
-  orocos-kdl
-)
-
-install(TARGETS connect 
-  DESTINATION lib/${PROJECT_NAME}
-  # ARCHIVE DESTINATION lib
-  # LIBRARY DESTINATION lib
-  # RUNTIME DESTINATION bin
-)
-
-
-install(DIRECTORY include/
-  DESTINATION include/
-)
-
-add_executable(movej src/movej.cpp)
+# (4.3) movej 节点的依赖
 ament_target_dependencies(movej
   rclcpp
   moveit_ros_planning_interface
   controller_manager_msgs
   realtime_tools
-)
-
-#3.添加头文件路径
-target_include_directories(movej PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include
-  #${CMAKE_CURRENT_SOURCE_DIR}/sdk/include/rokae/new_sdk
-  ${EIGEN3_INCLUDE_DIR}
-)
-
-target_link_libraries(movej 
-  xCoreSDK
-  xMateModel  # 如果需要
-  xMateSDK_so
-  orocos-kdl
-)
-
-install(TARGETS movej
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-# 7.插件导出（用于 controller manager 动态加载）  
-# 将 hardware_interface 插件描述文件 xml 注册到插件系统供 controller manager 使用 pluginlib 动态加载实现的接口类
-pluginlib_export_plugin_description_file(hardware_interface rokae_hardware_interface.xml)
-install(FILES rokae_hardware_interface.xml 
-DESTINATION share/${PROJECT_NAME})
-
-#8.
-ament_export_dependencies(
-  rclcpp
-  rclcpp_lifecycle
-  sensor_msgs
   std_msgs
-  rokae_msgs
-  controller_manager
-  hardware_interface
-  pluginlib
-  realtime_tools
-  Eigen3
 )
 
-install(DIRECTORY config launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-# 9.生成 ament package
-ament_package()
-
-# 添加 moveit_msgs 依赖
-find_package(moveit_msgs REQUIRED)
-
-# 轨迹监控节点
-add_executable(trajectory_monitor_node
-  src/trajectory_monitor.cpp
-)
-
+# (4.4) trajectory_monitor_node 的依赖
 ament_target_dependencies(trajectory_monitor_node
   rclcpp
-  moveit_msgs        # 新增
+  moveit_msgs
   std_msgs
-  rosidl_typesupport_c
 )
 
+# (4.5) rokae_driver_node 的依赖
+ament_target_dependencies(rokae_driver
+  rclcpp
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+  std_srvs
+  # 如果使用 rokae_msgs，则添加
+  rokae_msgs
+  tf2_geometry_msgs
+)
+
+# -----------------------------------------------------------------------------
+# 5. 包含目录配置
+# -----------------------------------------------------------------------------
+
+# 公共包含目录
+set(COMMON_INCLUDES
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${SDK_INCLUDE_DIR}
+  ${Eigen3_INCLUDE_DIRS}
+)
+
+# 为每个目标添加包含目录
+foreach(target 
+    rokae_hardware_interface
+    connect
+    movej
+    trajectory_monitor_node
+    rokae_driver
+)
+  target_include_directories(${target}
+    PUBLIC
+      ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+      ${SDK_INCLUDE_DIR}
+      ${Eigen3_INCLUDE_DIRS}
+      ${orocos_kdl_INCLUDE_DIRS}
+  )
+endforeach()
+
+# -----------------------------------------------------------------------------
+# 6. SDK 库配置
+# -----------------------------------------------------------------------------
+
+# (6.1) 添加 SDK 库目录到链接路径
+link_directories(${SDK_LIB_DIR})
+
+# (6.2) ROKAE SDK 静态库
+# 注意：ROKAE SDK 可能有多个库文件
+add_library(xCoreSDK STATIC IMPORTED)
+set_target_properties(xCoreSDK PROPERTIES
+    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.a"
+)
+
+add_library(xMateModel STATIC IMPORTED)
+set_target_properties(xMateModel PROPERTIES
+    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxMateModel.a"
+    POSITION_INDEPENDENT_CODE ON
+)
+
+# 如果是动态库，可以这样处理
+# 假设 ROKAE 也有一个主要的 .so 文件
+if(EXISTS "${SDK_LIB_DIR}/libxCoreSDK.so")
+  add_library(xCoreSDK_so SHARED IMPORTED)
+  set_target_properties(xCoreSDK_so PROPERTIES
+    IMPORTED_LOCATION "${SDK_LIB_DIR}/libxCoreSDK.so"
+  )
+endif()
+
+# -----------------------------------------------------------------------------
+# 7. 链接库配置（为每个节点链接 SDK 库）
+# -----------------------------------------------------------------------------
+
+# 公共的 SDK 库列表
+set(COMMON_SDK_LIBS
+  xCoreSDK
+  xMateModel
+  # 如果有动态库版本
+  # xCoreSDK_so
+  orocos-kdl
+  ${Eigen3_LIBRARIES}
+)
+
+# 为每个目标链接库
+target_link_libraries(rokae_hardware_interface ${COMMON_SDK_LIBS})
+target_link_libraries(connect ${COMMON_SDK_LIBS})
+target_link_libraries(movej ${COMMON_SDK_LIBS})
+target_link_libraries(rokae_driver ${COMMON_SDK_LIBS})
+
+# trajectory_monitor_node 可能不需要 SDK 库
+# target_link_libraries(trajectory_monitor_node ...)
+
+# -----------------------------------------------------------------------------
+# 8. 安装配置
+# -----------------------------------------------------------------------------
+
+# 安装可执行文件
 install(TARGETS
+  rokae_hardware_interface
+  connect
+  movej
   trajectory_monitor_node
+  rokae_driver
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# 安装头文件（如果有）
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# 安装 launch 文件
+install(DIRECTORY launch/
+  DESTINATION share/${PROJECT_NAME}/launch
+)
+
+# 安装配置文件
+install(DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
+# 安装插件描述文件（硬件接口需要）
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/rokae_hardware_interface.xml")
+  pluginlib_export_plugin_description_file(hardware_interface rokae_hardware_interface.xml)
+  install(FILES rokae_hardware_interface.xml 
+    DESTINATION share/${PROJECT_NAME}
+  )
+endif()
+
+# -----------------------------------------------------------------------------
+# 9. 生成 ament 包
+# -----------------------------------------------------------------------------
+ament_package()

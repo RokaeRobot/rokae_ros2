@@ -224,8 +224,8 @@ bool RokaeHardwareInterface<DoF>::initRobot()
 {
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start connect rokae");
     try {
-        // robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
-        robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
+        robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
+        // robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
     } catch (const rokae::NetworkException &e) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot instantiation failed: %s", e.what());
         return false;
@@ -343,7 +343,7 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::
 
     } catch (const rokae::RealtimeMotionException& e) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), 
-                     "实时运动异常:---wyf %s", e.what());  
+                     "实时运动异常: %s", e.what());  
         ///添加实现 rci_, robot_正常
         // if (!initRobot()) {
         // RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot initialization failed.");
@@ -547,6 +547,7 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::perform_command_mod
         //RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始向机器人写入数据write() called");
         //std::function<rokae::JointPosition()> callback2 = std::bind(&RokaeHardwareInterface::callback, this);
         //rokae::JointPosition joints_value=callback2();
+        
         // std::function<rokae::JointPosition()> callback = [this]()
         // {
         //     // joint_position_command_ 是由ROS2的控制器通过命令接口设置的，所以理论上，只要控制器更新了 joint_position_command_，回调函数中就会使用最新的值
