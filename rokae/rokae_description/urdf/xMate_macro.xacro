@@ -58,8 +58,6 @@
         use_fake_hardware="${use_fake_hardware}"/>
     </xacro:if>
 
-    <!-- 其他机型（如有）按同样模式继续加 -->
-
     <!-- AR5L -->
     <xacro:if value="${xMate_type == 'AR5L'}">
       <xacro:include filename="$(find rokae_description)/urdf/AR5-5_07L-W4C4A2.urdf.xacro"/>
@@ -78,6 +76,63 @@
         local_ip="${local_ip}"
         use_fake_hardware="${use_fake_hardware}"/>
     </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateSR5'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateSR5.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateSR5.ros2_control.xacro"/>
+      <xacro:sr5_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateCR12'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR12.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR12.ros2_control.xacro"/>
+      <xacro:cr12_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateCR18'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR18.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR18.ros2_control.xacro"/>
+      <xacro:cr18_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateCR20'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR20.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR20.ros2_control.xacro"/>
+      <xacro:cr20_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateER3'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateER3.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateER3.ros2_control.xacro"/>
+      <xacro:er3_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <xacro:if value="${xMate_type == 'xMateSR3'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateSR3.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateSR3.ros2_control.xacro"/>
+      <xacro:sr3_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
+    <!-- 其他机型（如有）按同样模式继续加 -->
+    
   </xacro:macro>
 
 </robot>

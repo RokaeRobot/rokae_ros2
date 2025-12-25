@@ -21,12 +21,12 @@ controller_manager:
 joint_state_broadcaster:
   ros__parameters:
     joints:
-      - xMate7_joint_1
-      - xMate7_joint_2
-      - xMate7_joint_3
-      - xMate7_joint_4
-      - xMate7_joint_5
-      - xMate7_joint_6
+      - xMateER7_joint_1
+      - xMateER7_joint_2
+      - xMateER7_joint_3
+      - xMateER7_joint_4
+      - xMateER7_joint_5
+      - xMateER7_joint_6
     command_interfaces:
       - position
     state_interfaces:
@@ -36,12 +36,12 @@ joint_state_broadcaster:
 position_joint_trajectory_controller:
   ros__parameters:
     joints:
-      - xMate7_joint_1
-      - xMate7_joint_2
-      - xMate7_joint_3
-      - xMate7_joint_4
-      - xMate7_joint_5
-      - xMate7_joint_6
+      - xMateER7_joint_1
+      - xMateER7_joint_2
+      - xMateER7_joint_3
+      - xMateER7_joint_4
+      - xMateER7_joint_5
+      - xMateER7_joint_6
     command_interfaces:
       - position
     state_interfaces:
@@ -64,12 +64,12 @@ velocity_joint_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - xMate7_joint_1
-      - xMate7_joint_2
-      - xMate7_joint_3
-      - xMate7_joint_4
-      - xMate7_joint_5
-      - xMate7_joint_6
+      - xMateER7_joint_1
+      - xMateER7_joint_2
+      - xMateER7_joint_3
+      - xMateER7_joint_4
+      - xMateER7_joint_5
+      - xMateER7_joint_6
     command_interfaces:
       - velocity
     state_interfaces:
@@ -100,12 +100,12 @@ torque_joint_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - xMate7_joint_1
-      - xMate7_joint_2
-      - xMate7_joint_3
-      - xMate7_joint_4
-      - xMate7_joint_5
-      - xMate7_joint_6
+      - xMateER7_joint_1
+      - xMateER7_joint_2
+      - xMateER7_joint_3
+      - xMateER7_joint_4
+      - xMateER7_joint_5
+      - xMateER7_joint_6
     command_interfaces:
       - effort
     state_interfaces:
@@ -136,12 +136,12 @@ joint_group_position_controller:
   ros__parameters:
     type: position_controllers/JointGroupPositionController
     joints:
-      - xMate7_joint_1
-      - xMate7_joint_2
-      - xMate7_joint_3
-      - xMate7_joint_4
-      - xMate7_joint_5
-      - xMate7_joint_6
+      - xMateER7_joint_1
+      - xMateER7_joint_2
+      - xMateER7_joint_3
+      - xMateER7_joint_4
+      - xMateER7_joint_5
+      - xMateER7_joint_6
 
 # # Settings for ros_control control loop
 # hardware_control_loop:

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMate7">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMateER7">
   <!-- Constants for robot dimensions -->
   <!-- <material name="black">
     <color rgba="0.0 0.0 0.0 1.0"/>
@@ -36,36 +36,36 @@
   <link name="world"/>
   <joint name="fixed" type="fixed">
     <parent link="world"/>
-    <child link="xMate7_base"/>
+    <child link="xMateER7_base"/>
   </joint>
 
 
   <!--base-->
-  <link name="xMate7_base">
+  <link name="xMateER7_base">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_base.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <material name="white"/>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_base.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_1" type="revolute">
-    <parent link="xMate7_base"/>
-    <child link="xMate7_link1"/>
+  <joint name="xMateER7_joint_1" type="revolute">
+    <parent link="xMateER7_base"/>
+    <child link="xMateER7_link1"/>
     <limit effort="217" lower="-2.9671" upper="2.9671" velocity="1.5707963267948966"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
   </joint>
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xMate7_joint_7">
+    <joint name="xMateER7_joint_7">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor1">
@@ -74,10 +74,10 @@
     </actuator>
   </transmission>
   <!--link 1-->
-  <link name="xMate7_link1">
+  <link name="xMateER7_link1">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="white"/>
@@ -89,14 +89,14 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link1.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_2" type="revolute">
-    <parent link="xMate7_link1"/>
-    <child link="xMate7_link2"/>
+  <joint name="xMateER7_joint_2" type="revolute">
+    <parent link="xMateER7_link1"/>
+    <child link="xMateER7_link2"/>
     <limit effort="217" lower="-2.0944" upper="2.0944" velocity="1.5707963267948966"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.404"/>
@@ -112,10 +112,10 @@
     </actuator>
   </transmission>
   <!--link 2-->
-  <link name="xMate7_link2">
+  <link name="xMateER7_link2">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link2.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link2.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <material name="white"/>
@@ -127,14 +127,14 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link2.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link2.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_3" type="revolute">
-    <parent link="xMate7_link2"/>
-    <child link="xMate7_link3"/>
+  <joint name="xMateER7_joint_3" type="revolute">
+    <parent link="xMateER7_link2"/>
+    <child link="xMateER7_link3"/>
     <limit effort="102" lower="-2.0944" upper="2.0944" velocity="3.141592653589793"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.4375"/>
@@ -150,10 +150,10 @@
     </actuator>
   </transmission>
   <!--link 3-->
-  <link name="xMate7_link3">
+  <link name="xMateER7_link3">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link3.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link3.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="white"/>
@@ -165,14 +165,14 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link3.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link3.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_4" type="revolute">
-    <parent link="xMate7_link3"/>
-    <child link="xMate7_link4"/>
+  <joint name="xMateER7_joint_4" type="revolute">
+    <parent link="xMateER7_link3"/>
+    <child link="xMateER7_link4"/>
     <limit effort="66" lower="-2.9671" upper="2.9671" velocity="3.141592653589793"/>
     <!--     lower="-6.2832" upper="6.2832" -->
     <axis xyz="0 0 1"/>
@@ -190,10 +190,10 @@
     </actuator>
   </transmission>
   <!--link 4-->
-  <link name="xMate7_link4">
+  <link name="xMateER7_link4">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link4.stl" scale=".001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link4.stl" scale=".001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <material name="white"/>
@@ -205,14 +205,14 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link4.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link4.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_5" type="revolute">
-    <parent link="xMate7_link4"/>
-    <child link="xMate7_link5"/>
+  <joint name="xMateER7_joint_5" type="revolute">
+    <parent link="xMateER7_link4"/>
+    <child link="xMateER7_link5"/>
     <limit effort="66" lower="-2.0944" upper="2.0944" velocity="3.141592653589793"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
@@ -228,10 +228,10 @@
     </actuator>
   </transmission>
   <!--link 5-->
-  <link name="xMate7_link5">
+  <link name="xMateER7_link5">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link5.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link5.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <material name="white"/>
@@ -243,14 +243,14 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link5.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link5.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMate7_joint_6" type="revolute">
-    <parent link="xMate7_link5"/>
-    <child link="xMate7_link6"/>
+  <joint name="xMateER7_joint_6" type="revolute">
+    <parent link="xMateER7_link5"/>
+    <child link="xMateER7_link6"/>
     <limit effort="66" lower="-6.2832" upper="6.2832" velocity="3.141592653589793"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0.0 0.0 0" xyz="0.0 0.0 0.2755"/>
@@ -266,10 +266,10 @@
     </actuator>
   </transmission>
   <!--link 6-->
-  <link name="xMate7_link6">
+  <link name="xMateER7_link6">
     <visual>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMate7_link6.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/visual/xMateER7_link6.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <material name="white"/>
@@ -281,7 +281,7 @@
     </inertial>
     <collision>
       <geometry>
-        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMate7_link6.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://rokae_description/meshes/${nameofManipulator}/collision/xMateER7_link6.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>

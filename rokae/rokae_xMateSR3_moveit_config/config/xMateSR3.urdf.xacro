@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMateSR3">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+
+    <!-- Import xMateSR3 urdf file -->
+    <xacro:include filename="$(find rokae_description)/urdf/xMateSR3.urdf.xacro" />
+
+    <!-- Import control_xacro -->
+    <xacro:include filename="xMateSR3.ros2_control.xacro" />
+
+
+    <xacro:xMateSR3_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+
+</robot>

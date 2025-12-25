@@ -60,13 +60,14 @@ add_library(rokae_hardware_interface SHARED
 add_executable(connect src/connect.cpp)
 
 # (3.3) MoveJ 测试节点
-add_executable(movej src/movej.cpp)
+add_executable(movej src/movej_moveit_test.cpp)
 
-# (3.4) 轨迹监控节点
-add_executable(trajectory_monitor_node src/trajectory_monitor.cpp)
 
-# (3.5) 新增：rokae_driver 节点（这是你要添加的）
+# (3.4) 新增：rokae_driver 节点
 add_executable(rokae_driver src/rokae_driver.cpp)
+
+add_executable(movej_client src/movej_client.cpp)
+add_executable(rokae_driver7 src/rokae_driver7.cpp)
 
 # -----------------------------------------------------------------------------
 # 4. 为每个节点链接依赖
@@ -112,15 +113,30 @@ ament_target_dependencies(movej
   std_msgs
 )
 
-# (4.4) trajectory_monitor_node 的依赖
-ament_target_dependencies(trajectory_monitor_node
+# (4.4) rokae_driver_node 的依赖
+ament_target_dependencies(rokae_driver
   rclcpp
-  moveit_msgs
   std_msgs
+  geometry_msgs
+  sensor_msgs
+  std_srvs
+  # 如果使用 rokae_msgs，则添加
+  rokae_msgs
+  tf2_geometry_msgs
 )
 
-# (4.5) rokae_driver_node 的依赖
-ament_target_dependencies(rokae_driver
+
+ament_target_dependencies(movej_client
+  rclcpp
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+  std_srvs
+  # 如果使用 rokae_msgs，则添加
+  rokae_msgs
+  tf2_geometry_msgs
+)
+ament_target_dependencies(rokae_driver7
   rclcpp
   std_msgs
   geometry_msgs
@@ -147,8 +163,9 @@ foreach(target
     rokae_hardware_interface
     connect
     movej
-    trajectory_monitor_node
     rokae_driver
+    rokae_driver7
+    movej_client
 )
   target_include_directories(${target}
     PUBLIC
@@ -208,9 +225,8 @@ target_link_libraries(rokae_hardware_interface ${COMMON_SDK_LIBS})
 target_link_libraries(connect ${COMMON_SDK_LIBS})
 target_link_libraries(movej ${COMMON_SDK_LIBS})
 target_link_libraries(rokae_driver ${COMMON_SDK_LIBS})
+target_link_libraries(rokae_driver7 ${COMMON_SDK_LIBS})
 
-# trajectory_monitor_node 可能不需要 SDK 库
-# target_link_libraries(trajectory_monitor_node ...)
 
 # -----------------------------------------------------------------------------
 # 8. 安装配置
@@ -221,8 +237,9 @@ install(TARGETS
   rokae_hardware_interface
   connect
   movej
-  trajectory_monitor_node
   rokae_driver
+  rokae_driver7
+  movej_client
   DESTINATION lib/${PROJECT_NAME}
 )
 

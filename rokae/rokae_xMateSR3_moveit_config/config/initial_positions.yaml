@@ -1,0 +1,9 @@
+# Default initial positions for xMateSR3's ros2_control fake system
+
+initial_positions:
+  xMateSR3_joint_1: 0
+  xMateSR3_joint_2: 0
+  xMateSR3_joint_3: 0
+  xMateSR3_joint_4: 0
+  xMateSR3_joint_5: 0
+  xMateSR3_joint_6: 0

@@ -34,8 +34,8 @@ rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr cartesian_pose_pub
 rokae::xMateRobot robot; ////六轴
 // rokae::xMateErProRobot robot; //// 七轴
 std::error_code ec;
-const std::string local_ip = "192.168.2.100";
-const std::string robot_ip = "192.168.2.160";
+// const std::string local_ip = "192.168.2.100";
+// const std::string robot_ip = "192.168.2.160";
 
 
 
@@ -901,7 +901,7 @@ void state_monitor_worker(rclcpp::Node::SharedPtr node) {
         }
         
         // 3. 控制频率
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); //100hz发布一次
     }
 }
 
@@ -909,6 +909,12 @@ int main(int argc , char** argv){
     rclcpp::init(argc,argv);
     auto node = rclcpp::Node::make_shared("rokae_driver");
     rclcpp::Rate rate(125); 
+
+    node->declare_parameter("robot_ip", "192.168.2.160");
+    node->declare_parameter("local_ip", "192.168.2.100");
+    std::string robot_ip = node->get_parameter("robot_ip").as_string();
+    std::string local_ip = node->get_parameter("local_ip").as_string();
+
     // 连接到机器人
     try {
         robot.connectToRobot(robot_ip ,local_ip);

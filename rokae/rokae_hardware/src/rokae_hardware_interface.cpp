@@ -224,8 +224,8 @@ bool RokaeHardwareInterface<DoF>::initRobot()
 {
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start connect rokae");
     try {
-        robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
-        // robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
+        // robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
+        robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
     } catch (const rokae::NetworkException &e) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot instantiation failed: %s", e.what());
         return false;

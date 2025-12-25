@@ -10,3 +10,14 @@ float32 velocity
 ---
 bool success       # 执行是否成功
 string message     # 返回信息
+
+# 三个相对偏移量：x, y, z (单位：米)
+# 相对于当前位置的偏移量，可以为正或负
+# float64[6] target_position
+
+# # 运动速度 (建议范围：0.01-1.0)
+# float32 velocity
+
+# ---
+# bool success       # 执行是否成功
+# string message     # 返回信息

@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: rokae_description
+    relative_path: urdf/xMateCR18.urdf.xacro
+  srdf:
+    relative_path: config/xMateCR18.srdf
+  package_settings:
+    author_name: wang
+    author_email: wangyifan@rokae.com
+    generated_timestamp: 1766454584
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
