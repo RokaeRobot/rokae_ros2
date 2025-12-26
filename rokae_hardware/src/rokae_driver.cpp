@@ -31,8 +31,8 @@ rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_pub;
 rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr cartesian_pose_pub;
 
 // 创建机器人对象
-// rokae::xMateRobot robot; ////六轴
-rokae::xMateErProRobot robot; //// 七轴
+rokae::xMateRobot robot; ////六轴
+// rokae::xMateErProRobot robot; //// 七轴
 std::error_code ec;
 // const std::string local_ip = "192.168.2.100";
 // const std::string robot_ip = "192.168.2.160";
@@ -174,13 +174,13 @@ bool calculate_fk_callback(
     try {
         RCLCPP_INFO(rclcpp::get_logger("rokae_driver"), "calculate_fk called");
         
-        if (request->joint_positions.size() != 7) {
+        if (request->joint_positions.size() != 6) {
             response->success = false;
             response->message = "Joint positions must have 6 elements";
             return true;
         }
         
-        std::array<double, 7> joint_positions;
+        std::array<double, 6> joint_positions;
         std::copy(request->joint_positions.begin(), request->joint_positions.end(), joint_positions.begin());
         
         auto model = robot.model();
@@ -596,8 +596,8 @@ bool movej_callback(
     try {
         RCLCPP_INFO(rclcpp::get_logger("rokae_driver"),"movej called");
         // 1. 获取目标关节角度
-        std::array<double, 7> target_joints;
-        for (int i = 0; i < 7; i++) {
+        std::array<double, 6> target_joints;
+        for (int i = 0; i < 6; i++) {
             target_joints[i] = request->joint_positions[i];
         }
         
@@ -605,7 +605,7 @@ bool movej_callback(
         double velocity = static_cast<double>(request->velocity);
         
         // 3. 获取当前关节角度
-        std::array<double, 7> current_joints = robot.jointPos(ec);
+        std::array<double, 6> current_joints = robot.jointPos(ec);
         if (ec) {
             response->success = false;
             response->message = "Failed to get current joint positions";
@@ -969,7 +969,6 @@ int main(int argc , char** argv){
     cartesian_pose_pub = node->create_publisher<geometry_msgs::msg::PoseStamped>("/rokae_driver/cartesian_pose", 10);
 
     std::thread monitor_thread(state_monitor_worker, node);
-    
     // 保持节点运行
     rclcpp::spin(node);
     

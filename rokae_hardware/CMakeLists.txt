@@ -57,7 +57,7 @@ add_library(rokae_hardware_interface SHARED
 )
 
 # (3.2) 连接测试节点
-add_executable(connect src/connect.cpp)
+add_executable(connect_test src/connect_test.cpp)
 
 # (3.3) MoveJ 测试节点
 add_executable(movej src/movej_moveit_test.cpp)
@@ -89,8 +89,8 @@ ament_target_dependencies(rokae_hardware_interface
   orocos_kdl
 )
 
-# (4.2) connect 节点的依赖
-ament_target_dependencies(connect
+# (4.2) connect_test 节点的依赖
+ament_target_dependencies(connect_test
   rclcpp
   rclcpp_lifecycle
   std_msgs
@@ -161,7 +161,7 @@ set(COMMON_INCLUDES
 # 为每个目标添加包含目录
 foreach(target 
     rokae_hardware_interface
-    connect
+    connect_test
     movej
     rokae_driver
     rokae_driver7
@@ -222,7 +222,7 @@ set(COMMON_SDK_LIBS
 
 # 为每个目标链接库
 target_link_libraries(rokae_hardware_interface ${COMMON_SDK_LIBS})
-target_link_libraries(connect ${COMMON_SDK_LIBS})
+target_link_libraries(connect_test ${COMMON_SDK_LIBS})
 target_link_libraries(movej ${COMMON_SDK_LIBS})
 target_link_libraries(rokae_driver ${COMMON_SDK_LIBS})
 target_link_libraries(rokae_driver7 ${COMMON_SDK_LIBS})
@@ -235,7 +235,7 @@ target_link_libraries(rokae_driver7 ${COMMON_SDK_LIBS})
 # 安装可执行文件
 install(TARGETS
   rokae_hardware_interface
-  connect
+  connect_test
   movej
   rokae_driver
   rokae_driver7
