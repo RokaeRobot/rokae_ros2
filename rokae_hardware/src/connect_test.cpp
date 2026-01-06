@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
                 // 核心测试：读取关节位置
                 std::array<double, 6> pos{};
                 auto read_start = std::chrono::high_resolution_clock::now();
+                int ret_=robot.updateRobotState(std::chrono::milliseconds(1)); 
                 int ret = robot.getStateData(rokae::RtSupportedFields::jointPos_m, pos);
                 auto read_end = std::chrono::high_resolution_clock::now();
                 
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
                 double delay_ms = std::chrono::duration<double, std::milli>(
                     read_end - read_start).count();
                 
-                bool success = (ret == 0);
+                bool success = (ret_ > 0);
                 
                 cycle_count++;
                 if (success) {

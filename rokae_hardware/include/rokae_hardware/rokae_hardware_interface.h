@@ -92,8 +92,8 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         
 
     public: 
-        // std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
-        std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
+        std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
+        // std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
         std::string robot_ip_;
         std::string local_ip_;
         std::error_code ec;
