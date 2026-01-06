@@ -49,19 +49,17 @@ moveit和controller-manager及相关的包安装
             ros-humble-velocity-controllers \
             ros-humble-position-controllers \
             ros-humble-joint-trajectory-controller
-        source /opt/ros/humble/setup.bash
+        source /opt/ros/humble/setup.bashS
     ```
 
-- 安装rokae ros2 软件包  
-  代码仓：https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2 下dev分支  
-  使用git、ssh、包下载均可实现  
-  创建本地工作空间  
+- 创建本地工作空间  
+  联系珞石开发人员获取最近的ros2软件包，将软件包复制到本地工作空间的src目录下
 
     ```bash
+        ##创建ros2_ws工作空间，必须包含子目录src
         mkdir -p ~/ros2_ws/src
-        cd ~/ros2_ws/src
-        git clone https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2.git
-        cd ..
+        ##复制软件包到src
+        ##在ros2_ws目录下编译
         colcon build
     ```
 
