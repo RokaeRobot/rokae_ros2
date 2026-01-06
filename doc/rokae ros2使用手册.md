@@ -49,7 +49,7 @@ moveit和controller-manager及相关的包安装
             ros-humble-velocity-controllers \
             ros-humble-position-controllers \
             ros-humble-joint-trajectory-controller
-        source /opt/ros/humble/setup.bashS
+        source /opt/ros/humble/setup.bash
     ```
 
 - 创建本地工作空间  
