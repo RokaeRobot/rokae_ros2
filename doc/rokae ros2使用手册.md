@@ -53,15 +53,14 @@ moveit和controller-manager及相关的包安装
     ```
 
 - 安装rokae ros2 软件包  
-  代码仓：https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2 下dev_lyf分支  
+  代码仓：https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2 下dev分支  
   使用git、ssh、包下载均可实现  
   创建本地工作空间  
 
     ```bash
         mkdir -p ~/ros2_ws/src
         cd ~/ros2_ws/src
-        #dev_lyf分支
-        git clone -b dev_lyf https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2.git
+        git clone https://gitlab.i.rokae.com/xcore_sdk/rokae_ros2.git
         cd ..
         colcon build
     ```
