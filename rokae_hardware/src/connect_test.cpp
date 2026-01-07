@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
                 double delay_ms = std::chrono::duration<double, std::milli>(
                     read_end - read_start).count();
                 
-                bool success = (ret_ > 0);
+                bool success = ((ret_ > 0)&&(ret ==0));
                 
                 cycle_count++;
                 if (success) {
