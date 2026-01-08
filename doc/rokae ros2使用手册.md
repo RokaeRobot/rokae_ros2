@@ -44,13 +44,15 @@ moveit和controller-manager及相关的包安装
         sudo apt install ros-humble-controller-manager
         sudo apt install ros-humble-joint-state-broadcaster 
         sudo apt install \
+            ros-humble-joint-state-publisher\
             ros-humble-forward-command-controller \
             ros-humble-effort-controllers \
             ros-humble-velocity-controllers \
             ros-humble-position-controllers \
             ros-humble-joint-trajectory-controller
+        ##若有其余的包未找到，可自行sudo apt install安装
         source /opt/ros/humble/setup.bash
-    ```
+   ```
 
 - 创建本地工作空间  
   联系珞石开发人员获取最近的ros2软件包，将软件包复制到本地工作空间的src目录下
@@ -61,6 +63,13 @@ moveit和controller-manager及相关的包安装
         ##复制软件包到src
         ##在ros2_ws目录下编译
         colcon build
+    ```
+    ！！建议刷新环境变量--在 **.bashrc**文件末添加下面内容并保存  
+    ！！在 **home**文件夹下输入快捷键**ctrl+h**显示隐藏文件 **.bashrc**
+    ```bash
+        source /opt/ros/humble/setup.bash
+        source ~/ros2_ws/install/local_setup.sh
+        source ~/ros2_ws/install/setup.bash
     ```
 
 ## 工作空间概述
@@ -112,7 +121,8 @@ moveit和controller-manager及相关的包安装
 
 ### ROS2_control架构
 
-rokae ros2采用ros2_control架构 具体参考https://control.ros.org/rolling/doc/getting_started/getting_started.html  
+rokae ros2采用ros2_control架构  
+参考学习网站：https://control.ros.org/rolling/doc/getting_started/getting_started.html  
 
 在这个架构下，只需提供几个关键性文件
 
