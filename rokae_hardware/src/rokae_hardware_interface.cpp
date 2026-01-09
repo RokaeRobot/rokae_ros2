@@ -7,7 +7,7 @@
 // Rokae sdk
 #include <rokae/robot.h>
 #include <rokae/data_types.h>
-// #include <rokae/motion_control_rt.h>
+#include <rokae/motion_control_rt.h>
 //#include "rokae_msgs/include/rokae_msgs/rokae_msgs/msg/external_force.h"
 #include "rokae_hardware/rokae_hardware_interface.h"
 #include "pluginlib/class_list_macros.hpp"
@@ -256,6 +256,7 @@ bool RokaeHardwareInterface<DoF>::initRobot()
         robot_->setMotionControlMode(rokae::MotionControlMode::RtCommand, ec);
         auto base_rci = robot_->getRtMotionController().lock();
         rci_ = std::dynamic_pointer_cast<RtType>(base_rci);
+        rci_->setFilterLimit(true, 50);
         robot_->startReceiveRobotState(std::chrono::milliseconds(1), {rokae::RtSupportedFields::jointPos_m, rokae::RtSupportedFields::jointVel_m,
                                       rokae::RtSupportedFields::tau_m, rokae::RtSupportedFields::tauExt_inBase,
                                       rokae::RtSupportedFields::tauExt_inStiff});

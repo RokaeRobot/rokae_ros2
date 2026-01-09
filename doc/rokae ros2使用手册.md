@@ -77,7 +77,6 @@ moveit和controller-manager及相关的包安装
 ### rokae包概述
 
     ├── doc------------手册目录  
-    ├── rokae_bringup
     ├── rokae_description------------存放 URDF、描述机器人模型的配置文件
     ├── rokae_hardware------------主要文件夹 具体结构如下 
     ├── rokae_msgs------------包含在其他包中使用的自定义消息 
@@ -103,7 +102,7 @@ moveit和controller-manager及相关的包安装
     ├── launch------------启动各个节点的文件  
     ├── package.xml  
     ├── rokae_hardware_interface.xml
-    ------------ROS2 Control 框架中的插件描述文件，用于向 ROS2 控制系统注册硬件接口。  
+    ------------ROS2 Control 框架中的插件描述文件，用于向 ROS2 控制系统注册硬件接口  
     ├── sdk------------sdk相关包  
     └── src------------具体实现cpp，具体文件如下  
 
@@ -162,9 +161,10 @@ rokae ros2采用ros2_control架构
 (3)在rviz下进行路径规划：
 
 - 黄色机械臂模型为goal position，白色实体模型为真实机械臂模型，灰色透明的机械臂是初始时的位置。
-- 点击交互标记（表示为机器人末端执行器的球体），将其移动到所需的目标位置，或在 MotionpPlanning下的Joints修改goal position的关节角度。
+- 点击交互标记（表示为机器人末端执行器的球体），将其移动到所需的目标位置，或在 MotionpPlanning下的**Joints**修改goal position的关节角度。
 - 点击 "Plan & Execute" 生成并可视化机器人的轨迹，可以看到白色机械臂运动到黄色机械臂姿态。  
 - 多次连续规划运动时，建议先点击rviz机械臂末端交互小球，更新MotionPlanning的Joints下的关节信息，便于进行下一次的运动规划。
+- 运动速度修改：MotionpPlanning下的Planning右侧Options,**VelocityScaling**，比例为0-1。
 
 ![hmi状态监控](image.png) 
 图1 hmi状态监控 
