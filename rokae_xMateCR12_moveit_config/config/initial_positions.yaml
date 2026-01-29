@@ -1,0 +1,9 @@
+# Default initial positions for xMateCR12's ros2_control fake system
+
+initial_positions:
+  xMateCR12_joint_1: 0
+  xMateCR12_joint_2: 0
+  xMateCR12_joint_3: 0
+  xMateCR12_joint_4: 0
+  xMateCR12_joint_5: 0
+  xMateCR12_joint_6: 0

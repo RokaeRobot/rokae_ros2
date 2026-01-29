@@ -1,0 +1,39 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 1000  # Hz
+
+    position_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+position_joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - xMateCR20_joint_1
+      - xMateCR20_joint_2
+      - xMateCR20_joint_3
+      - xMateCR20_joint_4
+      - xMateCR20_joint_5
+      - xMateCR20_joint_6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 7.5
+      stopped_velocity_tolerance: 0.1
+      joint1: {goal: 0.1, trajectory: 0.2}    #goal达到最终目标点的误差，trajectory路径规划途中实际与轨迹点误差--适当设大 
+      joint2: {goal: 0.1, trajectory: 0.2} 
+      joint3: {goal: 0.1, trajectory: 0.2}
+      joint4: {goal: 0.1, trajectory: 0.2}
+      joint5: {goal: 0.1, trajectory: 0.2}
+      joint6: {goal: 0.1, trajectory: 0.2}
+      joint7: {goal: 0.1, trajectory: 0.2}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0  

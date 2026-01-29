@@ -1,0 +1,16 @@
+# 请求消息
+string register_name
+string data_type    # 可选项: "float", "int", "bool", "int16", "uint16", "double"
+int32 index         # 索引位置，如果读取单个值
+bool read_all       # 是否读取所有值
+
+---
+# 响应消息
+bool success
+string message
+
+# 各种数据类型的返回数组
+float32[] float_values
+bool[] bool_values
+int16[] int16_values
+float64[] double_values

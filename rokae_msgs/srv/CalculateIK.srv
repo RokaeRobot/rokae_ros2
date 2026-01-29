@@ -1,0 +1,7 @@
+# 逆运动学计算服务
+float64[] target_pose      # 目标笛卡尔位姿 [x, y, z, rx, ry, rz]
+
+---
+bool success
+string message
+float64[] joint_positions  # 逆解得到的关节角度

@@ -1,0 +1,7 @@
+# 正运动学计算服务
+float64[] joint_positions  # 关节角度 [rad]
+
+---
+bool success
+string message
+float64[] cartesian_pose   # 计算得到的笛卡尔位姿 [x, y, z, rx, ry, rz]

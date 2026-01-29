@@ -49,7 +49,7 @@
   <joint name="joint1" type="revolute">
     <parent link="${nameofManipulator}_base"/>
     <child link="${nameofManipulator}_link1"/>
- <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+ <limit effort="194" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
  </joint>
@@ -97,7 +97,7 @@
   <joint name="joint2" type="revolute">
     <parent link="${nameofManipulator}_link1"/>
     <child link="${nameofManipulator}_link2"/>
-  <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+  <limit effort="194" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
     <axis xyz="0 1 0"/>
 	<origin rpy="0 0 0" xyz="0 0 0.296"/>
     </joint>
@@ -145,7 +145,7 @@
   <joint name="joint3" type="revolute">
     <parent link="${nameofManipulator}_link2"/>
     <child link="${nameofManipulator}_link3"/>
-  <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+  <limit effort="102" lower="-3.0543" upper="3.0543" velocity="4.084070449666731"/>
     <axis xyz="0 -1 0"/>
     <origin rpy="0 0 0" xyz="0 0 0.49"/>
   </joint>
@@ -192,7 +192,7 @@
   <joint name="joint4" type="revolute">
     <parent link="${nameofManipulator}_link3"/>
     <child link="${nameofManipulator}_link4"/>
-   <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+   <limit effort="66" lower="-3.0543" upper="3.0543" velocity="4.1887902047863905"/>
 <!--     lower="-2.79" upper="2.79" -->
     <axis xyz="0 0 1"/>
 <!--     <origin rpy="0 0 0" xyz="0.585 0.0 0.035"/> -->
@@ -238,7 +238,7 @@
   <joint name="joint5" type="revolute">
     <parent link="${nameofManipulator}_link4"/>
     <child link="${nameofManipulator}_link5"/>
-  <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+  <limit effort="66" lower="-3.0543" upper="3.0543" velocity="4.1887902047863905"/>
     <axis xyz="0 -1 0"/>
    <origin rpy="0 0 0" xyz="0 -0.151 0"/>
   </joint>
@@ -286,7 +286,7 @@
   <joint name="joint6" type="revolute">
     <parent link="${nameofManipulator}_link5"/>
     <child link="${nameofManipulator}_link6"/>
-   <limit effort="300" lower="-3.054" upper="3.054" velocity="8"/>
+   <limit effort="29" lower="-3.0543" upper="3.0543" velocity="5.235987755982989"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0.0 0.0 0" xyz="0 0 0.1265" />
   </joint>

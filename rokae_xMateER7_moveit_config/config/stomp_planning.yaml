@@ -1,5 +1,5 @@
 stomp/motionplanning:
-  group_name: motionplanning
+  group_name: rokae_arm
   optimization:
     num_timesteps: 60
     num_iterations: 40

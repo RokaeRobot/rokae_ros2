@@ -1,0 +1,14 @@
+# MoveC.srv - 圆弧运动服务
+
+# 辅助点相对偏移量 (dx, dy, dz) - 相对于当前位置的偏移
+float64[3] aux_offset
+
+# 终点相对偏移量 (dx, dy, dz) - 相对于当前位置的偏移
+float64[3] target_offset
+
+# 运动速度 (建议范围：0.01-1.0)
+float32 velocity
+
+---
+bool success       # 执行是否成功
+string message     # 返回信息

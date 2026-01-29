@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMateCR20">
+  <!-- Constants for robot dimensions -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+  </material>
+  <material name="brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="Beige">
+    <color rgba="1.0 0.784 0.5765 1.0"/>
+  </material>
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="xMateCR20_base"/>
+  </joint>
+  <!--base-->
+  <link name="xMateCR20_base">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_1" type="revolute">
+    <parent link="xMateCR20_base"/>
+    <child link="xMateCR20_link1"/>
+    <limit effort="762" lower="-3.0543" upper="3.0543" velocity="2.0943951023931953"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.418"/>
+  </joint>
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xMateCR20_joint_7">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 1-->
+  <link name="xMateCR20_link1">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="18.196"/>
+      <inertia ixx="0.30851470" ixy="0.00012560" ixz="0.00039399" iyy="0.25071167" iyz="-0.08923631" izz="0.15494443"/>
+      <origin rpy="0 0 0" xyz="0.00023999999999999998 -0.054541 0.325133"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_2" type="revolute">
+    <parent link="xMateCR20_link1"/>
+    <child link="xMateCR20_link2"/>
+    <limit effort="762" lower="-3.0543" upper="3.0543" velocity="2.0943951023931953"/>
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+  </joint>
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xmate_joint_2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 2-->
+  <link name="xMateCR20_link2">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="22.846"/>
+      <inertia ixx="3.46404992" ixy="-0.00056210" ixz="0.00073117" iyy="3.44023407" iyz="-0.04298666" izz="0.15753355"/>
+      <origin rpy="0 0 0" xyz="0.00035099999999999997 -0.222505 0.392301"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_3" type="revolute">
+    <parent link="xMateCR20_link2"/>
+    <child link="xMateCR20_link3"/>
+    <limit effort="436" lower="-2.9671" upper="2.9671" velocity="2.0943951023931953"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.9"/>
+  </joint>
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xmate_joint_3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 3-->
+  <link name="xMateCR20_link3">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="7.838"/>
+      <inertia ixx="0.11155065" ixy="0.00000007" ixz="-0.00000590" iyy="0.07601873" iyz="-0.03480542" izz="0.06724796"/>
+      <origin rpy="0 0 0" xyz="1.1e-05 0.07265300000000001 0.060502"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_4" type="revolute">
+    <parent link="xMateCR20_link3"/>
+    <child link="xMateCR20_link4"/>
+    <limit effort="194" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
+    <!--     lower="-3.0543" upper="3.0543" -->
+    <axis xyz="0 0 1"/>
+    <!--     <origin rpy="0 0 0" xyz=0.0 0.0 0.75/> -->
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.75"/>
+  </joint>
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xmate_joint_4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 4-->
+  <link name="xMateCR20_link4">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link4.stl" scale=".001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="6.943"/>
+      <inertia ixx="0.36721860" ixy="0.00001459" ixz="-0.00002251" iyy="0.36403022" iyz="-0.02428836" izz="0.02251059"/>
+      <origin rpy="0 0 0" xyz="-4.9000000000000005e-05 -0.012031 -0.294371"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_5" type="revolute">
+    <parent link="xMateCR20_link4"/>
+    <child link="xMateCR20_link5"/>
+    <limit effort="102" lower="-3.0543" upper="3.0543" velocity="4.084070449666731"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.17 0.0"/>
+  </joint>
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xmate_joint_5">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 5-->
+  <link name="xMateCR20_link5">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="2.939"/>
+      <inertia ixx="0.01426615" ixy="-0.00000568" ixz="-0.00000948" iyy="0.00796211" iyz="-0.00209867" izz="0.01079183"/>
+      <origin rpy="0 0 0" xyz="6.500000000000001e-05 0.037814999999999994 0.018831"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="xMateCR20_joint_6" type="revolute">
+    <parent link="xMateCR20_link5"/>
+    <child link="xMateCR20_link6"/>
+    <limit effort="102" lower="-3.0543" upper="3.0543" velocity="4.084070449666731"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0.0 0.0 0" xyz="0.0 0.0 0.14"/>
+  </joint>
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="xmate_joint_6">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 6-->
+  <link name="xMateCR20_link6">
+    <visual>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="1.586"/>
+      <inertia ixx="0.00340881" ixy="-0.00000059" ixz="-0.00000191" iyy="0.00341954" iyz="0.00000107" izz="0.00202228"/>
+      <origin rpy="0 0 0" xyz="-3.1e-05 5.2e-05 -0.052799"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="package://rokae_description/meshes/xMateCR20/xMateCR20_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+</robot>

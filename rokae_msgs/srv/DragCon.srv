@@ -1,0 +1,5 @@
+# DragCon.srv
+string command  # "on" 或 "off"
+---
+bool success
+string message

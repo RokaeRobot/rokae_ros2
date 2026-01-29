@@ -49,7 +49,7 @@
   <joint name="joint1" type="revolute">
     <parent link="${nameofManipulator}_base"/>
     <child link="${nameofManipulator}_link1"/>
- <limit effort="300" lower="-3.0527" upper="3.0527" velocity="10"/>
+ <limit effort="102" lower="-2.9671" upper="2.9671" velocity="3.141592653589793"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
  </joint>
@@ -97,7 +97,7 @@
   <joint name="joint2" type="revolute">
     <parent link="${nameofManipulator}_link1"/>
     <child link="${nameofManipulator}_link2"/>
-  <limit effort="300" lower="-2.0933" upper="2.0933" velocity="10"/>
+  <limit effort="108" lower="-2.0944" upper="2.0944" velocity="2.6179938779914944"/>
     <axis xyz="0 1 0"/>
 	<origin rpy="0 0 0" xyz="0 0 0.34260487"/>
     </joint>
@@ -146,7 +146,7 @@
   <joint name="joint3" type="revolute">
     <parent link="${nameofManipulator}_link2"/>
     <child link="${nameofManipulator}_link3"/>
-  <limit effort="300" lower="-3.0527" upper="3.0527" velocity="10"/>
+  <limit effort="102" lower="-2.9671" upper="2.9671" velocity="3.141592653589793"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0 0 0" xyz="0 0 0.23743878"/>
   </joint>
@@ -194,7 +194,7 @@
   <joint name="joint4" type="revolute">
     <parent link="${nameofManipulator}_link3"/>
     <child link="${nameofManipulator}_link4"/>
-   <limit effort="300" lower="-2.0933" upper="2.0933" velocity="10"/>
+   <limit effort="102" lower="-2.0944" upper="2.0944" velocity="3.141592653589793"/>
 <!--     lower="-2.79" upper="2.79" -->
     <axis xyz="0 1 0"/>
 <!--     <origin rpy="0 0 0" xyz="0.585 0.0 0.035"/> -->
@@ -242,7 +242,7 @@
   <joint name="joint5" type="revolute">
     <parent link="${nameofManipulator}_link4"/>
     <child link="${nameofManipulator}_link5"/>
-  <limit effort="300" lower="-3.0527" upper="3.0527" velocity="10"/>
+  <limit effort="29" lower="-2.9671" upper="2.9671" velocity="3.9269908169872414"/>
     <axis xyz="0 0 1"/>
    <origin rpy="0 0 0" xyz="0 0 0.22044633"/>
   </joint>
@@ -291,7 +291,7 @@
   <joint name="joint6" type="revolute">
     <parent link="${nameofManipulator}_link5"/>
     <child link="${nameofManipulator}_link6"/>
-   <limit effort="300" lower="-2.0933" upper="2.0933" velocity="10"/>
+   <limit effort="29" lower="-2.0944" upper="2.0944" velocity="3.9269908169872414"/>
     <axis xyz="0 1 0"/>
     <origin rpy="0.0 0.0 0" xyz="0 0 0.14512568" />
   </joint>
@@ -341,7 +341,7 @@
   <joint name="joint7" type="revolute">
     <parent link="${nameofManipulator}_link6"/>
     <child link="${nameofManipulator}_link7"/>
-   <limit effort="300" lower="-6.283" upper="6.283" velocity="10"/>
+   <limit effort="29" lower="-6.2832" upper="6.2832" velocity="3.9269908169872414"/>
     <axis xyz="0 0 1"/>
     <origin rpy="0.0 0.0 0.0" xyz="0 0 0.25090877" />
   </joint>
