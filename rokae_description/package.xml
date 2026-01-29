@@ -3,10 +3,9 @@
 <package format="3">
   <name>rokae_description</name>
   <version>1.6.0</version>
-  <description>URDF description for Flexiv robots</description>
-  <maintainer email="munseng.phoon@flexiv.com">Mun Seng Phoon</maintainer>
+  <description>URDF description for Rokae robots</description>
+  <maintainer email="wangyifan@rokae.com">wang</maintainer>
   <license>Apache License 2.0</license>
-  <author email="munseng.phoon@flexiv.com">Mun Seng Phoon</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
