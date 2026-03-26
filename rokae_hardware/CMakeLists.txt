@@ -38,6 +38,9 @@ find_package(rokae_msgs REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(controller_manager_msgs REQUIRED)
 find_package(moveit_msgs REQUIRED)
+find_package(control_msgs REQUIRED)
+find_package(trajectory_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
 
 add_definitions(-DXMATEMODEL_LIB_SUPPORTED)
 # -----------------------------------------------------------------------------
@@ -61,6 +64,13 @@ add_executable(connect_test src/connect_test.cpp)
 
 # (3.3) MoveJ 测试节点
 add_executable(movej src/movej_moveit_test.cpp)
+add_executable(joint_position_control src/joint_position_control.cpp)
+add_executable(joint_s_line src/joint_s_line.cpp)
+add_executable(cartesian_s_line src/cartesian_s_line.cpp)
+add_executable(follow_cart_position src/follow_cart_position.cpp)
+add_executable(follow_joint_position src/follow_joint_position.cpp)
+add_executable(servoj_demo src/servoj_demo.cpp)
+add_executable(stop_motion_demo src/stop_motion_demo.cpp)
 
 
 # (3.4) 新增：rokae_driver 节点
@@ -110,6 +120,65 @@ ament_target_dependencies(movej
   moveit_ros_planning_interface
   controller_manager_msgs
   realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(joint_position_control
+  rclcpp
+  rclcpp_action
+  moveit_ros_planning_interface
+  controller_manager_msgs
+  control_msgs
+  trajectory_msgs
+  realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(joint_s_line
+  rclcpp
+  moveit_ros_planning_interface
+  controller_manager_msgs
+  realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(cartesian_s_line
+  rclcpp
+  moveit_ros_planning_interface
+  controller_manager_msgs
+  moveit_msgs
+  realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(follow_cart_position
+  rclcpp
+  moveit_ros_planning_interface
+  controller_manager_msgs
+  moveit_msgs
+  realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(follow_joint_position
+  rclcpp
+  rclcpp_action
+  moveit_ros_planning_interface
+  controller_manager_msgs
+  control_msgs
+  trajectory_msgs
+  realtime_tools
+  std_msgs
+)
+
+ament_target_dependencies(servoj_demo
+  rclcpp
+  std_msgs
+  std_srvs
+)
+
+ament_target_dependencies(stop_motion_demo
+  rclcpp
   std_msgs
 )
 
@@ -163,6 +232,13 @@ foreach(target
     rokae_hardware_interface
     connect_test
     movej
+  joint_position_control
+    joint_s_line
+    cartesian_s_line
+    follow_cart_position
+    follow_joint_position
+    servoj_demo
+    stop_motion_demo
     rokae_driver
     rokae_driver7
     movej_client
@@ -224,6 +300,13 @@ set(COMMON_SDK_LIBS
 target_link_libraries(rokae_hardware_interface ${COMMON_SDK_LIBS})
 target_link_libraries(connect_test ${COMMON_SDK_LIBS})
 target_link_libraries(movej ${COMMON_SDK_LIBS})
+target_link_libraries(joint_position_control ${COMMON_SDK_LIBS})
+target_link_libraries(joint_s_line ${COMMON_SDK_LIBS})
+target_link_libraries(cartesian_s_line ${COMMON_SDK_LIBS})
+target_link_libraries(follow_cart_position ${COMMON_SDK_LIBS})
+target_link_libraries(follow_joint_position ${COMMON_SDK_LIBS})
+target_link_libraries(servoj_demo ${COMMON_SDK_LIBS})
+target_link_libraries(stop_motion_demo ${COMMON_SDK_LIBS})
 target_link_libraries(rokae_driver ${COMMON_SDK_LIBS})
 target_link_libraries(rokae_driver7 ${COMMON_SDK_LIBS})
 
@@ -237,6 +320,13 @@ install(TARGETS
   rokae_hardware_interface
   connect_test
   movej
+  joint_position_control
+  joint_s_line
+  cartesian_s_line
+  follow_cart_position
+  follow_joint_position
+  servoj_demo
+  stop_motion_demo
   rokae_driver
   rokae_driver7
   movej_client

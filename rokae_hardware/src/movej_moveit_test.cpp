@@ -183,6 +183,58 @@ public:
         }
     }
 
+    bool movej_sequence(const std::vector<std::vector<double>>& joint_targets)
+    {
+        auto& arm = *move_group_;
+
+        arm.setPlanningTime(45.0);
+        arm.allowReplanning(true);
+        arm.setGoalPositionTolerance(0.2);
+        arm.setGoalOrientationTolerance(0.2);
+        arm.setMaxAccelerationScalingFactor(0.05);
+        arm.setMaxVelocityScalingFactor(0.05);
+
+        const size_t dof = arm.getCurrentJointValues().size();
+
+        for (size_t i = 0; i < joint_targets.size(); ++i) {
+            const auto& target = joint_targets[i];
+
+            if (target.size() != dof) {
+                RCLCPP_ERROR(this->get_logger(),
+                    "第 %zu 个目标维度错误: 期望 %zu, 实际 %zu",
+                    i + 1, dof, target.size());
+                return false;
+            }
+
+            arm.setStartStateToCurrentState();
+            arm.setJointValueTarget(target);
+
+            moveit::planning_interface::MoveGroupInterface::Plan plan;
+            bool success = (arm.plan(plan) == moveit::core::MoveItErrorCode::SUCCESS);
+
+            if (!success) {
+                RCLCPP_ERROR(this->get_logger(), "第 %zu 个目标规划失败", i + 1);
+                return false;
+            }
+
+            RCLCPP_INFO(this->get_logger(), "第 %zu 个目标规划成功，开始执行", i + 1);
+            auto result = arm.execute(plan);
+
+            if (result != moveit::core::MoveItErrorCode::SUCCESS) {
+                RCLCPP_WARN(this->get_logger(), "第 %zu 个目标执行失败，尝试重启控制器", i + 1);
+                arm.stop();
+                arm.clearPoseTargets();
+                arm.setStartStateToCurrentState();
+                reset_controller(kControllerName);
+                return false;
+            }
+
+            rclcpp::sleep_for(std::chrono::milliseconds(300));
+        }
+
+        return true;
+    }
+
 private:
     rclcpp::Client<controller_manager_msgs::srv::SwitchController>::SharedPtr controller_client_;
     std::shared_ptr<moveit::planning_interface::MoveGroupInterface> move_group_;
@@ -288,7 +340,18 @@ int main(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // 5) 执行你的 blocking 流程（plan/execute）
-    node->movej();
+    // node->movej();
+
+    // 两个关节目标，按顺序执行
+    std::vector<std::vector<double>> targets = {
+        {0.5, 0.5, 0.5, 0.5, 0.5, 0.5},  // 目标1（6轴示例）
+        // {1.0,  1.0, 1.0,  1.0, 1.0, 1.0}    // 目标2（6轴示例）
+    };
+
+    bool ok = node->movej_sequence(targets);
+    if (!ok) {
+        RCLCPP_ERROR(node->get_logger(), "顺序运动执行失败");
+    }
 
     // 6) 结束：shutdown 并等待 spinner 退出
     rclcpp::shutdown();
