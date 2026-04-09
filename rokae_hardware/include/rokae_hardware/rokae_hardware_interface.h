@@ -48,7 +48,10 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         virtual ~RokaeHardwareInterface()
         {
             // RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start() called");
-            robot_->setMotionControlMode(rokae::MotionControlMode::NrtCommand, ec);
+            if (robot_)
+            {
+                robot_->setMotionControlMode(rokae::MotionControlMode::NrtCommand, ec);
+            }
         }
 
         

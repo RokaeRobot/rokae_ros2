@@ -63,7 +63,7 @@ def launch_setup(context, *args, **kwargs):
     }
 
     joint_position_control_node = Node(
-        package="rokae_hardware",
+        package="rokae_example",
         executable="joint_position_control",
         name="joint_position_control",
         output="screen",

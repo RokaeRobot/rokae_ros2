@@ -62,10 +62,10 @@ def launch_setup(context, *args, **kwargs):
         )
     }
 
-    joint_s_line_node = Node(
-        package="rokae_hardware",
-        executable="joint_s_line",
-        name="joint_s_line",
+    cartesian_s_line_node = Node(
+        package="rokae_example",
+        executable="cartesian_s_line",
+        name="cartesian_s_line",
         output="screen",
         parameters=[
             robot_description,
@@ -74,7 +74,7 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
-    return [joint_s_line_node]
+    return [cartesian_s_line_node]
 
 
 def generate_launch_description():

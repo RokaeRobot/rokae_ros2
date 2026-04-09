@@ -15,7 +15,7 @@ def generate_launch_description():
 		DeclareLaunchArgument("servoj_lookahead_s", default_value="0.06", description="ServoJ lookahead time"),
 		DeclareLaunchArgument("servoj_kp", default_value="1.0", description="ServoJ gain"),
 		Node(
-			package="rokae_hardware",
+			package="rokae_example",
 			executable="servoj_demo",
 			name="servoj_demo",
 			output="screen",

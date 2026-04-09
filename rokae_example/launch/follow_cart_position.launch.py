@@ -2,10 +2,11 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from ament_index_python.packages import get_package_share_directory
 
 import os
-import re
+import yaml
 
 
 def launch_setup(context, *args, **kwargs):
@@ -42,16 +43,8 @@ def launch_setup(context, *args, **kwargs):
 	if not os.path.exists(kinematics_yaml):
 		raise RuntimeError(f"Kinematics YAML file not found: {kinematics_yaml}")
 
-	with open(srdf_file, "r", encoding="utf-8") as f:
-		srdf_content = f.read()
-
-	# URDF 根节点固定为 xMate_robot，SRDF 需保持同名避免 MoveIt 语义模型报错。
-	semantic_content = re.sub(
-		r'<robot\s+name\s*=\s*"[^"]+"',
-		r'<robot name="xMate_robot"',
-		srdf_content,
-		count=1,
-	)
+	with open(kinematics_yaml, "r", encoding="utf-8") as f:
+		kinematics_params = yaml.safe_load(f)
 
 	robot_description = {
 		"robot_description": Command([
@@ -63,31 +56,38 @@ def launch_setup(context, *args, **kwargs):
 	}
 
 	robot_description_semantic = {
-		"robot_description_semantic": semantic_content
+		"robot_description_semantic": ParameterValue(
+			Command(["cat ", srdf_file]),
+			value_type=str,
+		)
 	}
 
-	follow_joint_position_node = Node(
-		package="rokae_hardware",
-		executable="follow_joint_position",
-		name="follow_joint_position",
+	follow_cart_position_node = Node(
+		package="rokae_example",
+		executable="follow_cart_position",
+		name="follow_cart_position",
 		output="screen",
 		parameters=[
 			robot_description,
 			robot_description_semantic,
-			kinematics_yaml,
+			kinematics_params,
 			{
-				"robot_type": LaunchConfiguration("robot_type"),
-				"point_period_s": LaunchConfiguration("point_period_s"),
-				"start_blend_s": LaunchConfiguration("start_blend_s"),
-				"goal_tolerance_rad": LaunchConfiguration("goal_tolerance_rad"),
+				"amplitude_m": LaunchConfiguration("amplitude_m"),
+				"period_s": LaunchConfiguration("period_s"),
+				"target_update_hz": LaunchConfiguration("target_update_hz"),
+				"control_hz": LaunchConfiguration("control_hz"),
+				"kp": LaunchConfiguration("kp"),
+				"filter_alpha": LaunchConfiguration("filter_alpha"),
+				"duration_s": LaunchConfiguration("duration_s"),
 				"vel_scale": LaunchConfiguration("vel_scale"),
 				"acc_scale": LaunchConfiguration("acc_scale"),
-				"cycle_count": LaunchConfiguration("cycle_count"),
+				"eef_step": LaunchConfiguration("eef_step"),
+				"min_fraction": LaunchConfiguration("min_fraction"),
 			},
 		],
 	)
 
-	return [follow_joint_position_node]
+	return [follow_cart_position_node]
 
 
 def generate_launch_description():
@@ -97,11 +97,16 @@ def generate_launch_description():
 			default_value="CR7",
 			description="Robot type: CR7/CR12/CR18/CR20/ER3/ER7/SR3/SR4/SR5/Pro3/Pro7/AR5L/AR5R",
 		),
-		DeclareLaunchArgument("point_period_s", default_value="0.6", description="相邻轨迹点时间间隔（秒）"),
-		DeclareLaunchArgument("start_blend_s", default_value="0.6", description="首点预留平滑时间（秒）"),
-		DeclareLaunchArgument("goal_tolerance_rad", default_value="0.01", description="关节目标容差（弧度）"),
-		DeclareLaunchArgument("vel_scale", default_value="0.2", description="MoveIt 速度缩放(0,1]"),
-		DeclareLaunchArgument("acc_scale", default_value="0.2", description="MoveIt 加速度缩放(0,1]"),
-		DeclareLaunchArgument("cycle_count", default_value="0", description="往复循环次数，0 表示无限循环"),
+		DeclareLaunchArgument("amplitude_m", default_value="0.4", description="Y轴正弦摆动振幅（米）"),
+		DeclareLaunchArgument("period_s", default_value="1.33", description="正弦周期（秒）"),
+		DeclareLaunchArgument("target_update_hz", default_value="1.0", description="目标点更新频率（Hz）"),
+		DeclareLaunchArgument("control_hz", default_value="5.0", description="控制步执行频率（Hz）"),
+		DeclareLaunchArgument("kp", default_value="0.6", description="比例跟踪系数"),
+		DeclareLaunchArgument("filter_alpha", default_value="0.25", description="一阶滤波系数(0,1]"),
+		DeclareLaunchArgument("duration_s", default_value="20.0", description="跟随总时长（秒）"),
+		DeclareLaunchArgument("vel_scale", default_value="0.08", description="速度缩放(0,1]"),
+		DeclareLaunchArgument("acc_scale", default_value="0.08", description="加速度缩放(0,1]"),
+		DeclareLaunchArgument("eef_step", default_value="0.002", description="笛卡尔路径插值步长（米）"),
+		DeclareLaunchArgument("min_fraction", default_value="0.95", description="局部路径最小完成率"),
 		OpaqueFunction(function=launch_setup),
 	])
