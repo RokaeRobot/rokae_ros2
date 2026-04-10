@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(rokae_description)
-
+project(rokae_description VERSION 1.7.0)
 find_package(ament_cmake REQUIRED)
 
 install(

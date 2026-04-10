@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(rokae_msgs)
-
+project(rokae_msgs VERSION 1.7.0)
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)

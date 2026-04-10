@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>rokae_hardware</name>
-  <version>0.0.0</version>
+  <version>1.7.0</version>
   <description>The rokae_hardware package</description>
   <maintainer email="ros1@todo.todo">ros1</maintainer>
   <license>TODO</license>
