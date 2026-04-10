@@ -1,3 +1,3 @@
-1.7.0 (2026-04-10)
+0.0.2 (2026-04-10)
 ------------------
-* Align MoveIt 2 configuration package with rokae_ros2 stack release 1.7.0.
+* Align MoveIt 2 configuration package with rokae_ros2 stack release 0.0.2.
