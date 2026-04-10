@@ -152,9 +152,9 @@ rokae ros2采用ros2_control架构
 (2)执行launch文件
 
 ```bash
-    ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardware:=false robot_ip:=192.168.21.10 local_ip:=192.168.21.131
+    ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=SR4 use_fake_hardware:=true robot_ip:=192.168.2.160 local_ip:=192.168.2.1
 ```
-
+这里的rt是什么意思
 ！！！**注意**！！！  
 将CR7换成相应的机型&emsp;&emsp;e.g.AR5L，AR5R，SR4，ER7，Pro3，Pro7  
 **robot_ip**对应机器人ip       **local_ip**对应本机ip  
@@ -196,7 +196,7 @@ rviz中目标姿态和实际姿态
 在保证上述launch正常运行的情况下，启动controll_movej.launch.py
 
 ```bash
-    ros2 launch rokae_hardware controll_movej.launch.py robot_type:=CR7
+    ros2 launch rokae_hardware controll_movej.launch.py robot_type:=SR4
 ```
 
 ！！！**movej.cpp中注意以下修改**！！！

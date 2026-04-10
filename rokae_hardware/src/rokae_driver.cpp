@@ -7,6 +7,7 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <std_srvs/srv/trigger.hpp>
 #include "rokae_msgs/srv/move_j.hpp"   //报错去install中找对应的名字
 #include "rokae_msgs/srv/move_c.hpp"
 #include "rokae_msgs/srv/move_l.hpp"
@@ -79,6 +80,84 @@ bool get_robot_info_callback(
     }
     
     return true;
+}
+
+bool stop_rt_callback(
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> /*request*/,
+    std::shared_ptr<std_srvs::srv::Trigger::Response> response)
+{
+    try {
+        std::error_code local_ec;
+
+        auto state_before = robot.operationState(local_ec);
+        if (local_ec) {
+            RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "读取初始operationState失败: %s", local_ec.message().c_str());
+            local_ec.clear();
+        }
+
+        if (state_before == rokae::OperationState::rlProgram) {
+            robot.pauseProject(local_ec);
+            if (local_ec) {
+                RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "pauseProject失败: %s", local_ec.message().c_str());
+                local_ec.clear();
+            }
+        }
+
+        try {
+            auto rt_con = robot.getRtMotionController().lock();
+            if (rt_con) {
+                try {
+                    rt_con->stopServoJoint();
+                } catch (const std::exception &e) {
+                    RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "stopServoJoint异常: %s", e.what());
+                } catch (...) {
+                    RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "stopServoJoint未知异常");
+                }
+
+                try {
+                    rt_con->stopMove();
+                } catch (const std::exception &e) {
+                    RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "stopMove异常: %s", e.what());
+                } catch (...) {
+                    RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "stopMove未知异常");
+                }
+            }
+        } catch (const std::exception &e) {
+            RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "获取RtMotionController异常: %s", e.what());
+        } catch (...) {
+            RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "获取RtMotionController未知异常");
+        }
+
+        robot.stop(local_ec);
+        if (local_ec) {
+            RCLCPP_WARN(rclcpp::get_logger("rokae_driver"), "robot.stop失败: %s", local_ec.message().c_str());
+            local_ec.clear();
+        }
+
+        auto state_after = robot.operationState(local_ec);
+        if (local_ec) {
+            response->success = false;
+            response->message = "stop_rt执行后读取operationState失败: " + local_ec.message();
+            return true;
+        }
+
+        const bool inactive = (state_after != rokae::OperationState::rtControlling &&
+                               state_after != rokae::OperationState::moving &&
+                               state_after != rokae::OperationState::jogging);
+
+        response->success = inactive;
+        response->message = std::string("state_before=") + std::to_string(static_cast<int>(state_before)) +
+                            ", state_after=" + std::to_string(static_cast<int>(state_after));
+        return true;
+    } catch (const std::exception &e) {
+        response->success = false;
+        response->message = std::string("stop_rt异常: ") + e.what();
+        return true;
+    } catch (...) {
+        response->success = false;
+        response->message = "stop_rt未知异常";
+        return true;
+    }
 }
 
 // 开启关闭拖动    需要提前设置超级管理员
@@ -939,6 +1018,8 @@ int main(int argc , char** argv){
         "/rokae_driver/drag_control", &drag_control_callback);
     auto jog_drag_service = node->create_service<rokae_msgs::srv::JogCon>(
         "/rokae_driver/jog_control", &jog_control_callback);
+    auto stop_rt_service = node->create_service<std_srvs::srv::Trigger>(
+        "/rokae_driver/stop_rt", &stop_rt_callback);
 
     auto get_do_service = node->create_service<rokae_msgs::srv::GetDO>(
         "/rokae_driver/get_do", &get_do_callback);
