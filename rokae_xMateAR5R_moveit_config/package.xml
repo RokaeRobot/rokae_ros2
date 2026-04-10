@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>rokae_xMateAR5R_moveit_config</name>
-  <version>0.3.0</version>
+  <version>0.0.2</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the AR5-5_07R-W4C4A2 with the MoveIt Motion Planning Framework
   </description>

@@ -19,6 +19,22 @@ ROS2是ROS1的升级版，但是存在一些区别：
 **范围**  
 当前版本的Rokae ROS2软件包提供xMate系列CR7、CR12、CR18、CR20、ER3、ER7、Pro3、Pro7、SR3、SR4、SR5和AR机型机械臂，后续会适配更多的机型，用户也可根据自己的需要自定义适配新的机型
 
+
+
+### 当前适配机型
+
+AR 系列:xMateAR5L,xMateAR5R
+
+CR 系列:xMateCR7,xMateCR12,xMateCR18,xMateCR20
+
+ER 系列:xMateER3,xMateER7
+
+Pro 系列:xMatePro3,xMatePro7
+
+SR 系列:xMateSR3,xMateSR4,xMateSR5
+
+
+
 ## 安装
 
 ### 环境配置
@@ -52,7 +68,7 @@ moveit和controller-manager及相关的包安装
             ros-humble-joint-trajectory-controller
         ##若有其余的包未找到，可自行sudo apt install安装
         source /opt/ros/humble/setup.bash
-   ```
+    ```
 
 - 创建本地工作空间  
   联系珞石开发人员获取最近的ros2软件包，将软件包复制到本地工作空间的src目录下
@@ -114,7 +130,7 @@ moveit和controller-manager及相关的包安装
     ├── rokae_driver.cpp------------6轴机器人 封装特定接口（ros2 service）
     ├── rokae_driver7.cpp------------7轴机器人 封装特定接口（ros2 service）
     └── rokae_hardware_interface.cpp------------硬件接口具体实现
-  
+
 
 ## 入门指南
 
@@ -136,9 +152,9 @@ rokae ros2采用ros2_control架构
 (2)执行launch文件
 
 ```bash
-    ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=CR7 use_fake_hardware:=false robot_ip:=192.168.21.10 local_ip:=192.168.21.131
+    ros2 launch rokae_hardware rokae_moveit_launch.py robot_type:=SR4 use_fake_hardware:=true robot_ip:=192.168.2.160 local_ip:=192.168.2.1
 ```
-
+这里的rt是什么意思
 ！！！**注意**！！！  
 将CR7换成相应的机型&emsp;&emsp;e.g.AR5L，AR5R，SR4，ER7，Pro3，Pro7  
 **robot_ip**对应机器人ip       **local_ip**对应本机ip  
@@ -180,7 +196,7 @@ rviz中目标姿态和实际姿态
 在保证上述launch正常运行的情况下，启动controll_movej.launch.py
 
 ```bash
-    ros2 launch rokae_hardware controll_movej.launch.py robot_type:=CR7
+    ros2 launch rokae_hardware controll_movej.launch.py robot_type:=SR4
 ```
 
 ！！！**movej.cpp中注意以下修改**！！！
@@ -196,7 +212,7 @@ rviz中目标姿态和实际姿态
     /*284行   更换对应的planning group(在相应机型srdf下)*/
     auto move_group = std::make_shared<moveit::planning_interface::MoveGroupInterface>(node, "AR5R_arm");
     //xmate系列默认为rokae_arm 
-``` 
+```
 
 #### 主要节点  
 
@@ -274,7 +290,7 @@ rokae_driver包负责低级别的机器人通信和控制, 使用ros2 service、
     | write_register | 写寄存器 | `WriteRegister` |  
 
 - topic  
-使用方法：ros2 topic echo/subscriber监听
+  使用方法：ros2 topic echo/subscriber监听
 
     | 话题名称 | 描述 | 消息类型 |
     |----------|------|----------|

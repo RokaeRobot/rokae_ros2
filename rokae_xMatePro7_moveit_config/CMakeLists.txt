@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(rokae_xMatePro7_moveit_config)
-
+project(rokae_xMatePro7_moveit_config VERSION 0.0.2)
 find_package(ament_cmake REQUIRED)
 
 install(

@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>rokae_hardware</name>
-  <version>0.0.0</version>
+  <version>0.0.2</version>
   <description>The rokae_hardware package</description>
   <maintainer email="ros1@todo.todo">ros1</maintainer>
   <license>TODO</license>
@@ -19,7 +19,6 @@
   <depend>eigen3_cmake_module</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>controller_manager_msgs</depend>
-  <depend>moveit_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>tf2_geometry_msgs</depend>
 
