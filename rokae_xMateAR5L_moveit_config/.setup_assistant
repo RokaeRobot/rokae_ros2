@@ -5,8 +5,6 @@ moveit_setup_assistant_config:
   srdf:
     relative_path: config/AR5-5_07L-W4C4A2.srdf
   package_settings:
-    author_name: wang
-    author_email: wangyifan@rokae.com
     generated_timestamp: 1764729616
   control_xacro:
     command:
