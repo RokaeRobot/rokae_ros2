@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.22)
-project(rokae_xMateCR12_moveit_config VERSION 0.0.2)
+﻿cmake_minimum_required(VERSION 3.22)
+project(rokae_xMateCR12_moveit_config VERSION 0.0.3)
 find_package(ament_cmake REQUIRED)
 
 ament_package()

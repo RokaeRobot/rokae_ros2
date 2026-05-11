@@ -176,9 +176,18 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument("robot_type", default_value="CR7", description="Robot type: SR4/ER7/..."),
+        DeclareLaunchArgument(
+            "robot_type",
+            default_value="CR7",
+            description="Robot type suffix for rokae_xMate{robot_type}_moveit_config and xMate{robot_type}.srdf (e.g. CR7, CR35, SR4).",
+        ),
         DeclareLaunchArgument("robot_ip", default_value="192.168.21.1", description="Robot IP"),
         DeclareLaunchArgument("local_ip", default_value="192.168.21.130", description="Local IP"),
         DeclareLaunchArgument("warehouse_sqlite_path", default_value="", description="Warehouse path"),
+        DeclareLaunchArgument(
+            "use_fake_hardware",
+            default_value="false",
+            description="Forwarded to xacro (mock vs real hardware plugin).",
+        ),
         OpaqueFunction(function=launch_setup)
     ])

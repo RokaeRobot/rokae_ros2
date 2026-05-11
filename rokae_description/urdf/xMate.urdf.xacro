@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMate_robot">
 
   <!-- 启动参数（launch.py 会传 robot_type） -->
-  <xacro:arg name="robot_type" default="CR7"/>  <!-- 可选: CR7, SR4, ER7p, ER7 -->
+  <xacro:arg name="robot_type" default="CR7"/>  <!-- 可选: CR7, CR12, CR18, CR20, CR35, SR4, ... -->
   <xacro:arg name="robot_ip" default="192.168.21.10"/>
   <xacro:arg name="local_ip" default="192.168.21.131"/>
   <xacro:arg name="use_fake_hardware" default="false"/>
@@ -44,6 +44,9 @@
   </xacro:if>
   <xacro:if value="${robot_type_prop == 'CR20'}">
     <xacro:property name="xMate_type" value="xMateCR20"/>
+  </xacro:if>
+  <xacro:if value="${robot_type_prop == 'CR35'}">
+    <xacro:property name="xMate_type" value="xMateCR35"/>
   </xacro:if>
   <xacro:if value="${robot_type_prop == 'ER3'}">
     <xacro:property name="xMate_type" value="xMateER3"/>

@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <cmath>
+#include <algorithm>
 
 // Rokae sdk
 #include <rokae/robot.h>
@@ -201,63 +203,28 @@ hardware_interface::CallbackReturn RokaeHardwareInterface<DoF>::on_activate(cons
 //hardware_interface::CallbackReturn RokaeHardwareInterface::on_activate(const rclcpp_lifecycle::State & previous_state)    //连接机器人，必须要通过ROS2中基类接口函数调用
 {
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "on_activate() called");
-    static auto last_get_state_log_time = std::chrono::steady_clock::now() - std::chrono::milliseconds(1000);
 
-    for (int i = 0; i < DoF; i++) 
-    {
-        const auto now = std::chrono::steady_clock::now();
-        const bool should_log = (now - last_get_state_log_time) >= std::chrono::milliseconds(1000);
-        if (should_log)
-        {
-            last_get_state_log_time = now;
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData input field=jointPos_m target_before=%s",
-                vector_to_string(joint_position_state_).c_str());
-        }
-        int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData output field=jointPos_m ret=%d target_after=%s",
-                ret_pos, vector_to_string(joint_position_state_).c_str());
-        }
-
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData input field=jointVel_m target_before=%s",
-                vector_to_string(joint_velocity_state_).c_str());
-        }
-        int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData output field=jointVel_m ret=%d target_after=%s",
-                ret_vel, vector_to_string(joint_velocity_state_).c_str());
-        }
-
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData input field=tau_m target_before=%s",
-                vector_to_string(joint_torque_state_).c_str());
-        }
-        int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[on_activate] getStateData output field=tau_m ret=%d target_after=%s",
-                ret_torque, vector_to_string(joint_torque_state_).c_str());
-        }
-
-        rclcpp::sleep_for(std::chrono::milliseconds(10));
+    try {
+        robot_->updateRobotState(std::chrono::milliseconds(1));
+    } catch (const std::exception &e) {
+        RCLCPP_WARN(
+            rclcpp::get_logger("RokaeHardwareInterface"),
+            "on_activate: updateRobotState: %s", e.what());
+    } catch (...) {
+        RCLCPP_WARN(
+            rclcpp::get_logger("RokaeHardwareInterface"),
+            "on_activate: updateRobotState threw non-std exception");
     }
+
+    const int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
+    const int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
+    const int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
+    RCLCPP_INFO(
+        rclcpp::get_logger("RokaeHardwareInterface"),
+        "on_activate: initial RT getStateData ret pos=%d vel=%d tau=%d | joint_pos=%s | tau=%s",
+        ret_pos, ret_vel, ret_torque,
+        vector_to_string(joint_position_state_).c_str(),
+        vector_to_string(joint_torque_state_).c_str());
     
     // 初始化命令为当前状态
     for (size_t i = 0; i < DoF; ++i) {
@@ -383,7 +350,7 @@ template <unsigned short DoF>
 hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::Time&, const rclcpp::Duration &period)
 {
     RCLCPP_DEBUG(rclcpp::get_logger("RokaeHardwareInterface"), "开始从机器人读取数据read() called");
-    static auto last_get_state_log_time = std::chrono::steady_clock::now() - std::chrono::milliseconds(1000);
+    static bool logged_first_successful_read = false;
 
     // 检查周期时间
     double period_ms = period.seconds() * 1000.0;
@@ -396,56 +363,57 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::read(const rclcpp::
     try {
         int update_success = robot_->updateRobotState(std::chrono::milliseconds(1));
 
-        const auto now = std::chrono::steady_clock::now();
-        const bool should_log = (now - last_get_state_log_time) >= std::chrono::milliseconds(1000);
-        if (should_log)
-        {
-            last_get_state_log_time = now;
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData input field=jointPos_m target_before=%s",
-                vector_to_string(joint_position_state_).c_str());
-        }
-
         int ret_pos = robot_->getStateData(rokae::RtSupportedFields::jointPos_m, joint_position_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData output field=jointPos_m ret=%d target_after=%s",
-                ret_pos, vector_to_string(joint_position_state_).c_str());
-        }
-
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData input field=jointVel_m target_before=%s",
-                vector_to_string(joint_velocity_state_).c_str());
-        }
         int ret_vel = robot_->getStateData(rokae::RtSupportedFields::jointVel_m, joint_velocity_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData output field=jointVel_m ret=%d target_after=%s",
-                ret_vel, vector_to_string(joint_velocity_state_).c_str());
+        int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
+
+        // Some robots (e.g. CR35) may leave RtSupportedFields::jointPos_m at ~0 while tau_m updates.
+        // That would overwrite good values from setInitPosition()/jointPos(ec). Fall back to NRT jointPos.
+        if (ret_pos == 0) {
+            const bool rt_pos_all_near_zero = std::all_of(
+                joint_position_state_.begin(), joint_position_state_.end(),
+                [](double p) { return std::fabs(p) < 1e-8; });
+            static auto last_jointpos_nrt_poll = std::chrono::steady_clock::now();
+            static bool logged_jointpos_fallback = false;
+            const auto now_poll = std::chrono::steady_clock::now();
+            if (rt_pos_all_near_zero &&
+                (now_poll - last_jointpos_nrt_poll) >= std::chrono::milliseconds(50)) {
+                last_jointpos_nrt_poll = now_poll;
+                try {
+                    const auto jp = robot_->jointPos(ec);
+                    for (size_t i = 0; i < DoF; ++i) {
+                        joint_position_state_[i] = jp[i];
+                    }
+                    if (!logged_jointpos_fallback) {
+                        logged_jointpos_fallback = true;
+                        RCLCPP_WARN(
+                            rclcpp::get_logger("RokaeHardwareInterface"),
+                            "RT stream jointPos_m was all ~0; using jointPos(ec) for /joint_states positions "
+                            "(polled every 50 ms while RT positions stay zero). Verify SDK RT fields for this model.");
+                    }
+                } catch (const std::exception &e) {
+                    static auto last_jointpos_fallback_err = std::chrono::steady_clock::now();
+                    const auto nw = std::chrono::steady_clock::now();
+                    if (nw - last_jointpos_fallback_err >= std::chrono::seconds(5)) {
+                        last_jointpos_fallback_err = nw;
+                        RCLCPP_WARN(
+                            rclcpp::get_logger("RokaeHardwareInterface"),
+                            "jointPos(ec) fallback failed: %s", e.what());
+                    }
+                }
+            }
         }
 
-        if (should_log)
-        {
+        if (!logged_first_successful_read && ret_pos == 0) {
+            logged_first_successful_read = true;
             RCLCPP_INFO(
                 rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData input field=tau_m target_before=%s",
+                "read: first successful getStateData (ret pos=%d vel=%d tau=%d update_ret=%d) "
+                "joint_pos=%s joint_vel=%s tau=%s — per-cycle getStateData INFO logs disabled.",
+                ret_pos, ret_vel, ret_torque, update_success,
+                vector_to_string(joint_position_state_).c_str(),
+                vector_to_string(joint_velocity_state_).c_str(),
                 vector_to_string(joint_torque_state_).c_str());
-        }
-        int ret_torque = robot_->getStateData("tau_m", joint_torque_state_);
-        if (should_log)
-        {
-            RCLCPP_INFO(
-                rclcpp::get_logger("RokaeHardwareInterface"),
-                "[read] getStateData output field=tau_m ret=%d target_after=%s update_ret=%d",
-                ret_torque, vector_to_string(joint_torque_state_).c_str(), update_success);
         }
         
         if (ret_pos != 0) {

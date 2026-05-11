@@ -113,6 +113,15 @@
         use_fake_hardware="${use_fake_hardware}"/>
     </xacro:if>
 
+    <xacro:if value="${xMate_type == 'xMateCR35'}">
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR35.urdf.xacro"/>
+      <xacro:include filename="$(find rokae_description)/urdf/xMateCR35.ros2_control.xacro"/>
+      <xacro:cr35_ros2_control
+        robot_ip="${robot_ip}"
+        local_ip="${local_ip}"
+        use_fake_hardware="${use_fake_hardware}"/>
+    </xacro:if>
+
     <xacro:if value="${xMate_type == 'xMateER3'}">
       <xacro:include filename="$(find rokae_description)/urdf/xMateER3.urdf.xacro"/>
       <xacro:include filename="$(find rokae_description)/urdf/xMateER3.ros2_control.xacro"/>

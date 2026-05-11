@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: rokae_description
+    relative_path: urdf/xMate.urdf.xacro
+    xacro_args: "robot_type:=CR35"
+  SRDF:
+    relative_path: config/xMateCR35.srdf
+  CONFIG:
+    author_name: zengxu he
+    author_email: hezengxu@rokae.com
+    generated_timestamp: 1680156172

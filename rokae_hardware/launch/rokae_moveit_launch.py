@@ -20,14 +20,34 @@ def generate_launch_description():
     robot_type_arg = DeclareLaunchArgument(
         "robot_type",
         default_value="CR7",
-        description="Robot type: CR7 or SR4"
+        description="Robot type for xMate.urdf.xacro and xMate{type}_controllers.yaml (e.g. CR7, CR35, SR4)."
     )
-    
-    # 声明launch参数，提供默认IP（根据你实际情况改）
+    robot_ip_arg = DeclareLaunchArgument(
+        "robot_ip",
+        default_value="192.168.21.10",
+        description="Robot controller IP.",
+    )
+    local_ip_arg = DeclareLaunchArgument(
+        "local_ip",
+        default_value="192.168.21.131",
+        description="This PC IP on the robot subnet.",
+    )
+    use_fake_hardware_arg = DeclareLaunchArgument(
+        "use_fake_hardware",
+        default_value="false",
+        description="If true, ros2_control uses mock hardware (no real robot from driver).",
+    )
+    warehouse_sqlite_path_arg = DeclareLaunchArgument(
+        "warehouse_sqlite_path",
+        default_value="",
+        description="Optional MoveIt warehouse DB path (passed to nested MoveIt launch).",
+    )
+
     robot_type = LaunchConfiguration("robot_type")
-    robot_ip = LaunchConfiguration('robot_ip', default='192.168.21.10')
-    local_ip = LaunchConfiguration('local_ip', default='192.168.21.131')
+    robot_ip = LaunchConfiguration("robot_ip")
+    local_ip = LaunchConfiguration("local_ip")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path")
     
     description_pkg = FindPackageShare("rokae_description").find("rokae_description")
     hardware_pkg = FindPackageShare("rokae_hardware").find("rokae_hardware")
@@ -140,7 +160,14 @@ def generate_launch_description():
             target_action=position_joint_trajectory_controller_node,
             on_exit=[
                 IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(moveit_config_launch_file)
+                    PythonLaunchDescriptionSource(moveit_config_launch_file),
+                    launch_arguments=[
+                        ("robot_type", robot_type),
+                        ("robot_ip", robot_ip),
+                        ("local_ip", local_ip),
+                        ("use_fake_hardware", use_fake_hardware),
+                        ("warehouse_sqlite_path", warehouse_sqlite_path),
+                    ],
                 )
             ],
         )
@@ -148,7 +175,11 @@ def generate_launch_description():
 
     
     return LaunchDescription([
-        robot_type_arg,  # 加入参数声明
+        robot_type_arg,
+        robot_ip_arg,
+        local_ip_arg,
+        use_fake_hardware_arg,
+        warehouse_sqlite_path_arg,
         ros2_control_node,
         joint_state_broadcaster_node,
         delayed_position_spawner,

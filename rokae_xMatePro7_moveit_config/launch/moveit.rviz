@@ -74,8 +74,8 @@ Visualization Manager:
       Scene Robot:
         Attached Body Color: 150; 50; 150
         Links: ~
-        Robot Alpha: 0.5
-        Show Scene Robot: true
+        Robot Alpha: 0
+        Show Scene Robot: false
       Value: true
   Enabled: true
   Global Options:

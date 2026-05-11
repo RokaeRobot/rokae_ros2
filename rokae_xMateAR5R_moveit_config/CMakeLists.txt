@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.22)
-project(rokae_xMateAR5R_moveit_config VERSION 0.0.2)
+﻿cmake_minimum_required(VERSION 3.22)
+project(rokae_xMateAR5R_moveit_config VERSION 0.0.3)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
