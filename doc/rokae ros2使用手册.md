@@ -17,7 +17,7 @@ ROS2是ROS1的升级版，但是存在一些区别：
 本文件提供了安装和配置 Rokae ROS2软件包的指南，并包含针对仿真和真实机器人操作的提供教程。  
 本手册适用于熟悉基本ROS2概念、并希望将Rokae机器人集成到其应用中的开发者。  
 **范围**  
-当前版本的Rokae ROS2软件包提供xMate系列CR7、CR12、CR18、CR20、ER3、ER7、Pro3、Pro7、SR3、SR4、SR5和AR机型机械臂，后续会适配更多的机型，用户也可根据自己的需要自定义适配新的机型
+当前版本的Rokae ROS2软件包提供xMate系列CR7、CR12、CR18、CR20、CR35、ER3、ER7、Pro3、Pro7、SR3、SR4、SR5和AR机型机械臂，后续会适配更多的机型，用户也可根据自己的需要自定义适配新的机型
 
 
 
@@ -25,7 +25,7 @@ ROS2是ROS1的升级版，但是存在一些区别：
 
 AR 系列:xMateAR5L,xMateAR5R
 
-CR 系列:xMateCR7,xMateCR12,xMateCR18,xMateCR20
+CR 系列:xMateCR7,xMateCR12,xMateCR18,xMateCR20,xMateCR35
 
 ER 系列:xMateER3,xMateER7
 
@@ -98,10 +98,11 @@ moveit和controller-manager及相关的包安装
     ├── rokae_msgs------------包含在其他包中使用的自定义消息 
     ├── rokae_xMateAR5L_moveit_config------------各机型的moveit_config配置文件  
     ├── rokae_xMateAR5R_moveit_config
+    ├── rokae_xMateCR7_moveit_config
     ├── rokae_xMateCR12_moveit_config
     ├── rokae_xMateCR18_moveit_config
     ├── rokae_xMateCR20_moveit_config
-    ├── rokae_xMateCR7_moveit_config
+    ├── rokae_xMateCR35_moveit_config
     ├── rokae_xMateER3_moveit_config
     ├── rokae_xMateER7_moveit_config
     ├── rokae_xMatePro3_moveit_config
@@ -156,7 +157,7 @@ rokae ros2采用ros2_control架构
 ```
 这里的rt是什么意思
 ！！！**注意**！！！  
-将CR7换成相应的机型&emsp;&emsp;e.g.AR5L，AR5R，SR4，ER7，Pro3，Pro7  
+将示例中的 `robot_type` 换成你的机型&emsp;&emsp;例如 AR5L、AR5R、SR4、ER7、Pro3、Pro7、CR7、CR12、CR18、CR20、CR35 等  
 **robot_ip**对应机器人ip       **local_ip**对应本机ip  
 **use_fake_hardware**:使用虚拟硬件接口，连接实体机器人或hmi时 设为**false**，建议先使用`use_fake_hardware = true`虚拟硬件接口测试  
 连接实体机器人时，注意hmi中的rci设置以及丢包率  

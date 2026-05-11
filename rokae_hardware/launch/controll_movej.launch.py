@@ -109,9 +109,9 @@ def launch_setup(context, *args, **kwargs):
     robot_type = LaunchConfiguration("robot_type").perform(context)
     
     # 验证机器人类型（根据你的实际支持类型）
-    supported_types = ["CR7", "CR12","CR18", "CR20",
+    supported_types = ["CR7", "CR12", "CR18", "CR20", "CR35",
                        "ER3", "ER7", "SR3", "SR4", "SR5",
-                       "Pro3", "Pro7","AR5L","AR5R"]  # 添加实际支持的型号
+                       "Pro3", "Pro7", "AR5L", "AR5R"]
     if robot_type not in supported_types:
         raise RuntimeError(f"Unsupported robot type: {robot_type}. Supported types: {supported_types}")
     
@@ -188,7 +188,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "robot_type", 
             default_value="CR7", 
-            description="Robot type: SR4/ER7/CR7/SR5 etc."
+            description="Robot type (e.g. CR7, CR35, SR4, ER7)."
         ),
         OpaqueFunction(function=launch_setup)
     ])

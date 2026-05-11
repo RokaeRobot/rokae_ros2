@@ -194,7 +194,8 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-        Robot Alpha: 0.5
+        Robot Alpha: 0
+        Show Scene Robot: false
         Show Robot Collision: false
         Show Robot Visual: true
       Value: true

@@ -1,0 +1,75 @@
+# joint_limits.yaml allows the dynamics properties specified in the URDF to be overwritten or augmented as needed
+# Limits aligned with rokae_description/urdf/xMateCR35.urdf.xacro (joint1–joint6).
+
+/**:
+  ros__parameters:
+    default_velocity_scaling_factor: 0.05
+    default_acceleration_scaling_factor: 0.05
+
+    joint_limits:
+      joint1:
+        has_velocity_limits: true
+        max_velocity: 2.844246
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -6.283185307179586
+        max_position: 6.283185307179586
+        soft_lower_limit: -6.0
+        soft_upper_limit: 6.0
+        k_position: 0.1
+      joint2:
+        has_velocity_limits: true
+        max_velocity: 2.844246
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -6.283185307179586
+        max_position: 6.283185307179586
+        soft_lower_limit: -6.0
+        soft_upper_limit: 6.0
+        k_position: 0.1
+      joint3:
+        has_velocity_limits: true
+        max_velocity: 2.094395
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -2.8972465583105865
+        max_position: 2.8972465583105865
+        soft_lower_limit: -2.75
+        soft_upper_limit: 2.75
+        k_position: 0.1
+      joint4:
+        has_velocity_limits: true
+        max_velocity: 2.181662
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -6.283185307179586
+        max_position: 6.283185307179586
+        soft_lower_limit: -6.0
+        soft_upper_limit: 6.0
+        k_position: 0.1
+      joint5:
+        has_velocity_limits: true
+        max_velocity: 3.490659
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -6.283185307179586
+        max_position: 6.283185307179586
+        soft_lower_limit: -6.0
+        soft_upper_limit: 6.0
+        k_position: 0.1
+      joint6:
+        has_velocity_limits: true
+        max_velocity: 4.014257
+        has_acceleration_limits: true
+        max_acceleration: 0.05
+        has_position_limits: true
+        min_position: -6.283185307179586
+        max_position: 6.283185307179586
+        soft_lower_limit: -6.0
+        soft_upper_limit: 6.0
+        k_position: 0.1

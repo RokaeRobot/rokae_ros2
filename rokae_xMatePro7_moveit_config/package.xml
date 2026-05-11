@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>rokae_xMatePro7_moveit_config</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <description>The rokae_xMatePro7_moveit_config package</description>
   <maintainer email="gaoyize@todo.todo">gaoyize</maintainer>
   <license>TODO</license>

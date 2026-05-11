@@ -12,7 +12,7 @@ def launch_setup(context, *args, **kwargs):
 	robot_type = LaunchConfiguration("robot_type").perform(context)
 
 	supported_types = [
-		"CR7", "CR12", "CR18", "CR20",
+		"CR7", "CR12", "CR18", "CR20", "CR35",
 		"ER3", "ER7", "SR3", "SR4", "SR5",
 		"Pro3", "Pro7", "AR5L", "AR5R",
 	]
@@ -95,7 +95,7 @@ def generate_launch_description():
 		DeclareLaunchArgument(
 			"robot_type",
 			default_value="CR7",
-			description="Robot type: CR7/CR12/CR18/CR20/ER3/ER7/SR3/SR4/SR5/Pro3/Pro7/AR5L/AR5R",
+			description="Robot type: CR7/CR12/CR18/CR20/CR35/ER3/ER7/SR3/SR4/SR5/Pro3/Pro7/AR5L/AR5R",
 		),
 		DeclareLaunchArgument("point_period_s", default_value="0.6", description="相邻轨迹点时间间隔（秒）"),
 		DeclareLaunchArgument("start_blend_s", default_value="0.6", description="首点预留平滑时间（秒）"),

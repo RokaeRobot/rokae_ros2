@@ -5,8 +5,6 @@ moveit_setup_assistant_config:
   srdf:
     relative_path: config/xMateSR3.srdf
   package_settings:
-    author_name: wang
-    author_email: wangyifan@rokae.com
     generated_timestamp: 1766461473
   control_xacro:
     command:

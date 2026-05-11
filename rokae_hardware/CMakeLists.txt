@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.8)
-project(rokae_hardware VERSION 0.0.2)
+﻿cmake_minimum_required(VERSION 3.8)
+project(rokae_hardware VERSION 0.0.3)
 set(CMAKE_BUILD_TYPE Debug)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
