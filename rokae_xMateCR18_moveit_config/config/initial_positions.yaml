@@ -1,9 +1,9 @@
 # Default initial positions for xMateCR18's ros2_control fake system
 
 initial_positions:
-  xMateCR18_joint_1: 0
-  xMateCR18_joint_2: 0
-  xMateCR18_joint_3: 0
-  xMateCR18_joint_4: 0
-  xMateCR18_joint_5: 0
-  xMateCR18_joint_6: 0
+  joint1: 0
+  joint2: 0
+  joint3: 0
+  joint4: 0
+  joint5: 0
+  joint6: 0

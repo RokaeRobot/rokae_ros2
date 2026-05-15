@@ -11,11 +11,11 @@ controller_names:
 position_joint_trajectory_controller:
   type: FollowJointTrajectory
   joints:
-    - xMateCR20_joint_1
-    - xMateCR20_joint_2
-    - xMateCR20_joint_3
-    - xMateCR20_joint_4
-    - xMateCR20_joint_5
-    - xMateCR20_joint_6
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
   action_ns: follow_joint_trajectory
   default: true

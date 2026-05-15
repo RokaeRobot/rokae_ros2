@@ -1,5 +1,6 @@
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 // ROS interface
@@ -48,8 +49,7 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         virtual ~RokaeHardwareInterface()
         {
             // RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start() called");
-            if (robot_)
-            {
+            if (robot_) {
                 robot_->setMotionControlMode(rokae::MotionControlMode::NrtCommand, ec);
             }
         }
@@ -95,10 +95,11 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         
 
     public: 
-        std::shared_ptr<rokae::xMateRobot> robot_;     //连六轴机型
-        // std::shared_ptr<rokae::xMateErProRobot> robot_;    //连七轴机型
+        using RobotType = typename std::conditional<(DoF == 7), rokae::xMateErProRobot, rokae::xMateRobot>::type;
+        std::shared_ptr<RobotType> robot_;
         std::string robot_ip_;
         std::string local_ip_;
+        unsigned rt_network_tolerance_ = 80;
         std::error_code ec;
         //const → 值不可变 ；static → 所有对象共享一份
         static const size_t num_joints_ = DoF;   //const 表示这个变量是常量，初始化之后不能再修改，且只能初始化一次；static 表示这是一个 类变量，而不是某个对象独有的。没有 static 的话，就是 实例成员变量，每个对象都会单独保存一份 num_joints_。但轴数其实是由模板参数 DoF 决定的，不需要重复存储，所以用 static
@@ -135,7 +136,10 @@ namespace rokae_hardware    //用override虚函数对基类SystemInterface的成
         bool controllers_initialized_ = false;
 
         long times_loop_ = 0;
-        double planPeriod = 0.001;  ///servoj 1ms
+        /// setServoJoint(ServoJ_T, ...) 的 ServoJ_T（秒），应与 ros2_control 实际 write 周期一致；默认 0.004≈250Hz
+        double servo_joint_period_s_ = 0.004;
+        /// 为 true 时才调用 SDK setServoJoint；部分固件会报 invalid data key(-258)，默认 false 与旧版 .bak 行为一致
+        bool enable_servoj_ = false;
 
         // ROS 2 Publisher示例
         // rclcpp::Publisher<rokae_msgs::msg::ExternalForce>::SharedPtr ext_force_in_stiff_pub_;

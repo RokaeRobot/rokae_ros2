@@ -27,6 +27,13 @@ def launch_setup(context, *args, **kwargs):
     local_ip = LaunchConfiguration("local_ip").perform(context)
     warehouse_sqlite_path = LaunchConfiguration("warehouse_sqlite_path").perform(context)
     use_fake_hardware = LaunchConfiguration("use_fake_hardware").perform(context)
+    use_sim_time = LaunchConfiguration("use_sim_time").perform(context).lower() in ("1", "true", "yes")
+    # Mock (GenericSystem) in rokae_moveit_launch: no /clock — MoveIt must use wall time.
+    if use_fake_hardware.lower() in ("1", "true", "yes"):
+        use_sim_time = False
+    # Real Rokae: joint_states on system clock.
+    elif robot_type.startswith(("CR", "AR", "ER", "Pro", "SR")) and use_fake_hardware.lower() in ("0", "false", "no"):
+        use_sim_time = False
 
     # description 包
     description_pkg = get_package_share_directory("rokae_description")
@@ -133,6 +140,7 @@ def launch_setup(context, *args, **kwargs):
             moveit_controllers,
             trajectory_execution,
             planning_scene_monitor_parameters,
+            {"use_sim_time": use_sim_time},
         ],
     )
 
@@ -151,6 +159,7 @@ def launch_setup(context, *args, **kwargs):
             ompl_pipeline_config,
             trajectory_execution,
             planning_scene_monitor_parameters,
+            {"use_sim_time": use_sim_time},
             ],
         # prefix="gdb -ex run --args",
     )
@@ -181,13 +190,26 @@ def generate_launch_description():
             default_value="CR7",
             description="Robot type suffix for rokae_xMate{robot_type}_moveit_config and xMate{robot_type}.srdf (e.g. CR7, CR35, SR4).",
         ),
-        DeclareLaunchArgument("robot_ip", default_value="192.168.21.1", description="Robot IP"),
-        DeclareLaunchArgument("local_ip", default_value="192.168.21.130", description="Local IP"),
+        DeclareLaunchArgument(
+            "robot_ip",
+            default_value="192.168.21.10",
+            description="Robot controller IP.",
+        ),
+        DeclareLaunchArgument(
+            "local_ip",
+            default_value="192.168.21.131",
+            description="This PC IP on the robot subnet.",
+        ),
         DeclareLaunchArgument("warehouse_sqlite_path", default_value="", description="Warehouse path"),
         DeclareLaunchArgument(
             "use_fake_hardware",
             default_value="false",
             description="Forwarded to xacro (mock vs real hardware plugin).",
+        ),
+        DeclareLaunchArgument(
+            "use_sim_time",
+            default_value="false",
+            description="Use simulation time only when /clock exists (Gazebo or bag).",
         ),
         OpaqueFunction(function=launch_setup)
     ])

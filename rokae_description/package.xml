@@ -15,8 +15,15 @@
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <!-- test_model.launch.py、Gazebo 相关 launch -->
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
 
   <export>
-      <build_type>ament_cmake</build_type>
+    <build_type>ament_cmake</build_type>
+    <gazebo_ros gazebo_model_path="${prefix}/share/rokae_description"/>
+    <gazebo_ros gazebo_resource_path="${prefix}/share/rokae_description"/>
   </export>
 </package>

@@ -50,7 +50,7 @@
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_1" type="revolute">
+  <joint name="joint1" type="revolute">
     <parent link="xMateSR3_base"/>
     <child link="xMateSR3_link1"/>
     <limit effort="66" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
@@ -59,7 +59,7 @@
   </joint>
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xMateSR3_joint_7">
+    <joint name="joint1">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor1">
@@ -88,7 +88,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_2" type="revolute">
+  <joint name="joint2" type="revolute">
     <parent link="xMateSR3_link1"/>
     <child link="xMateSR3_link2"/>
     <limit effort="66" lower="-2.3562" upper="2.2689" velocity="3.141592653589793"/>
@@ -97,7 +97,7 @@
   </joint>
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_2">
+    <joint name="joint2">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor2">
@@ -126,7 +126,7 @@
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_3" type="revolute">
+  <joint name="joint3" type="revolute">
     <parent link="xMateSR3_link2"/>
     <child link="xMateSR3_link3"/>
     <limit effort="29" lower="-3.0543" upper="2.3562" velocity="3.141592653589793"/>
@@ -135,7 +135,7 @@
   </joint>
   <transmission name="tran3">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_3">
+    <joint name="joint3">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor3">
@@ -164,7 +164,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_4" type="revolute">
+  <joint name="joint4" type="revolute">
     <parent link="xMateSR3_link3"/>
     <child link="xMateSR3_link4"/>
     <limit effort="16" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
@@ -175,7 +175,7 @@
   </joint>
   <transmission name="tran4">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_4">
+    <joint name="joint4">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor4">
@@ -204,7 +204,7 @@
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_5" type="revolute">
+  <joint name="joint5" type="revolute">
     <parent link="xMateSR3_link4"/>
     <child link="xMateSR3_link5"/>
     <limit effort="16" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
@@ -213,7 +213,7 @@
   </joint>
   <transmission name="tran5">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_5">
+    <joint name="joint5">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor5">
@@ -242,7 +242,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="xMateSR3_joint_6" type="revolute">
+  <joint name="joint6" type="revolute">
     <parent link="xMateSR3_link5"/>
     <child link="xMateSR3_link6"/>
     <limit effort="16" lower="-3.0543" upper="3.0543" velocity="3.141592653589793"/>
@@ -251,7 +251,7 @@
   </joint>
   <transmission name="tran6">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_6">
+    <joint name="joint6">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor6">

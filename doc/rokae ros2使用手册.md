@@ -314,3 +314,393 @@ rokae_driver包负责低级别的机器人通信和控制, 使用ros2 service、
 - **robot_description**中导入相应rviz,mesh,xacro文件，文件格式可模仿现有机型  
 - **robot_description** 的**urdf**文件中xMate.urdf.xacro,xMate_macro.xacro添加相应机型配置，并编写新机型ros2_controll.xacro文件，具体格式可参照现有文件机型
 - 使用**moveit_setup_assistant**配置相应机型moveit_config文件夹，存在区别的地方以现有机型格式为准
+
+---
+
+## Gazebo 仿真与轨迹开发
+
+### 说明
+
+- 下文示例中工作空间路径以 `~/ros2_ws`、源码目录以 `~/ros2_ws/src/rokae_ros2` 为例，请按本机实际路径替换；每个新终端均建议先执行：  
+  `source ~/ros2_ws/install/setup.bash`
+- 关节命名：指令、轨迹、控制器配置在文档与示例中统一为 `joint1`～`joint6`（六轴）或 `joint1`～`joint7`（七轴）；各轴软限位、奇异与安全空间仍以 `rokae_description/urdf/` 中对应机型（含 `*_Gazebo*.urdf.xacro`）的 `<limit lower upper>` 为准；发轨迹前务必 `ros2 topic echo /joint_states` 核对轴数与关节名字。
+- 当前存在的机型,只有CR35目前没有适配Gazebo相关功能的开发。
+
+### 一、环境与场景支持
+
+#### 1.1 障碍场景一键加载
+
+参数 `gazebo_world_file:=obstacles.world` 时，由 `test_model.launch.py` 载入 `rokae_gazebo/worlds/obstacles.world`（障碍物空间）。机型与场景解耦，只改 `robot_type` 即可。
+
+终端 1 — 加载启动指令
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware test_model.launch.py robot_type:=Pro3 gazebo_world_file:=obstacles.world gui:=true
+```
+
+已支持机型（如 `SR3`、`SR4`、`SR5`、`CR7`、`CR12`、`CR18`、`CR20`、`ER3`、`ER7`、`Pro3`、`Pro7`、`AR5L`、`AR5R` 等）同理替换 `robot_type`。默认空世界为 `empty.world`；不加 `gazebo_world_file` 即空世界。
+
+#### 1.2 场景加载与保存服务
+
+节点 `scene_service`（包 `rokae_hardware`）提供：
+
+| 服务名 | 作用 |
+|--------|------|
+| `/load_scene` | 按场景名查找 `.world`，校验路径并登记为参数，供其它模块引用。 |
+| `/save_scene` | 将模板 world 复制到用户目录，保存自定义场景快照。 |
+
+服务类型：`rokae_hardware/srv/SceneService`，字段 `scene_name`（字符串）。
+
+终端 1 — 启动带障碍的仿真（示例 SR3）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware test_model.launch.py robot_type:=SR3 gazebo_world_file:=obstacles.world gui:=true
+```
+
+保持运行。
+
+终端 2 — 启动场景服务
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 run rokae_hardware scene_service
+```
+
+典型日志一行类似：
+
+```text
+[INFO] [scene_manager]: 场景服务: /load_scene /save_scene (world 包: rokae_gazebo)
+```
+
+终端 3 — 调用 `/load_scene`（须在终端 2 已运行后执行）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 service call /load_scene rokae_hardware/srv/SceneService "{scene_name: 'obstacles.world'}"
+```
+
+成功时 `success: true`，`message` 中会给出解析后的 world 绝对路径；并提示：若需替换已在运行的 Gazebo 世界，应先关闭 Gazebo，再用 launch 的 world 参数启动该文件。
+
+终端 3 — 调用 `/save_scene` 保存快照示例
+
+```bash
+ros2 service call /save_scene rokae_hardware/srv/SceneService "{scene_name: 'my_cr7_snapshot'}"
+```
+
+成功时 `message` 中会给出保存路径，一般在用户目录下 `~/.rokae_gazebo/saved_worlds/<名称>.world`。
+
+#### 1.3 碰撞检测验证
+
+障碍世界与 `arm_controller` 已运行后，可用 `rokae_gazebo` 包中的 `collision_test.launch.py` 订阅 `ContactsState`（默认 `/obstacle/bumper_contact`），在终端日志中查看碰撞体对。
+
+终端 1 — 仿真（示例 SR5，与终端 2 的 `robot_type` 必须一致）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware test_model.launch.py robot_type:=SR5 gazebo_world_file:=obstacles.world gui:=true
+```
+
+终端 2 — 碰撞监听
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_gazebo collision_test.launch.py robot_type:=SR5 publish_motion:=false contact_topic:=/obstacle/bumper_contact
+```
+
+- `publish_motion:=false`：不在本节点内自动发轨迹，靠终端 1 的滑条或外部轨迹顶障碍。
+- 默认按 `robot_collision_substring:=xMate` 过滤与机械臂无关的接触（可在 launch 参数中调整）。
+
+启动后终端 2 可能出现类似：
+
+```text
+[INFO] [collision_test_node]: 碰撞监听: /obstacle/bumper_contact；轨迹话题: /arm_controller/joint_trajectory（请已启动 arm_controller）
+```
+
+发生碰撞时，日志中可能出现：
+
+```text
+[WARN] [collision_test_node]: 检测到新碰撞接触 ... 碰撞体: [table::link::collision] <-> [xMateSR5::xMateSR5_link2::xMateSR5_link2_collision]
+```
+
+### 二、ros2_control 集成与轨迹控制
+
+#### 2.1 仿真控制闭环
+
+- Gazebo 插件 `libgazebo_ros2_control.so` 启动 `controller_manager`，与 ROS 2 `ros2_control` 栈对接。
+- `test_model.launch.py` 延时后通过 `spawner` 依次加载：
+  - `joint_state_broadcaster`：读仿真关节状态，发布 `/joint_states`；
+  - `arm_controller`（`JointTrajectoryController`）：订阅 `/arm_controller/joint_trajectory`，将 `trajectory_msgs/JointTrajectory` 转为关节位置指令驱动仿真。
+- 链路：ROS 2 轨迹话题 → 轨迹控制器 → Gazebo 关节。
+
+#### 2.2 controll_movej.launch.py
+
+在 Gazebo 中加载机型 URDF、`gazebo_ros2_control`、`joint_state_broadcaster` 与 `arm_controller`；相对 `test_model.launch.py` 另可带入 MoveIt 配置，并可选 `movej` 演示节点。
+
+重要：勿同时 `enable_gui:=true` 与 `enable_movej:=true`，避免多源争抢同一轨迹控制器。
+
+模式 A — GUI 滑条（终端 1）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware controll_movej.launch.py robot_type:=SR3 enable_gui:=true enable_movej:=false
+```
+
+约 5～6 秒后再拖动 `joint_state_publisher_gui` 滑条；滑条经 `gui_to_joint_trajectory` 打成短时轨迹发往 `/arm_controller/joint_trajectory`。关闭 `joint_state_publisher_gui` 界面后，也可直接切换到模式 B。
+
+模式 B — movej 演示 + 终端发轨迹（终端 1）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware controll_movej.launch.py robot_type:=SR3 enable_gui:=false enable_movej:=true
+```
+
+另开终端发 `ros2 topic pub ...`（见 2.4）。
+
+#### 2.3 验证 /joint_states
+
+验证时确保终端 1 已启动 Gazebo 场景，且机型已成功加载显示。
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 topic echo /joint_states --once
+```
+
+在统一命名下，`name` 字段应为 `joint1`…`joint6` 或含 `joint7`（七轴），与 `rokae_hardware/config/xMate{机型}_controllers.yaml` 中控制器 `joints` 列表一致。
+
+#### 2.4 轨迹话题与 ros2 topic pub 示例
+
+（1）确认当前由谁在订阅轨迹
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 control list_controllers
+
+ros2 topic list | grep joint_trajectory
+```
+
+- Gazebo `test_model` / `controll_movej` 场景下，常见为 `/arm_controller/joint_trajectory`。
+- 若仅 `position_joint_trajectory_controller` 为 active（例如单独使用 `rokae_moveit_launch.py` 时默认拉起该控制器），则应向 `/position_joint_trajectory_controller/joint_trajectory` 发布。
+
+（2）六轴 — 终端 1
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware controll_movej.launch.py robot_type:=SR3 enable_gui:=false enable_movej:=false
+```
+
+终端 2 — 两段路点（单位 rad）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - positions: [0.20, -0.20, 0.15, 0.00, 0.20, 0.00]
+    time_from_start: {sec: 3, nanosec: 0}
+  - positions: [0.20, -0.55, 0.25, 0.10, 0.30, 0.10]
+    time_from_start: {sec: 6, nanosec: 0}
+"
+```
+
+（3）七轴 — `joint_names` 与每条 `positions` 须为 7 维
+
+```bash
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6, joint7]
+points:
+  - positions: [0.10, -0.20, 0.15, 0.00, 0.20, 0.00, 0.00]
+    time_from_start: {sec: 3, nanosec: 0}
+  - positions: [0.20, -0.35, 0.25, 0.10, 0.30, 0.10, 0.00]
+    time_from_start: {sec: 6, nanosec: 0}
+"
+```
+
+（4）各机型关节角软限位参考（弧度）  
+下表数值来自仓库 Gazebo xacro 中 `<limit>`，仅作发指令前粗查；改 URDF 后以文件为准。轴名统一为 `joint1`～`joint6`（及 `joint7`） 顺序对应机械第 1～7 轴。
+
+| 机型 | joint1 | joint2 | joint3 | joint4 | joint5 | joint6 | joint7 |
+|------|--------|--------|--------|--------|--------|--------|--------|
+| SR3 | [-3.0543, 3.0543] | [-2.3562, 2.2689] | [-3.0543, 2.3562] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| SR4 | [-3.0543, 3.0543] | [-2.3562, 2.3562] | [-2.3562, 2.3562] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| SR5 | [-6.2832, 6.2832] | [-2.7925, 2.618] | [-2.9671, 2.4435] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | — |
+| CR7 | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| CR12 | [-6.2832, 6.2832] | [-2.9671, 2.9671] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | — |
+| CR18 | [-3.0543, 3.0543] | [-2.9671, 2.9671] | [-2.8798, 2.8798] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| CR20 | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-2.9671, 2.9671] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| ER3 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] | — |
+| ER7 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] | — |
+| Pro3 / Pro7 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] |
+| AR5L / AR5R | [-3.1067, 3.1067] | [-2.0944, 2.0944] | [-3.1067, 3.1067] | [-1.0472, 2.5307] | [-3.1067, 3.1067] | [-1.0472, 1.0472] | [-1.0472, 1.0472] |
+
+### 三、一键 launch（Gazebo 仿真 / 真机指令驱动）
+
+#### 3.1 入口与内部链路
+
+```bash
+ros2 launch rokae_hardware gazebo_moveit.launch.py ...
+```
+
+| 条件 | 子 launch | 作用 |
+|------|-----------|------|
+| `mode:=sim` | `controll_movej.launch.py` | Gazebo + `gazebo_ros2_control`；`world` → 子 launch 的 `gazebo_world_file`；可选 `enable_gui` / `enable_movej`。 |
+| `mode:=real` | `real_moveit.launch.py` | 本机 `ros2_control_node` + 真机 IP，加载 `xMate{机型}_real_controllers.yaml`；不启动 Gazebo。 |
+
+#### 3.2 参数约束
+
+1. `mode:=real` 时 `use_sim_time:=false`（真机用系统时钟）。
+2. `mode:=sim` 时不可同时 `enable_gui:=true` 与 `enable_movej:=true`。
+3. `mode:=real` 必须同时提供 `robot_ip` 与 `local_ip`。
+
+#### 3.3 仿真模式示例
+
+空世界 + 滑条（SR3）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=SR3 world:=empty.world enable_gui:=true enable_movej:=false
+```
+
+障碍世界
+
+```bash
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR7 world:=obstacles.world enable_gui:=true enable_movej:=false
+```
+
+开 `movej` 演示、关 GUI
+
+```bash
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR7 world:=empty.world enable_gui:=false enable_movej:=true
+```
+
+#### 3.4 真机模式示例
+
+终端 1 — 启动真机控制栈（无 Gazebo）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=real robot_type:=CR7 robot_ip:=192.168.2.160 local_ip:=192.168.2.162 enable_moveit:=false use_sim_time:=false
+```
+
+终端 2 — 发关节轨迹（六轴）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - positions: [0.10, -0.20, 0.15, 0.00, 0.20, 0.00]
+    time_from_start: {sec: 3, nanosec: 0}
+  - positions: [0.20, -0.35, 0.25, 0.10, 0.30, 0.10]
+    time_from_start: {sec: 6, nanosec: 0}
+"
+```
+
+### 四、仿真数据录制与回放
+
+#### 4.1 脚本说明
+
+- `rokae_hardware/scripts/record_sim.sh`  
+  - 用法：`bash .../record_sim.sh [bag输出目录] [robot_type可选]`  
+  - 默认在 `~/rosbags/<robot小写>_sim_日期时间>` 创建；脚本会等待 `/arm_controller/joint_trajectory` 或 `/position_joint_trajectory_controller/joint_trajectory` 出现后再开始 `ros2 bag record`，录制 `/joint_states`、两类控制器的 `.../joint_trajectory` 与 `follow_joint_trajectory` action 各话题、`/tf`、`/tf_static`、`/clock` 等（完整列表见脚本内）。  
+- `rokae_hardware/scripts/replay_sim.sh`  
+  - 用法：`bash .../replay_sim.sh <bag目录> [倍速rate] [with_clock true|false]`  
+  - 默认 `rate=1.0`；第三参数为 `true` 时增加 `ros2 bag play --clock`；仅回放与轨迹相关的话题子集。
+
+#### 4.2 推荐流程（三终端）
+
+以下以 `robot_type:=CR7`、bag 目录 `~/rosbags/cr7_sim0002` 为例；请替换为本机路径与机型。
+
+终端 1 — 启动仿真（无滑条，与录制脚本习惯一致）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR7 world:=empty.world enable_gui:=false enable_movej:=false
+```
+
+保持运行。
+
+终端 2 — 开始录制
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+bash ~/ros2_ws/src/rokae_ros2/rokae_hardware/scripts/record_sim.sh ~/rosbags/cr7_sim0002 CR7
+```
+
+结束录制：在本终端按 Ctrl+C。
+
+终端 3 — 录制过程中下发轨迹（六轴；关节名统一）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - positions: [0.10, -0.20, 0.15, 0.00, 0.20, 0.00]
+    time_from_start: {sec: 3, nanosec: 0}
+  - positions: [0.30, -0.35, 0.25, 0.10, 0.30, 0.10]
+    time_from_start: {sec: 6, nanosec: 0}
+"
+```
+
+录制期间可多次执行 `ros2 topic pub`。七轴须 `joint7` 且 `positions` 为 7 个数。
+
+#### 4.3 检查 bag
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ls ~/rosbags/
+
+ros2 bag info ~/rosbags/cr7_sim0002
+```
+
+#### 4.4 回放
+
+1. 终端 1 再次启动与录制时相同的仿真（同一 `robot_type`）。
+2. 终端 2 — 原速回放
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+bash ~/ros2_ws/src/rokae_ros2/rokae_hardware/scripts/replay_sim.sh ~/rosbags/cr7_sim0002
+```
+
+3. 二倍速
+
+```bash
+bash ~/ros2_ws/src/rokae_ros2/rokae_hardware/scripts/replay_sim.sh ~/rosbags/cr7_sim0002 2.0
+```
+
+4. 带 `--clock`（第三参数 `true`）
+
+```bash
+bash ~/ros2_ws/src/rokae_ros2/rokae_hardware/scripts/replay_sim.sh ~/rosbags/cr7_sim0002 1.0 true
+```
+
+#### 4.5 使用注意
+
+1. 回放前 `robot_type`、URDF、关节轴数须与录制时一致。  
+2. 用 `ros2 control list_controllers` 确认轨迹控制器为 active。  
+3. 回放异常时检查 `use_sim_time`、bag 是否含 `/clock`、以及 `replay_sim.sh` 第三参数。  
+4. 建议保留 `ros2 bag info` 输出备查。
+

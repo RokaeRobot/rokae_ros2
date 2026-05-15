@@ -10,11 +10,11 @@ controller_names:
 position_joint_trajectory_controller:
   type: FollowJointTrajectory
   joints:
-    - xMateSR3_joint_1
-    - xMateSR3_joint_2
-    - xMateSR3_joint_3
-    - xMateSR3_joint_4
-    - xMateSR3_joint_5
-    - xMateSR3_joint_6
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
   action_ns: follow_joint_trajectory
   default: true

@@ -10,32 +10,32 @@
     # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
     # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
     joint_limits:
-      xMateSR3_joint_1:
+      joint1:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false
         max_acceleration: 0
-      xMateSR3_joint_2:
+      joint2:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false
         max_acceleration: 0
-      xMateSR3_joint_3:
+      joint3:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false
         max_acceleration: 0
-      xMateSR3_joint_4:
+      joint4:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false
         max_acceleration: 0
-      xMateSR3_joint_5:
+      joint5:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false
         max_acceleration: 0
-      xMateSR3_joint_6:
+      joint6:
         has_velocity_limits: true
         max_velocity: 3.1415926535897931
         has_acceleration_limits: false

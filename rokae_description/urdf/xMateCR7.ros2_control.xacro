@@ -23,6 +23,9 @@
           <param name="robot_ip">${robot_ip}</param>
           <param name="local_ip">${local_ip}</param>
           <param name="xMate_type">${xMate_type}</param>
+          <!-- 与 controller_manager 实际更新周期一致（常见 250Hz→0.004）；仅 enable_servoj=true 时才会调用 setServoJoint -->
+          <param name="servo_joint_period_s">0.004</param>
+          <param name="enable_servoj">false</param>
         </xacro:unless>
       </hardware>
 

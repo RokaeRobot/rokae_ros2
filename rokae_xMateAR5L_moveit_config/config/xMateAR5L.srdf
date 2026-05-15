@@ -3,7 +3,7 @@
     This is a format for representing semantic information about the robot structure.
     A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
 -->
-<robot name="AR5-5_07L-W4C4A2">
+<robot name="xMate_robot">
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
     <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
@@ -11,17 +11,31 @@
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="AR5L_arm">
         <!-- <joint name="fixed"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_1"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_2"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_3"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_4"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_5"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_6"/>
-        <joint name="AR5-5_07L-W4C4A2_joint_7"/>
+        <joint name="joint1"/>
+        <joint name="joint2"/>
+        <joint name="joint3"/>
+        <joint name="joint4"/>
+        <joint name="joint5"/>
+        <joint name="joint6"/>
+        <joint name="joint7"/>
         <joint name="AR5-5_07L-W4C4A2_tcp_joint"/> -->
             <!--KDL运动学插件需要chain对象，否则会出现内存报错-->
         <chain base_link="AR5-5_07L-W4C4A2_base" tip_link="AR5-5_07L-W4C4A2_tcp"/>   
     </group>
+    <group_state name="init_pose" group="AR5L_arm">
+        <joint name="joint1" value="0"/>
+        <joint name="joint2" value="0"/>
+        <joint name="joint3" value="0"/>
+        <joint name="joint4" value="0"/>
+        <joint name="joint5" value="0"/>
+        <joint name="joint6" value="0"/>
+        <joint name="joint7" value="0"/>
+    </group_state>
+    <virtual_joint
+        name="base"
+        type="fixed"
+        parent_frame="world"
+        child_link="AR5-5_07L-W4C4A2_base"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="AR5-5_07L-W4C4A2_base" link2="AR5-5_07L-W4C4A2_link1" reason="Adjacent"/>
     <disable_collisions link1="AR5-5_07L-W4C4A2_base" link2="AR5-5_07L-W4C4A2_link2" reason="Never"/>
