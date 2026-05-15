@@ -20,7 +20,7 @@ def launch_setup(context, *args, **kwargs):
     service_call_timeout = LaunchConfiguration("service_call_timeout").perform(context)
 
     supported_types = [
-        "CR7", "CR12", "CR18", "CR20",
+        "CR7", "CR12", "CR18", "CR20", "CR35",
         "ER3", "ER7", "SR3", "SR4", "SR5",
         "Pro3", "Pro7", "AR5L", "AR5R",
     ]

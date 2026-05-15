@@ -92,45 +92,45 @@ moveit和controller-manager及相关的包安装
 
 ### rokae包概述
 
-    ├── doc------------手册目录  
-    ├── rokae_description------------存放 URDF、描述机器人模型的配置文件
-    ├── rokae_hardware------------主要文件夹 具体结构如下 
-    ├── rokae_msgs------------包含在其他包中使用的自定义消息 
-    ├── rokae_xMateAR5L_moveit_config------------各机型的moveit_config配置文件  
-    ├── rokae_xMateAR5R_moveit_config
-    ├── rokae_xMateCR7_moveit_config
-    ├── rokae_xMateCR12_moveit_config
-    ├── rokae_xMateCR18_moveit_config
-    ├── rokae_xMateCR20_moveit_config
-    ├── rokae_xMateCR35_moveit_config
-    ├── rokae_xMateER3_moveit_config
-    ├── rokae_xMateER7_moveit_config
-    ├── rokae_xMatePro3_moveit_config
-    ├── rokae_xMatePro7_moveit_config
-    ├── rokae_xMateSR3_moveit_config
-    ├── rokae_xMateSR4_moveit_config
-    └── rokae_xMateSR5_moveit_config
+​    ├── doc------------手册目录  
+​    ├── rokae_description------------存放 URDF、描述机器人模型的配置文件
+​    ├── rokae_hardware------------主要文件夹 具体结构如下 
+​    ├── rokae_msgs------------包含在其他包中使用的自定义消息 
+​    ├── rokae_xMateAR5L_moveit_config------------各机型的moveit_config配置文件  
+​    ├── rokae_xMateAR5R_moveit_config
+​    ├── rokae_xMateCR7_moveit_config
+​    ├── rokae_xMateCR12_moveit_config
+​    ├── rokae_xMateCR18_moveit_config
+​    ├── rokae_xMateCR20_moveit_config
+​    ├── rokae_xMateCR35_moveit_config
+​    ├── rokae_xMateER3_moveit_config
+​    ├── rokae_xMateER7_moveit_config
+​    ├── rokae_xMatePro3_moveit_config
+​    ├── rokae_xMatePro7_moveit_config
+​    ├── rokae_xMateSR3_moveit_config
+​    ├── rokae_xMateSR4_moveit_config
+​    └── rokae_xMateSR5_moveit_config
 
 ### rokae_hardware包结构
 
-    ├── CMakeLists.txt  
-    ├── config------------控制器配置文件  
-    ├── include------------硬件接口头文件  
-    ├── launch------------启动各个节点的文件  
-    ├── package.xml  
-    ├── rokae_hardware_interface.xml
-    ------------ROS2 Control 框架中的插件描述文件，用于向 ROS2 控制系统注册硬件接口  
-    ├── sdk------------sdk相关包  
-    └── src------------具体实现cpp，具体文件如下  
+​    ├── CMakeLists.txt  
+​    ├── config------------控制器配置文件  
+​    ├── include------------硬件接口头文件  
+​    ├── launch------------启动各个节点的文件  
+​    ├── package.xml  
+​    ├── rokae_hardware_interface.xml
+​    ------------ROS2 Control 框架中的插件描述文件，用于向 ROS2 控制系统注册硬件接口  
+​    ├── sdk------------sdk相关包  
+​    └── src------------具体实现cpp，具体文件如下  
 
 ### src文件结构
 
-    ├── connect_test.cpp------------网络性能分析测试 ！！未写入节点，编译后在build目录下寻找二进制可执行文件运行
-    ├── movej_client.cpp------------movej函数客户端示例，与rokae_driver(服务端)一起使用 
-    ├── movej_moveit_test.cpp------------基于moveit的movej实现（moveit规划） 
-    ├── rokae_driver.cpp------------6轴机器人 封装特定接口（ros2 service）
-    ├── rokae_driver7.cpp------------7轴机器人 封装特定接口（ros2 service）
-    └── rokae_hardware_interface.cpp------------硬件接口具体实现
+​    ├── connect_test.cpp------------网络性能分析测试 ！！未写入节点，编译后在build目录下寻找二进制可执行文件运行
+​    ├── movej_client.cpp------------movej函数客户端示例，与rokae_driver(服务端)一起使用 
+​    ├── movej_moveit_test.cpp------------基于moveit的movej实现（moveit规划） 
+​    ├── rokae_driver.cpp------------6轴机器人 封装特定接口（ros2 service）
+​    ├── rokae_driver7.cpp------------7轴机器人 封装特定接口（ros2 service）
+​    └── rokae_hardware_interface.cpp------------硬件接口具体实现
 
 
 ## 入门指南
@@ -324,7 +324,6 @@ rokae_driver包负责低级别的机器人通信和控制, 使用ros2 service、
 - 下文示例中工作空间路径以 `~/ros2_ws`、源码目录以 `~/ros2_ws/src/rokae_ros2` 为例，请按本机实际路径替换；每个新终端均建议先执行：  
   `source ~/ros2_ws/install/setup.bash`
 - 关节命名：指令、轨迹、控制器配置在文档与示例中统一为 `joint1`～`joint6`（六轴）或 `joint1`～`joint7`（七轴）；各轴软限位、奇异与安全空间仍以 `rokae_description/urdf/` 中对应机型（含 `*_Gazebo*.urdf.xacro`）的 `<limit lower upper>` 为准；发轨迹前务必 `ros2 topic echo /joint_states` 核对轴数与关节名字。
-- 当前存在的机型,只有CR35目前没有适配Gazebo相关功能的开发。
 
 ### 一、环境与场景支持
 
@@ -340,7 +339,7 @@ source ~/ros2_ws/install/setup.bash
 ros2 launch rokae_hardware test_model.launch.py robot_type:=Pro3 gazebo_world_file:=obstacles.world gui:=true
 ```
 
-已支持机型（如 `SR3`、`SR4`、`SR5`、`CR7`、`CR12`、`CR18`、`CR20`、`ER3`、`ER7`、`Pro3`、`Pro7`、`AR5L`、`AR5R` 等）同理替换 `robot_type`。默认空世界为 `empty.world`；不加 `gazebo_world_file` 即空世界。
+已支持机型（如 `SR3`、`SR4`、`SR5`、`CR7`、`CR12`、`CR18`、`CR20`、`CR35`、`ER3`、`ER7`、`Pro3`、`Pro7`、`AR5L`、`AR5R` 等）同理替换 `robot_type`。默认空世界为 `empty.world`；不加 `gazebo_world_file` 即空世界。
 
 #### 1.2 场景加载与保存服务
 
@@ -541,6 +540,7 @@ points:
 | CR12 | [-6.2832, 6.2832] | [-2.9671, 2.9671] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | — |
 | CR18 | [-3.0543, 3.0543] | [-2.9671, 2.9671] | [-2.8798, 2.8798] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
 | CR20 | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-2.9671, 2.9671] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | [-3.0543, 3.0543] | — |
+| CR35 | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-2.8972, 2.8972] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | [-6.2832, 6.2832] | — |
 | ER3 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] | — |
 | ER7 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] | — |
 | Pro3 / Pro7 | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-2.9671, 2.9671] | [-2.0944, 2.0944] | [-6.2832, 6.2832] |
@@ -575,10 +575,16 @@ source ~/ros2_ws/install/setup.bash
 ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=SR3 world:=empty.world enable_gui:=true enable_movej:=false
 ```
 
-障碍世界
+障碍世界（CR7）
 
 ```bash
 ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR7 world:=obstacles.world enable_gui:=true enable_movej:=false
+```
+
+障碍世界（CR35）
+
+```bash
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR35 world:=obstacles.world enable_gui:=true enable_movej:=false
 ```
 
 开 `movej` 演示、关 GUI
@@ -595,6 +601,14 @@ ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=sim robot_type:=CR7 wor
 source ~/ros2_ws/install/setup.bash
 
 ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=real robot_type:=CR7 robot_ip:=192.168.2.160 local_ip:=192.168.2.162 enable_moveit:=false use_sim_time:=false
+```
+
+终端 1 — 六轴 CR35 真机（仅需将 `robot_type` 与 IP 换为本机值）
+
+```bash
+source ~/ros2_ws/install/setup.bash
+
+ros2 launch rokae_hardware gazebo_moveit.launch.py mode:=real robot_type:=CR35 robot_ip:=192.168.2.160 local_ip:=192.168.2.162 enable_moveit:=false use_sim_time:=false
 ```
 
 终端 2 — 发关节轨迹（六轴）
@@ -703,4 +717,3 @@ bash ~/ros2_ws/src/rokae_ros2/rokae_hardware/scripts/replay_sim.sh ~/rosbags/cr7
 2. 用 `ros2 control list_controllers` 确认轨迹控制器为 active。  
 3. 回放异常时检查 `use_sim_time`、bag 是否含 `/clock`、以及 `replay_sim.sh` 第三参数。  
 4. 建议保留 `ros2 bag info` 输出备查。
-

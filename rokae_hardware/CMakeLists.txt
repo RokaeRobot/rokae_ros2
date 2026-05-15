@@ -1,5 +1,5 @@
-﻿cmake_minimum_required(VERSION 3.8)
-project(rokae_hardware VERSION 0.0.3)
+cmake_minimum_required(VERSION 3.8)
+project(rokae_hardware VERSION 0.0.4)
 
 set(CMAKE_BUILD_TYPE Debug)
 

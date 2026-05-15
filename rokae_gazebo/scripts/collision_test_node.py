@@ -21,7 +21,7 @@ class CollisionTestNode(Node):
             [0.15, 0.45, -0.35, 0.0, 0.2, 0.0],
         )
         self.declare_parameter('publish_motion', True)
-        self.declare_parameter('robot_collision_substring', 'xMateCR7')
+        self.declare_parameter('robot_collision_substring', 'xMate')
         self.declare_parameter('filter_robot_contacts', True)
         self.declare_parameter('log_interval_sec', 1.0)
         self.declare_parameter('print_collision_names', True)

@@ -13,6 +13,7 @@ from launch.substitutions import (
     PathJoinSubstitution,
 )
 import os
+import re
 import yaml
 import xacro
 import xml.etree.ElementTree as ET
@@ -150,6 +151,21 @@ def _inject_gazebo_blocks(robot_desc_xml, robot_type, controllers_param_path, jo
     return ET.tostring(root, encoding="unicode")
 
 
+def _strip_xml_comments_for_gazebo_ros2(robot_desc_xml: str) -> str:
+    """Strip <!-- --> so gazebo_ros2_control / rcl param parsing is not tripped."""
+    return re.sub(r"<!--(.*?)-->", "", robot_desc_xml, flags=re.DOTALL)
+
+
+def _resolve_gazebo_controller_params_path(robot_desc_xml, controllers_yaml_path):
+    abs_path = os.path.abspath(controllers_yaml_path)
+    return re.sub(
+        r"(<parameters>)([^<]*controllers\.yaml)(</parameters>)",
+        rf"\1{abs_path}\3",
+        robot_desc_xml,
+        count=1,
+    )
+
+
 def launch_setup(context, *args, **kwargs):
     from launch_ros.substitutions import FindPackageShare
 
@@ -160,9 +176,11 @@ def launch_setup(context, *args, **kwargs):
     controller_manager_timeout = LaunchConfiguration("controller_manager_timeout").perform(context)
     service_call_timeout = LaunchConfiguration("service_call_timeout").perform(context)
 
-    supported_types = ["CR7", "CR12", "CR18", "CR20",
-                       "ER3", "ER7", "SR3", "SR4", "SR5",
-                       "Pro3", "Pro7", "AR5L", "AR5R"]
+    supported_types = [
+        "CR7", "CR12", "CR18", "CR20", "CR35",
+        "ER3", "ER7", "SR3", "SR4", "SR5",
+        "Pro3", "Pro7", "AR5L", "AR5R",
+    ]
     if robot_type not in supported_types:
         raise RuntimeError(f"Unsupported robot type: {robot_type}")
 
@@ -188,6 +206,9 @@ def launch_setup(context, *args, **kwargs):
         )
     trajectory_controller_name = _select_trajectory_controller_name(controllers_cfg)
     trajectory_topic = f"/{trajectory_controller_name}/joint_trajectory"
+    follow_joint_trajectory_action = (
+        f"/{trajectory_controller_name}/follow_joint_trajectory"
+    )
 
     # Gazebo Classic 对 package:// mesh URI 解析经常失败；这里强制用文件路径 URI
     mesh_prefix = (Path(description_pkg) / "meshes").as_uri()
@@ -199,6 +220,11 @@ def launch_setup(context, *args, **kwargs):
             controllers_param_path=controllers_yaml_path,
             joint_names=joint_names,
         )
+    else:
+        robot_desc_xml = _resolve_gazebo_controller_params_path(
+            robot_desc_xml, controllers_yaml_path
+        )
+    robot_desc_xml = _strip_xml_comments_for_gazebo_ros2(robot_desc_xml)
     moveit_config_pkg_name = f"rokae_xMate{robot_type}_moveit_config"
     try:
         moveit_config_pkg_share = get_package_share_directory(moveit_config_pkg_name)
@@ -330,12 +356,14 @@ def launch_setup(context, *args, **kwargs):
                 {"use_sim_time": True},
                 {"joint_names": joint_names},
                 {"trajectory_topic": trajectory_topic},
+                {"follow_joint_trajectory_action": follow_joint_trajectory_action},
+                {"use_follow_joint_trajectory_action": True},
             ]
         )
 
         delayed_gui = TimerAction(
-            period=5.0,
-            actions=[joint_state_publisher_gui, gui_control_node]
+            period=6.0,
+            actions=[joint_state_publisher_gui, gui_control_node],
         )
         actions.append(delayed_gui)
 
@@ -347,7 +375,10 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "robot_type",
             default_value="CR7",
-            description="Robot type (e.g. CR7, CR35, SR4, ER7).",
+            description=(
+                "机型后缀；需存在 rokae_description/urdf/xMate{TYPE}_Gazebo.urdf.xacro 或 .urdf.xacro，"
+                "及 rokae_xMate{TYPE}_moveit_config、config/xMate{TYPE}_controllers.yaml。例 CR35、SR3。"
+            ),
         ),
         DeclareLaunchArgument(
             "gazebo_world_file",

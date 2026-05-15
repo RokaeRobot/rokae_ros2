@@ -1,7 +1,17 @@
 """
 阶段 2.3：机型无关的碰撞测试 launch（需已启动 test_model 并激活轨迹控制器）。
-示例:
-  ros2 launch rokae_gazebo collision_test.launch.py robot_type:=CR7
+
+空世界或障碍世界均可；机型只决定控制器配置与轨迹话题名。
+
+CR35 + obstacles.world 示例（终端 1 先起仿真）::
+
+  ros2 launch rokae_hardware test_model.launch.py \\
+    robot_type:=CR35 gazebo_world_file:=obstacles.world gui:=true
+
+  ros2 launch rokae_gazebo collision_test.launch.py \\
+    robot_type:=CR35 publish_motion:=false contact_topic:=/obstacle/bumper_contact
+
+其它机型（SR3、CR7、Pro3 等）将 robot_type 替换为对应后缀即可。
 """
 import os
 import yaml
@@ -88,7 +98,11 @@ def _setup(context, *args, **kwargs):
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument("robot_type", default_value="CR7"),
+        DeclareLaunchArgument(
+            "robot_type",
+            default_value="CR7",
+            description="机型后缀，须与 rokae_hardware/config/xMate{robot_type}_controllers.yaml 一致（如 CR35、SR5）。",
+        ),
         DeclareLaunchArgument("publish_motion", default_value="false"),
         DeclareLaunchArgument("contact_topic", default_value="/obstacle/bumper_contact"),
         DeclareLaunchArgument("filter_robot_contacts", default_value="true"),

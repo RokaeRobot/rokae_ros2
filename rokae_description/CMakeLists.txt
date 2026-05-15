@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(rokae_description VERSION 0.0.3)
+project(rokae_description VERSION 0.0.4)
 find_package(ament_cmake REQUIRED)
 
 # 安装文件夹：launch meshes urdf config
