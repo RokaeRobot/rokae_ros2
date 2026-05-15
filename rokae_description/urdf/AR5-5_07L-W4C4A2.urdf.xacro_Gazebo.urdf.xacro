@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMateAR5L">
+  <xacro:include filename="$(find rokae_description)/urdf/materials.xacro"/>
+  <xacro:arg name="mesh_prefix" default="package://rokae_description/meshes"/>
+  <xacro:property name="nameofManipulator" value="AR5-5_07L-W4C4A2"/>
+
+  <link name="world"/>
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="${nameofManipulator}_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <xacro:macro name="rokae_joint_gazebo" params="joint_name">
+    <gazebo reference="${joint_name}">
+      <kp>1000.0</kp>
+      <kd>100.0</kd>
+      <mu1>0.1</mu1>
+      <mu2>0.1</mu2>
+      <friction1>0.0</friction1>
+      <friction2>0.0</friction2>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="rokae_link_gazebo" params="link_ref">
+    <gazebo reference="${link_ref}">
+      <material>Gazebo/Blue</material>
+      <collision>
+        <laser_retro>0.5</laser_retro>
+      </collision>
+    </gazebo>
+  </xacro:macro>
+
+  <link name="${nameofManipulator}_base">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_base"/>
+
+  <joint name="joint1" type="revolute">
+    <parent link="${nameofManipulator}_base"/>
+    <child link="${nameofManipulator}_link1"/>
+    <limit effort="108" lower="-3.1067" upper="3.1067" velocity="3.0543261909900763"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint1"/>
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link1">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="2.683"/>
+      <inertia ixx="0.00493673" ixy="0.00000160" ixz="0.00000198" iyy="0.00452344" iyz="-0.00000020" izz="0.00432910"/>
+      <origin rpy="0 0 0" xyz="1e-06 -0.000621 0.167909"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link1"/>
+
+  <joint name="joint2" type="revolute">
+    <parent link="${nameofManipulator}_link1"/>
+    <child link="${nameofManipulator}_link2"/>
+    <limit effort="108" lower="-2.0944" upper="2.0944" velocity="3.0543261909900763"/>
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.1745"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint2"/>
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link2">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="2.3"/>
+      <inertia ixx="0.01151906" ixy="0.00000246" ixz="-0.00000055" iyy="0.00993335" iyz="0.00082477" izz="0.00435237"/>
+      <origin rpy="0 0 0" xyz="-2e-05 -0.003081 0.10298600000000001"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link2"/>
+
+  <joint name="joint3" type="revolute">
+    <parent link="${nameofManipulator}_link2"/>
+    <child link="${nameofManipulator}_link3"/>
+    <limit effort="66" lower="-3.1067" upper="3.1067" velocity="4.71238898038469"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.314"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint3"/>
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link3">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="1.862"/>
+      <inertia ixx="0.00519681" ixy="0.00001208" ixz="0.00035761" iyy="0.00470446" iyz="0.00003430" izz="0.00266752"/>
+      <origin rpy="0 0 0" xyz="0.007097 -0.0006590000000000001 -0.016530999999999997"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link3"/>
+
+  <joint name="joint4" type="revolute">
+    <parent link="${nameofManipulator}_link3"/>
+    <child link="${nameofManipulator}_link4"/>
+    <limit effort="66" lower="-1.0472" upper="2.5307" velocity="5.235987755982989"/>
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.01 0.0 0.0"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint4"/>
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link4">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link4.stl" scale=".001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="1.234"/>
+      <inertia ixx="0.00389590" ixy="-0.00004577" ixz="-0.00017280" iyy="0.00308657" iyz="0.00046679" izz="0.00188364"/>
+      <origin rpy="0 0 0" xyz="-0.007826 -0.004207 0.073404"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link4"/>
+
+  <joint name="joint5" type="revolute">
+    <parent link="${nameofManipulator}_link4"/>
+    <child link="${nameofManipulator}_link5"/>
+    <limit effort="19" lower="-3.1067" upper="3.1067" velocity="4.1887902047863905"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="-0.01 0.0 0.272"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint5"/>
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link5">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="1.329"/>
+      <inertia ixx="0.00281562" ixy="0.00001782" ixz="0.00001650" iyy="0.00221084" iyz="0.00002100" izz="0.00182169"/>
+      <origin rpy="0 0 0" xyz="0.00028399999999999996 0.0016510000000000001 -0.084133"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link5"/>
+
+  <joint name="joint6" type="revolute">
+    <parent link="${nameofManipulator}_link5"/>
+    <child link="${nameofManipulator}_link6"/>
+    <limit effort="19" lower="-1.0472" upper="1.0472" velocity="4.1887902047863905"/>
+    <axis xyz="0 1 0"/>
+    <origin rpy="0.0 0.0 0" xyz="0.0 0.0 0.0"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint6"/>
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link6">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="0.93"/>
+      <inertia ixx="0.00072078" ixy="-0.00000217" ixz="0.00000108" iyy="0.00085153" iyz="0.00000048" izz="0.00090205"/>
+      <origin rpy="0 0 0" xyz="0.005405999999999999 0.000612 -3.9e-05"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link6"/>
+
+  <joint name="joint7" type="revolute">
+    <parent link="${nameofManipulator}_link6"/>
+    <child link="${nameofManipulator}_link7"/>
+    <limit effort="19" lower="-1.0472" upper="1.0472" velocity="4.1887902047863905"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="0.0 0.0 0" xyz="0.0 0.0 0.0"/>
+    <dynamics damping="120.0" friction="4.0"/>
+    <initial_position>0.0</initial_position>
+  </joint>
+  <xacro:rokae_joint_gazebo joint_name="joint7"/>
+  <transmission name="tran7">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint7">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor7">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${nameofManipulator}_link7">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="0.33"/>
+      <inertia ixx="0.00051942" ixy="-0.00000052" ixz="0.00003721" iyy="0.00079132" iyz="0.00000265" izz="0.00045886"/>
+      <origin rpy="0 0 0" xyz="-0.00277 0.000316 0.054881"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/${nameofManipulator}/visual/${nameofManipulator}_link7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <xacro:rokae_link_gazebo link_ref="${nameofManipulator}_link7"/>
+
+  <link name="${nameofManipulator}_tcp">
+    <inertial>
+      <mass value="0.0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <joint name="${nameofManipulator}_tcp_joint" type="fixed">
+    <parent link="${nameofManipulator}_link7"/>
+    <child link="${nameofManipulator}_tcp"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.097"/>
+  </joint>
+
+  <ros2_control name="xMateAR5L_system" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <param name="use_sim_time">true</param>
+    </hardware>
+    <joint name="joint1">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint2">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint3">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint4">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint5">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint6">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint7">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <parameters>$(find rokae_hardware)/config/xMateAR5L_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+</robot>

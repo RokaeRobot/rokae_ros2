@@ -1,0 +1,195 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      
+    position_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    velocity_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    torque_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_group_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+# 新增：gazebo ros2_control 使用仿真时间
+gazebo_ros2_control:
+  ros__parameters:
+    use_sim_time: true
+
+# 关节状态发布器
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    state_interfaces:
+      - position
+      - velocity
+
+# 主控制器（你原来的 arm_controller，完整保留）
+arm_controller:
+  ros__parameters:
+    use_sim_time: true
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 100.0
+    action_monitor_rate: 30.0
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
+
+    # 轨迹约束 + 速度加速度限制（你原来的）
+    trajectory:
+      goal_time: 0.0
+      stopped_velocity_tolerance: 0.01
+
+    joint_limits:
+      joint1: {velocity: 1.0, acceleration: 0.5}
+      joint2: {velocity: 1.0, acceleration: 0.5}
+      joint3: {velocity: 1.0, acceleration: 0.5}
+      joint4: {velocity: 1.0, acceleration: 0.5}
+      joint5: {velocity: 1.0, acceleration: 0.5}
+      joint6: {velocity: 1.0, acceleration: 0.5}
+
+    # PID 增益（你原来的，完全保留）
+    gains:
+      joint1: {p: 31.5,  i: 0.0, d: 13.0}
+      joint2: {p: 49.5,  i: 0.0, d: 16.5}
+      joint3: {p: 36.0,  i: 0.0, d: 13.0}
+      joint4: {p: 25.2,  i: 0.0, d: 11.0}
+      joint5: {p: 18.0,  i: 0.0, d: 9.0}
+      joint6: {p: 12.6,  i: 0.0, d: 7.0}
+
+# 以下是从你参考文件补充的额外控制器（不影响你原有功能）
+position_joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 7.5
+      stopped_velocity_tolerance: 0.1
+      joint1: {goal: 0.1, trajectory: 0.2}    
+      joint2: {goal: 0.1, trajectory: 0.2} 
+      joint3: {goal: 0.1, trajectory: 0.2}
+      joint4: {goal: 0.1, trajectory: 0.2}
+      joint5: {goal: 0.1, trajectory: 0.2}
+      joint6: {goal: 0.1, trajectory: 0.2}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+velocity_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.05
+      joint1: {goal: 0.05}
+      joint2: {goal: 0.05}
+      joint3: {goal: 0.05}
+      joint4: {goal: 0.05}
+      joint5: {goal: 0.05}
+      joint6: {goal: 0.05}
+    gains:
+      joint1: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint2: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint3: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint4: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint5: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+      joint6: {p: 500, i: 0.05, d: 0.1, i_clamp: 1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+torque_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 0.5
+      stopped_velocity_tolerance: 0.05
+      joint1: {goal: 0.05}
+      joint2: {goal: 0.05}
+      joint3: {goal: 0.05}
+      joint4: {goal: 0.05}
+      joint5: {goal: 0.05}
+      joint6: {goal: 0.05}
+    gains:
+      joint1: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint2: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint3: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint4: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint5: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+      joint6: {p: 9, i: 0.1, d: 0.2, i_clamp: 1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+
+joint_group_position_controller:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6

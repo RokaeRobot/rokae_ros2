@@ -5,6 +5,10 @@
 
 <robot name="xMateCR7" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <!-- Real hardware: passed from launch (xacro mappings) -->
+  <xacro:arg name="robot_ip" default="10.0.2.163"/>
+  <xacro:arg name="local_ip" default="10.0.2.162"/>
+
   <!-- Constants for robot dimensions -->
  
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
@@ -334,4 +338,3 @@
   </link>
 
 </robot>
-

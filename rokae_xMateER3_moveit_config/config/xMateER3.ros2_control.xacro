@@ -8,45 +8,45 @@
                 <!-- By default, set up controllers for simulation. This won't work on real hardware -->
                 <plugin>mock_components/GenericSystem</plugin>
             </hardware>
-            <joint name="xMateER3_joint_1">
+            <joint name="joint1">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_1']}</param>
+                  <param name="initial_value">${initial_positions['joint1']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="xMateER3_joint_2">
+            <joint name="joint2">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_2']}</param>
+                  <param name="initial_value">${initial_positions['joint2']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="xMateER3_joint_3">
+            <joint name="joint3">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_3']}</param>
+                  <param name="initial_value">${initial_positions['joint3']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="xMateER3_joint_4">
+            <joint name="joint4">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_4']}</param>
+                  <param name="initial_value">${initial_positions['joint4']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="xMateER3_joint_5">
+            <joint name="joint5">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_5']}</param>
+                  <param name="initial_value">${initial_positions['joint5']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
-            <joint name="xMateER3_joint_6">
+            <joint name="joint6">
                 <command_interface name="position"/>
                 <state_interface name="position">
-                  <param name="initial_value">${initial_positions['xMateER3_joint_6']}</param>
+                  <param name="initial_value">${initial_positions['joint6']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>

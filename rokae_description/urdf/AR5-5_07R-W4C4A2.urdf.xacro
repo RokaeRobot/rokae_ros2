@@ -55,7 +55,7 @@
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_1" type="revolute">
+  <joint name="joint1" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_base"/>
     <child link="AR5-5_07R-W4C4A2_link1"/>
     <limit effort="108" lower="-3.1067" upper="3.1067" velocity="3.0543261909900763"/>
@@ -64,7 +64,7 @@
   </joint>
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="AR5-5_07R-W4C4A2_joint_8">
+    <joint name="joint1">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor1">
@@ -93,7 +93,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_2" type="revolute">
+  <joint name="joint2" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link1"/>
     <child link="AR5-5_07R-W4C4A2_link2"/>
     <limit effort="108" lower="-2.0944" upper="2.0944" velocity="3.0543261909900763"/>
@@ -102,7 +102,7 @@
   </joint>
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_2">
+    <joint name="joint2">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor2">
@@ -131,7 +131,7 @@
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_3" type="revolute">
+  <joint name="joint3" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link2"/>
     <child link="AR5-5_07R-W4C4A2_link3"/>
     <limit effort="66" lower="-3.1067" upper="3.1067" velocity="4.71238898038469"/>
@@ -140,7 +140,7 @@
   </joint>
   <transmission name="tran3">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_3">
+    <joint name="joint3">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor3">
@@ -169,7 +169,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_4" type="revolute">
+  <joint name="joint4" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link3"/>
     <child link="AR5-5_07R-W4C4A2_link4"/>
     <limit effort="66" lower="-1.0472" upper="2.5307" velocity="5.235987755982989"/>
@@ -180,7 +180,7 @@
   </joint>
   <transmission name="tran4">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_4">
+    <joint name="joint4">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor4">
@@ -209,7 +209,7 @@
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_5" type="revolute">
+  <joint name="joint5" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link4"/>
     <child link="AR5-5_07R-W4C4A2_link5"/>
     <limit effort="19" lower="-3.1067" upper="3.1067" velocity="4.1887902047863905"/>
@@ -218,7 +218,7 @@
   </joint>
   <transmission name="tran5">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_5">
+    <joint name="joint5">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor5">
@@ -247,7 +247,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_6" type="revolute">
+  <joint name="joint6" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link5"/>
     <child link="AR5-5_07R-W4C4A2_link6"/>
     <limit effort="19" lower="-1.0472" upper="1.0472" velocity="4.1887902047863905"/>
@@ -256,7 +256,7 @@
   </joint>
   <transmission name="tran6">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="xmate_joint_6">
+    <joint name="joint6">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor6">
@@ -285,7 +285,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </collision>
   </link>
-  <joint name="AR5-5_07R-W4C4A2_joint_7" type="revolute">
+  <joint name="joint7" type="revolute">
     <parent link="AR5-5_07R-W4C4A2_link6"/>
     <child link="AR5-5_07R-W4C4A2_link7"/>
     <limit effort="19" lower="-1.0472" upper="1.0472" velocity="4.1887902047863905"/>

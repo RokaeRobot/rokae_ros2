@@ -93,8 +93,40 @@ hardware_interface::CallbackReturn RokaeHardwareInterface<DoF>::on_init(const ha
     std::cout << DoF << std::endl;
     std::cout << joint_position_state_.size() << std::endl;
 
+    auto it_servo_t = info_.hardware_parameters.find("servo_joint_period_s");
+    if (it_servo_t != info_.hardware_parameters.end()) {
+        try {
+            const double v = std::stod(it_servo_t->second);
+            if (v > 0.0 && v < 1.0) {
+                servo_joint_period_s_ = v;
+            } else {
+                RCLCPP_WARN(
+                    rclcpp::get_logger("RokaeHardwareInterface"),
+                    "servo_joint_period_s=%s out of range (0,1), keep default %.6f",
+                    it_servo_t->second.c_str(), servo_joint_period_s_);
+            }
+        } catch (const std::exception &) {
+            RCLCPP_WARN(
+                rclcpp::get_logger("RokaeHardwareInterface"),
+                "Invalid servo_joint_period_s '%s', keep default %.6f",
+                it_servo_t->second.c_str(), servo_joint_period_s_);
+        }
+    }
+    RCLCPP_INFO(
+        rclcpp::get_logger("RokaeHardwareInterface"),
+        "servo_joint_period_s (setServoJoint T) = %.6f s (~%.0f Hz)",
+        servo_joint_period_s_, 1.0 / servo_joint_period_s_);
 
-   
+    auto it_enable_servoj = info_.hardware_parameters.find("enable_servoj");
+    if (it_enable_servoj != info_.hardware_parameters.end()) {
+        const auto &v = it_enable_servoj->second;
+        enable_servoj_ = (v == "true" || v == "1" || v == "True" || v == "TRUE");
+    }
+    RCLCPP_INFO(
+        rclcpp::get_logger("RokaeHardwareInterface"),
+        "enable_servoj=%s (false=跳过 setServoJoint，仅 startMove)",
+        enable_servoj_ ? "true" : "false");
+
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -181,6 +213,22 @@ hardware_interface::CallbackReturn RokaeHardwareInterface<DoF>::on_configure(con
         return hardware_interface::CallbackReturn::ERROR;
     }
 
+    // 3. 获取 rt_network_tolerance（默认 80）
+    auto it_tol = info_.hardware_parameters.find("rt_network_tolerance");
+    if (it_tol != info_.hardware_parameters.end()) {
+        try {
+            int value = std::stoi(it_tol->second);
+            if (value < 0) value = 0;
+            if (value > 100) value = 100;
+            rt_network_tolerance_ = static_cast<unsigned>(value);
+        } catch (...) {
+            RCLCPP_WARN(
+                rclcpp::get_logger("RokaeHardwareInterface"),
+                "Invalid rt_network_tolerance '%s', fallback to default %u",
+                it_tol->second.c_str(), rt_network_tolerance_);
+        }
+    }
+
         
     if (!initRobot()) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot initialization failed.");
@@ -190,7 +238,9 @@ hardware_interface::CallbackReturn RokaeHardwareInterface<DoF>::on_configure(con
     // 3. 打印检查
     RCLCPP_INFO_STREAM(
         rclcpp::get_logger("RokaeHardwareInterface"),
-        "Using robot_ip: " << robot_ip_ << ", local_ip: " << local_ip_);
+        "Using robot_ip: " << robot_ip_
+        << ", local_ip: " << local_ip_
+        << ", rt_network_tolerance: " << rt_network_tolerance_);
 
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "on_configure() finished successfully.");
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -263,10 +313,18 @@ bool RokaeHardwareInterface<DoF>::initRobot()
 {
     RCLCPP_INFO(rclcpp::get_logger("RokaeHardwareInterface"), "start connect rokae");
     try {
-        robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);   //连六轴机型
-        // robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);     //连七轴机型
+        if constexpr (DoF == 7) {
+            // 7-axis families (AR/Pro/SR4) must use 7-axis SDK robot class.
+            robot_ = std::make_shared<rokae::xMateErProRobot>(robot_ip_, local_ip_);
+        } else {
+            // 5/6-axis families keep the original xMateRobot class.
+            robot_ = std::make_shared<rokae::xMateRobot>(robot_ip_, local_ip_);
+        }
     } catch (const rokae::NetworkException &e) {
         RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot instantiation failed: %s", e.what());
+        return false;
+    } catch (const rokae::ExecutionException &e) {
+        RCLCPP_ERROR(rclcpp::get_logger("RokaeHardwareInterface"), "Robot type mismatch: %s", e.what());
         return false;
     }
 
@@ -281,7 +339,17 @@ bool RokaeHardwareInterface<DoF>::initRobot()
 
     try {
         robot_->setOperateMode(rokae::OperateMode::automatic, ec);
+        // Must be configured before switching to RtCommand (SDK note).
+        ec.clear();
+        robot_->setRtNetworkTolerance(rt_network_tolerance_, ec);
+        if (ec.value() != 0) {
+            RCLCPP_WARN(
+                rclcpp::get_logger("RokaeHardwareInterface"),
+                "setRtNetworkTolerance(%u) failed: %s (code=%d)",
+                rt_network_tolerance_, ec.message().c_str(), ec.value());
+        }
         //robot_->setMotionControlMode(rokae::MotionControlMode::NrtCommand, ec);
+        ec.clear();
         robot_->setMotionControlMode(rokae::MotionControlMode::RtCommand, ec);
         robot_->setPowerState(true, ec);
         if (ec.value() != 0)
@@ -727,19 +795,38 @@ hardware_interface::return_type RokaeHardwareInterface<DoF>::perform_command_mod
             joint_position_controller_running_ = true;
             joint_velocity_controller_running_ = false;
             joint_torque_controller_running_ = false;
-            if (rci_){
-                setInitPosition();
-                internal_joint_position_command_ = joint_position_state_;
-                //启用servoj接口
-                // rci_->setServoJoint(planPeriod,planPeriod*3,1,ec);
+            if (rci_) {
+                if (enable_servoj_) {
+                    ec.clear();
+                    rci_->setServoJoint(
+                        servo_joint_period_s_, servo_joint_period_s_ * 3.0, 1.0, ec);
+                    if (ec) {
+                        RCLCPP_WARN(
+                            rclcpp::get_logger("RokaeHardwareInterface"),
+                            "setServoJoint failed: %s (code=%d), continue with startMove only",
+                            ec.message().c_str(), ec.value());
+                    }
+                }
                 rci_->startMove(rokae::RtControllerMode::jointPosition);
-                
             }
         } else if (first.find(hardware_interface::HW_IF_VELOCITY) != std::string::npos) {
             joint_velocity_controller_running_ = true;
             joint_position_controller_running_ = false;
             joint_torque_controller_running_ = false;
-            if (rci_) rci_->startMove(rokae::RtControllerMode::jointPosition);
+            if (rci_) {
+                if (enable_servoj_) {
+                    ec.clear();
+                    rci_->setServoJoint(
+                        servo_joint_period_s_, servo_joint_period_s_ * 3.0, 1.0, ec);
+                    if (ec) {
+                        RCLCPP_WARN(
+                            rclcpp::get_logger("RokaeHardwareInterface"),
+                            "setServoJoint (velocity switch) failed: %s (code=%d), continue with startMove only",
+                            ec.message().c_str(), ec.value());
+                    }
+                }
+                rci_->startMove(rokae::RtControllerMode::jointPosition);
+            }
         } else if (first.find(hardware_interface::HW_IF_EFFORT) != std::string::npos) {
             joint_torque_controller_running_ = true;
             joint_position_controller_running_ = false;

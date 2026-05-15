@@ -3,7 +3,7 @@
     This is a format for representing semantic information about the robot structure.
     A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
 -->
-<robot name="xMateSR5">
+<robot name="xMate_robot">
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
     <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
@@ -11,12 +11,12 @@
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="rokae_arm">
         <!-- <joint name="fixed"/> -->
-        <joint name="xMateSR5_joint_1"/>
-        <joint name="xMateSR5_joint_2"/>
-        <joint name="xMateSR5_joint_3"/>
-        <joint name="xMateSR5_joint_4"/>
-        <joint name="xMateSR5_joint_5"/>
-        <joint name="xMateSR5_joint_6"/>
+        <joint name="joint1"/>
+        <joint name="joint2"/>
+        <joint name="joint3"/>
+        <joint name="joint4"/>
+        <joint name="joint5"/>
+        <joint name="joint6"/>
         <chain base_link="xMateSR5_base" tip_link="xMateSR5_link6"/>
     </group>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->

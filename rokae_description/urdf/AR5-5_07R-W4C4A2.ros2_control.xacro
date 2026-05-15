@@ -26,37 +26,37 @@
         </xacro:unless>
       </hardware>
 
-      <joint name="AR5-5_07R-W4C4A2_joint_1">
+      <joint name="joint1">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_2">
+      <joint name="joint2">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_3">
+      <joint name="joint3">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_4">
+      <joint name="joint4">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_5">
+      <joint name="joint5">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_6">
+      <joint name="joint6">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>
       </joint>
-      <joint name="AR5-5_07R-W4C4A2_joint_7">
+      <joint name="joint7">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <state_interface name="velocity"/>

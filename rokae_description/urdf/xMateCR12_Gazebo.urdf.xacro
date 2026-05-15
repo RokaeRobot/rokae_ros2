@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="xMateCR12">
+  <xacro:arg name="mesh_prefix" default="package://rokae_description/meshes"/>
+  <!-- Constants for robot dimensions -->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+  </material>
+  <material name="brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="Beige">
+    <color rgba="1.0 0.784 0.5765 1.0"/>
+  </material>
+  <link name="world"/>
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="xMateCR12_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+  <!--base-->
+  <link name="xMateCR12_base">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  <joint name="joint1" type="revolute">
+    <parent link="xMateCR12_base"/>
+    <child link="xMateCR12_link1"/>
+    <limit effort="436" lower="-6.2832" upper="6.2832" velocity="2.0943951023931953"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+  </joint>
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 1-->
+  <link name="xMateCR12_link1">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="9.762"/>
+      <inertia ixx="0.13037779" ixy="0.00003839" ixz="0.00015469" iyy="0.10332618" iyz="0.03481509" izz="0.07160903"/>
+      <origin rpy="0 0 0" xyz="-5.7e-05 0.039543999999999996 0.19659000000000001"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="joint2" type="revolute">
+    <parent link="xMateCR12_link1"/>
+    <child link="xMateCR12_link2"/>
+    <limit effort="436" lower="-2.9671" upper="2.9671" velocity="2.0943951023931953"/>
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.35"/>
+  </joint>
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 2-->
+  <link name="xMateCR12_link2">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="13.748"/>
+      <inertia ixx="1.45657505" ixy="0.00003009" ixz="0.00200615" iyy="1.45549299" iyz="0.00539027" izz="0.05816521"/>
+      <origin rpy="0 0 0" xyz="-0.000521 0.171648 0.322684"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+    </collision>
+  </link>
+  <joint name="joint3" type="revolute">
+    <parent link="xMateCR12_link2"/>
+    <child link="xMateCR12_link3"/>
+    <limit effort="194" lower="-6.2832" upper="6.2832" velocity="3.141592653589793"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.76"/>
+  </joint>
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 3-->
+  <link name="xMateCR12_link3">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="4.659"/>
+      <inertia ixx="0.05218042" ixy="-0.00000246" ixz="0.00000101" iyy="0.03753873" iyz="0.01436120" izz="0.02573444"/>
+      <origin rpy="0 0 0" xyz="-3.4e-05 -0.05076 0.059953000000000006"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="joint4" type="revolute">
+    <parent link="xMateCR12_link3"/>
+    <child link="xMateCR12_link4"/>
+    <limit effort="102" lower="-6.2832" upper="6.2832" velocity="4.084070449666731"/>
+    <!--     lower="-6.2832" upper="6.2832" -->
+    <axis xyz="0 0 1"/>
+    <!--     <origin rpy="0 0 0" xyz=0.0 0.0 0.54/> -->
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.54"/>
+  </joint>
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 4-->
+  <link name="xMateCR12_link4">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link4.stl" scale=".001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="4.015"/>
+      <inertia ixx="0.09862021" ixy="0.00001912" ixz="-0.00003049" iyy="0.09720570" iyz="0.00809217" izz="0.00930672"/>
+      <origin rpy="0 0 0" xyz="-7.4e-05 0.012412000000000001 -0.16548400000000002"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <joint name="joint5" type="revolute">
+    <parent link="xMateCR12_link4"/>
+    <child link="xMateCR12_link5"/>
+    <limit effort="66" lower="-6.2832" upper="6.2832" velocity="4.1887902047863905"/>
+    <axis xyz="0 -1 0"/>
+    <origin rpy="0 0 0" xyz="0.0 -0.15 0.0"/>
+  </joint>
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 5-->
+  <link name="xMateCR12_link5">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="2.34"/>
+      <inertia ixx="0.00953363" ixy="-0.00000282" ixz="0.00000824" iyy="0.00581555" iyz="0.00099717" izz="0.00692085"/>
+      <origin rpy="0 0 0" xyz="-4.2999999999999995e-05 -0.031099 0.014133"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+  </link>
+  <joint name="joint6" type="revolute">
+    <parent link="xMateCR12_link5"/>
+    <child link="xMateCR12_link6"/>
+    <limit effort="66" lower="-6.2832" upper="6.2832" velocity="4.1887902047863905"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0.0 0.0 0" xyz="0.0 0.0 0.127"/>
+  </joint>
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!--link 6-->
+  <link name="xMateCR12_link6">
+    <visual>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+      <mass value="1.142"/>
+      <inertia ixx="0.00217743" ixy="-0.00000018" ixz="-0.00000015" iyy="0.00218830" iyz="-0.00000570" izz="0.00125122"/>
+      <origin rpy="0 0 0" xyz="1e-06 -0.000201 -0.049302"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/xMateCR12/xMateCR12_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+
+  <!-- GAZEBO_ADDED_BEGIN -->
+  <xacro:macro name="rokae_joint_gazebo" params="joint_name">
+    <gazebo reference="${joint_name}">
+      <kp>1000.0</kp>
+      <kd>100.0</kd>
+      <mu1>0.1</mu1>
+      <mu2>0.1</mu2>
+      <friction1>0.0</friction1>
+      <friction2>0.0</friction2>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="rokae_link_gazebo" params="link_ref">
+    <gazebo reference="${link_ref}">
+      <material>Gazebo/Blue</material>
+      <collision>
+        <laser_retro>0.5</laser_retro>
+      </collision>
+    </gazebo>
+  </xacro:macro>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_base"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link1"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link2"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link3"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link4"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link5"/>
+  <xacro:rokae_link_gazebo link_ref="xMateCR12_link6"/>
+
+  <xacro:rokae_joint_gazebo joint_name="joint1"/>
+  <xacro:rokae_joint_gazebo joint_name="joint2"/>
+  <xacro:rokae_joint_gazebo joint_name="joint3"/>
+  <xacro:rokae_joint_gazebo joint_name="joint4"/>
+  <xacro:rokae_joint_gazebo joint_name="joint5"/>
+  <xacro:rokae_joint_gazebo joint_name="joint6"/>
+
+  <ros2_control name="xMateCR12_system" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <param name="use_sim_time">true</param>
+    </hardware>
+    <joint name="joint1"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint2"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint3"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint4"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint5"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint6"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <parameters>$(find rokae_hardware)/config/xMateCR12_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+  <!-- GAZEBO_ADDED_END -->
+</robot>

@@ -1,24 +1,34 @@
-# This config file is used by ros2_control
+# CR20 (6-DOF) mock for rokae_moveit_launch — no /clock; controller_manager use_sim_time must be false.
 controller_manager:
   ros__parameters:
-    update_rate: 1000  # Hz
-
-    position_joint_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
-
+    update_rate: 1000
+    use_sim_time: false
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
+    position_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
 
 position_joint_trajectory_controller:
   ros__parameters:
     joints:
-      - xMateCR20_joint_1
-      - xMateCR20_joint_2
-      - xMateCR20_joint_3
-      - xMateCR20_joint_4
-      - xMateCR20_joint_5
-      - xMateCR20_joint_6
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
     command_interfaces:
       - position
     state_interfaces:
@@ -27,13 +37,69 @@ position_joint_trajectory_controller:
     constraints:
       goal_time: 7.5
       stopped_velocity_tolerance: 0.1
-      joint1: {goal: 0.1, trajectory: 0.2}    #goal达到最终目标点的误差，trajectory路径规划途中实际与轨迹点误差--适当设大 
-      joint2: {goal: 0.1, trajectory: 0.2} 
-      joint3: {goal: 0.1, trajectory: 0.2}
-      joint4: {goal: 0.1, trajectory: 0.2}
-      joint5: {goal: 0.1, trajectory: 0.2}
-      joint6: {goal: 0.1, trajectory: 0.2}
-      joint7: {goal: 0.1, trajectory: 0.2}
+      joint1:
+        goal: 0.1
+        trajectory: 0.2
+      joint2:
+        goal: 0.1
+        trajectory: 0.2
+      joint3:
+        goal: 0.1
+        trajectory: 0.2
+      joint4:
+        goal: 0.1
+        trajectory: 0.2
+      joint5:
+        goal: 0.1
+        trajectory: 0.2
+      joint6:
+        goal: 0.1
+        trajectory: 0.2
     stop_trajectory_duration: 0.5
     state_publish_rate: 100.0
-    action_monitor_rate: 20.0  
+    action_monitor_rate: 20.0
+
+gazebo_ros2_control:
+  ros__parameters:
+    use_sim_time: true
+    controller_manager:
+      update_rate: 1000
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+      goal_time: 7.5
+      stopped_velocity_tolerance: 0.1
+      joint1:
+        goal: 0.1
+        trajectory: 0.2
+      joint2:
+        goal: 0.1
+        trajectory: 0.2
+      joint3:
+        goal: 0.1
+        trajectory: 0.2
+      joint4:
+        goal: 0.1
+        trajectory: 0.2
+      joint5:
+        goal: 0.1
+        trajectory: 0.2
+      joint6:
+        goal: 0.1
+        trajectory: 0.2
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0

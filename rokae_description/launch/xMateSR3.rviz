@@ -136,17 +136,17 @@ Visualization Manager:
       Enabled: true
       History Length: 1
       Joints:
-        xmate_joint_1:
+        joint1:
           Value: true
-        xmate_joint_2:
+        joint2:
           Value: true
-        xmate_joint_3:
+        joint3:
           Value: true
-        xmate_joint_4:
+        joint4:
           Value: true
-        xmate_joint_5:
+        joint5:
           Value: true
-        xmate_joint_6:
+        joint6:
           Value: true
         xmate_joint_7:
           Value: true

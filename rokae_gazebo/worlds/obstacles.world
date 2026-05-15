@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <world name="obstacle_world">
+    <!-- 光源 -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- 地面 -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- 桌子 -->
+    <model name="table">
+      <static>true</static>
+      <pose>1.0 0 0.3 0 0 0</pose>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box size="0.6 0.4 0.05"/>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box size="0.6 0.4 0.05"/>
+          </geometry>
+
+          <material>
+            <ambient>0.6 0.6 0.6 1</ambient>
+            <diffuse>0.9 0.9 0.9 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- 接触传感器 → ROS2 gazebo_msgs/ContactsState（便于 2.3 检测碰撞事件） -->
+        <sensor name="table_bumper" type="contact">
+          <always_on>true</always_on>
+          <update_rate>100</update_rate>
+          <contact>
+            <collision>collision</collision>
+          </contact>
+          <plugin name="gazebo_ros_bumper" filename="libgazebo_ros_bumper.so">
+            <ros>
+              <namespace>/obstacle</namespace>
+              <!-- 兼容 ROS2 gazebo_ros_bumper 默认 ~/bumper_states 输出 -->
+              <remapping>bumper_states:=bumper_contact</remapping>
+            </ros>
+            <frame_name>world</frame_name>
+            <bumper_topic_name>bumper_contact</bumper_topic_name>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- 墙壁 -->
+    <model name="wall">
+      <static>true</static>
+      <pose>2.0 0 1.0 0 0 0</pose>
+
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box size="0.1 1.5 2.0"/>
+          </geometry>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box size="0.1 1.5 2.0"/>
+          </geometry>
+
+          <material>
+            <ambient>0.3 0.3 0.8 1</ambient>
+            <diffuse>0.4 0.4 1.0 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- 墙体也挂接触传感器，确保撞墙也能触发 ROS 话题 -->
+        <sensor name="wall_bumper" type="contact">
+          <always_on>true</always_on>
+          <update_rate>100</update_rate>
+          <contact>
+            <collision>collision</collision>
+          </contact>
+          <plugin name="gazebo_ros_bumper_wall" filename="libgazebo_ros_bumper.so">
+            <ros>
+              <namespace>/obstacle</namespace>
+              <remapping>bumper_states:=bumper_contact</remapping>
+            </ros>
+            <frame_name>world</frame_name>
+            <bumper_topic_name>bumper_contact</bumper_topic_name>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- 动态障碍：非 static，受重力，可与机械臂/桌面发生物理交互 -->
+    <model name="dynamic_orb">
+      <pose>0.6 0.35 1.55 0 0 0</pose>
+      <link name="link">
+        <gravity>true</gravity>
+        <inertial>
+          <mass>1.2</mass>
+          <inertia>
+            <ixx>0.004</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.004</iyy>
+            <iyz>0</iyz>
+            <izz>0.004</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <sphere><radius>0.09</radius></sphere>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere><radius>0.09</radius></sphere>
+          </geometry>
+          <material>
+            <ambient>1 0.25 0.15 1</ambient>
+            <diffuse>1 0.35 0.2 1</diffuse>
+          </material>
+        </visual>
+
+        <!-- 动态球也挂接触传感器，便于观察动态碰撞事件 -->
+        <sensor name="orb_bumper" type="contact">
+          <always_on>true</always_on>
+          <update_rate>100</update_rate>
+          <contact>
+            <collision>collision</collision>
+          </contact>
+          <plugin name="gazebo_ros_bumper_orb" filename="libgazebo_ros_bumper.so">
+            <ros>
+              <namespace>/obstacle</namespace>
+              <remapping>bumper_states:=bumper_contact</remapping>
+            </ros>
+            <frame_name>world</frame_name>
+            <bumper_topic_name>bumper_contact</bumper_topic_name>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+
+  </world>
+</sdf>
