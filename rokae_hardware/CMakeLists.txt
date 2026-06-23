@@ -53,6 +53,21 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 set(SDK_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/include)
 set(SDK_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/lib)
 
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/sdk/VERSION" _ROKAe_SDK_VERSION)
+string(STRIP "${_ROKAe_SDK_VERSION}" _ROKAe_SDK_VERSION)
+set(_XCORE_LIB_RELEASES_URL "https://github.com/RokaeRobot/xCoreSDK-CPP/releases/tag/v${_ROKAe_SDK_VERSION}")
+set(_XCORE_LIB_CHECK "${SDK_LIB_DIR}/libxCoreSDK.a")
+if(NOT EXISTS "${_XCORE_LIB_CHECK}")
+  message(WARNING
+    "Prebuilt xCore SDK libraries not found.\n"
+    "  Expected: ${_XCORE_LIB_CHECK}\n"
+    "  Download from: ${_XCORE_LIB_RELEASES_URL}\n"
+    "  See rokae_hardware/sdk/lib/README.md for extraction instructions.")
+endif()
+unset(_XCORE_LIB_CHECK)
+unset(_XCORE_LIB_RELEASES_URL)
+unset(_ROKAe_SDK_VERSION)
+
 # -----------------------------------------------------------------------------
 # 3. 声明可执行文件
 # -----------------------------------------------------------------------------

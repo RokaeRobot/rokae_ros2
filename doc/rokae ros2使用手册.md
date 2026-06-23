@@ -71,14 +71,16 @@ moveit和controller-manager及相关的包安装
     ```
 
 - 创建本地工作空间  
-  联系珞石开发人员获取最近的ros2软件包，将软件包复制到本地工作空间的src目录下
+  从 GitHub 克隆本仓库到工作空间 `src` 目录，并按 [README.md](../README.md) 下载 xCore SDK 预编译库到 `rokae_hardware/sdk/lib/`。
 
     ```bash
-        ##创建ros2_ws工作空间，必须包含子目录src
+        ## 创建 ros2_ws 工作空间，必须包含子目录 src
         mkdir -p ~/ros2_ws/src
-        ##复制软件包到src
-        ##在ros2_ws目录下编译
-        colcon build
+        cd ~/ros2_ws/src
+        git clone <your-github-repo-url> rokae_ros2
+        ## 按 rokae_hardware/sdk/lib/README.md 下载并放置 xCore SDK 库
+        cd ~/ros2_ws
+        colcon build --symlink-install
     ```
     ！！建议刷新环境变量--在 **.bashrc**文件末添加下面内容并保存  
     ！！在 **home**文件夹下输入快捷键**ctrl+h**显示隐藏文件 **.bashrc**

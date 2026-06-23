@@ -5,7 +5,7 @@
   <version>0.0.4</version>
   <description>The rokae_hardware package</description>
   <maintainer email="ros1@todo.todo">ros1</maintainer>
-  <license>TODO</license>
+  <license>Apache License 2.0</license>
 
   <depend>ament_index_cpp</depend>
   <depend>rclcpp</depend>

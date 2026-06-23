@@ -1,2 +1,4 @@
-build
-devel
+build/
+devel/
+install/
+log/

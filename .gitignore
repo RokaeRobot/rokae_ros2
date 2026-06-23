@@ -1,1 +1,39 @@
+# IDE
 .idea/
+.vscode/
+*.swp
+*~
+
+# ROS 2 / colcon workspace (when built inside repo)
+build/
+install/
+log/
+devel/
+
+# CMake / C++ build artifacts
+cmake-build-*/
+build*/
+*.o
+*.so
+*.a
+*.dll
+*.lib
+*.pdb
+*.exe
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Prebuilt xCore SDK libraries — distributed via GitHub Releases (see rokae_hardware/sdk/lib/README.md)
+rokae_hardware/sdk/lib/**/*.lib
+rokae_hardware/sdk/lib/**/*.dll
+rokae_hardware/sdk/lib/**/*.pdb
+rokae_hardware/sdk/lib/**/*.a
+rokae_hardware/sdk/lib/**/*.so
+rokae_hardware/sdk/lib/**/*.so.*
+
+# Release packaging output
+dist/
