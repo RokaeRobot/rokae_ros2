@@ -2,7 +2,7 @@
 
 珞石机器人 ROS 2 软件栈，基于 `ros2_control` 与 MoveIt 2，提供 xMate 系列机械臂的仿真与真机控制。
 
-当前栈版本：**0.0.4**（各包 `package.xml` / `CHANGELOG.rst` 保持一致）
+当前栈版本：**0.0.4**
 
 ## 兼容性
 
@@ -15,7 +15,7 @@
 
 ## 仓库内容
 
-本仓库包含 ROS 2 源码包、URDF/MoveIt 配置与示例，**不包含** xCore SDK 预编译库（不占用 Git LFS 配额）。
+本仓库包含 ROS 2 源码包、URDF/MoveIt 配置与示例，**不包含** xCore SDK 预编译库。
 
 | 包 | 说明 |
 |----|------|
@@ -36,7 +36,7 @@ cd ~/ros2_ws/src
 git clone <your-github-repo-url> rokae_ros2
 ```
 
-若克隆后目录名为 `rokae_ros2-dev`，可保持该名称或重命名为 `rokae_ros2`，只要位于 `src/` 下即可被 `colcon` 发现。
+克隆后目录名只要位于 `src/` 下即可被 `colcon` 发现。
 
 ### 2. 下载 xCore SDK 预编译库
 
@@ -59,12 +59,10 @@ source install/setup.bash
 - [使用手册](doc/rokae%20ros2使用手册.md)
 - [Demo 启动说明](doc/README_demo.md)
 
-## 发版说明（维护者）
+## 发版说明
 
 - 栈版本：更新各包 `package.xml`、`CMakeLists.txt` 中的 `VERSION`，并写 `CHANGELOG.rst` / 根目录 `CHANGELOG.md`
 - SDK 升级：同步 `rokae_hardware/sdk/include` 头文件，更新 `rokae_hardware/sdk/VERSION`，在 GitHub Release 说明中注明所需 xCore SDK 版本
-- **禁止**将 `.a` / `.so` / `.dll` / `.lib` 等预编译库提交到 Git；CI 会自动检查
-- **禁止**使用 Git LFS 存储 SDK 库文件
 
 ## License
 
