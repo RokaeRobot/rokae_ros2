@@ -58,6 +58,7 @@ source install/setup.bash
 
 - [使用手册](doc/rokae%20ros2使用手册.md)
 - [Demo 启动说明](doc/README_demo.md)
+- [珞石在线文档（ROS2）](https://docs.rokae.com/docs/ROS2) — 可通过该链接进入公司文档在线手册，学习 ROS 2 及其他相关内容
 
 ## 发版说明
 
